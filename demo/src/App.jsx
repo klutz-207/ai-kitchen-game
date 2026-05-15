@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowRight, ChefHat, Heart, Send, Sparkles, Utensils } from 'lucide-react';
-import { guests, fallbackGuest } from './data/guests';
+import { guests } from './data/guests';
 import { chefs, defaultChef } from './data/chefs';
 import { feedbackAgent, fuseDishesAgent, generateDishAgent, guideAgent, startSessionAgent } from './services/apiClient';
 import { useTypewriter } from './hooks/useTypewriter';
@@ -32,7 +32,9 @@ const initialRun = {
 export default function App() {
   const [run, setRun] = useState(initialRun);
   const [selectedChefId, setSelectedChefId] = useState(defaultChef.id);
-  const guest = guests[run.guestIndex % guests.length] || fallbackGuest;
+  const runRef = useRef(run);
+  runRef.current = run;
+  const guest = guests[run.guestIndex % guests.length];
   const selectedChef = chefs.find((chef) => chef.id === selectedChefId) || defaultChef;
 
   const setStage = (stage) => setRun((current) => ({ ...current, stage, error: '' }));
@@ -46,68 +48,105 @@ export default function App() {
   };
 
   const startCreation = async () => {
-    setRun((current) => ({ ...current, stage: 'bubbleTransition', prompt: '', round: 1, answers: [], activeDishIndex: 1 }));
+    setRun((current) => ({ ...current, stage: 'bubbleTransition', prompt: '', round: 1, answers: [], activeDishIndex: 1, error: '' }));
     const sessionPromise = startSessionAgent(guest);
     window.setTimeout(async () => {
-      const session = await sessionPromise;
-      setRun((current) => ({
-        ...current,
-        sessionId: session.sessionId || '',
-        stage: 'creation',
-        prompt: session.prompt || session.nextPrompt,
-      }));
+      try {
+        const session = await sessionPromise;
+        setRun((current) => ({
+          ...current,
+          sessionId: session.sessionId || '',
+          stage: 'creation',
+          prompt: session.prompt || session.nextPrompt,
+        }));
+      } catch (err) {
+        console.error('startCreation failed:', err);
+        setRun((current) => ({ ...current, stage: 'arrival', error: '连接厨房失败，请重试。' }));
+      }
     }, 3400);
   };
 
-  const startSecondCreation = async () => {
-    setRun((current) => ({ ...current, stage: 'creation', prompt: '', round: 2, answers: [], activeDishIndex: 2 }));
-    const prompt = run.secondPrompt || await guideAgent(guest, 2);
-    setRun((current) => ({ ...current, prompt }));
-  };
+  const startSecondCreation = useCallback(async () => {
+    const secondPrompt = runRef.current.secondPrompt;
+    setRun((current) => ({ ...current, stage: 'creation', prompt: '', round: 2, answers: [], activeDishIndex: 2, error: '' }));
+    try {
+      const prompt = secondPrompt || await guideAgent(guest, 2);
+      setRun((current) => ({ ...current, prompt }));
+    } catch (err) {
+      console.error('startSecondCreation failed:', err);
+      setRun((current) => ({ ...current, stage: 'betweenDishes', error: '获取灵感失败，请重试。' }));
+    }
+  }, [guest]);
 
-  const submitAnswer = async (answer) => {
-    const nextAnswers = [...run.answers, answer];
-
+  const submitAnswer = useCallback((answer) => {
     setRun((current) => ({
       ...current,
-      answers: nextAnswers,
+      answers: [...current.answers, answer],
       allAnswers: [...current.allAnswers, answer],
       prompt: '灵感已经足够，炉火准备好了。',
       stage: current.activeDishIndex === 1 ? 'generating1' : 'generating2',
     }));
-  };
+  }, []);
 
-  const finishDish = (index, dish, meta = {}) => {
+  const finishDish = useCallback((index, dish, meta = {}) => {
     setRun((current) => ({
       ...current,
       [`dish${index}`]: dish,
       secondPrompt: index === 1 ? meta.nextPrompt || current.secondPrompt : current.secondPrompt,
       stage: index === 1 ? 'betweenDishes' : 'kitchen',
     }));
-  };
+  }, []);
 
-  const redoDish = async (index) => {
+  const redoDish = useCallback((index) => {
     setRun((current) => ({
       ...current,
-      stage: index === 1 ? 'creation' : 'creation',
+      stage: 'creation',
       activeDishIndex: index,
       answers: [],
       prompt: guest.prompts[0],
       [`dish${index}`]: null,
     }));
-  };
+  }, [guest]);
 
-  const fuseDishes = async () => {
-    const finalDish = await fuseDishesAgent({ guest, sessionId: run.sessionId, dish1: run.dish1, dish2: run.dish2 });
+  const fuseDishes = useCallback(async () => {
+    setRun((current) => ({ ...current, error: '' }));
+    try {
+      const current = runRef.current;
+      const finalDish = await fuseDishesAgent({ guest, sessionId: current.sessionId, dish1: current.dish1, dish2: current.dish2 });
+      setRun((prev) => ({ ...prev, stage: 'fusion', finalDish, feedback: null }));
+    } catch (err) {
+      console.error('fuseDishes failed:', err);
+      setRun((current) => ({ ...current, error: '融合失败，请重试。' }));
+    }
+  }, [guest]);
 
-    setRun((current) => ({ ...current, stage: 'fusion', finalDish, feedback: null }));
-  };
+  const serveFinalDish = useCallback(async () => {
+    setRun((current) => ({ ...current, stage: 'feedback', feedback: null, error: '' }));
+    try {
+      const current = runRef.current;
+      const feedback = await feedbackAgent({ guest, sessionId: current.sessionId, answers: current.allAnswers, finalDish: current.finalDish });
+      setRun((prev) => ({ ...prev, feedback }));
+    } catch (err) {
+      console.error('serveFinalDish failed:', err);
+      setRun((current) => ({ ...current, error: '获取反馈失败，请重试。' }));
+    }
+  }, [guest]);
 
-  const serveFinalDish = async () => {
-    setRun((current) => ({ ...current, stage: 'feedback', feedback: null }));
-    const feedback = await feedbackAgent({ guest, sessionId: run.sessionId, answers: run.allAnswers, finalDish: run.finalDish });
-    setRun((current) => ({ ...current, feedback }));
-  };
+  const handleGenerateError = useCallback((message) => {
+    setRun((current) => ({ ...current, error: message }));
+  }, []);
+
+  const retryFromError = useCallback(() => {
+    const current = runRef.current;
+    setRun((prev) => ({ ...prev, error: '' }));
+    if (current.stage === 'arrival') startCreation();
+    else if (current.stage === 'betweenDishes') startSecondCreation();
+    else if (current.stage === 'kitchen') fuseDishes();
+    else if (current.stage === 'feedback') serveFinalDish();
+    else if (current.stage === 'generating1' || current.stage === 'generating2') {
+      setRun((prev) => ({ ...prev, stage: 'creation', answers: [], prompt: guest.prompts[0] }));
+    }
+  }, [startCreation, startSecondCreation, fuseDishes, serveFinalDish, guest]);
 
   const nextGuest = () => {
     setRun((current) => ({
@@ -119,7 +158,6 @@ export default function App() {
 
   return (
     <main className="app-shell">
-      <div className="tile-grid" aria-hidden="true" />
       <header className="topbar">
         <div className="brand-mark">
           <ChefHat size={20} />
@@ -127,6 +165,13 @@ export default function App() {
         </div>
         <p>今日试营业</p>
       </header>
+
+      {run.error ? (
+        <div className="error-banner" role="alert">
+          <span>{run.error}</span>
+          <button type="button" onClick={retryFromError}>重试</button>
+        </div>
+      ) : null}
 
       {run.stage === 'start' ? (
         <StartScreen chef={selectedChef} selectedChefId={selectedChefId} onSelectChef={setSelectedChefId} onStart={beginGuest} />
@@ -137,13 +182,13 @@ export default function App() {
         <Creation guest={guest} prompt={run.prompt} round={run.round} answers={run.answers} onSubmit={submitAnswer} />
       ) : null}
       {run.stage === 'generating1' ? (
-        <GenerateDish guest={guest} sessionId={run.sessionId} answers={run.answers} index={1} onDone={finishDish} />
+        <GenerateDish guest={guest} sessionId={run.sessionId} answers={run.answers} index={1} onDone={finishDish} onError={handleGenerateError} />
       ) : null}
       {run.stage === 'betweenDishes' ? (
         <BetweenDishes dish={run.dish1} onNext={startSecondCreation} />
       ) : null}
       {run.stage === 'generating2' ? (
-        <GenerateDish guest={guest} sessionId={run.sessionId} answers={run.answers} index={2} firstDish={run.dish1} onDone={finishDish} />
+        <GenerateDish guest={guest} sessionId={run.sessionId} answers={run.answers} index={2} firstDish={run.dish1} onDone={finishDish} onError={handleGenerateError} />
       ) : null}
       {run.stage === 'kitchen' ? (
         <KitchenBoard guest={guest} dish1={run.dish1} dish2={run.dish2} onRedo={redoDish} onFuse={fuseDishes} />
@@ -151,7 +196,6 @@ export default function App() {
       {run.stage === 'fusion' ? (
         <Fusion guest={guest} dish1={run.dish1} dish2={run.dish2} finalDish={run.finalDish} onServe={serveFinalDish} />
       ) : null}
-      {run.stage === 'finalReveal' ? <FinalReveal guest={guest} finalDish={run.finalDish} /> : null}
       {run.stage === 'feedback' ? (
         <Feedback guest={guest} finalDish={run.finalDish} feedback={run.feedback} onSettle={() => setStage('settlement')} />
       ) : null}
@@ -330,7 +374,7 @@ function Creation({ guest, prompt, round, answers, onSubmit }) {
   );
 }
 
-function GenerateDish({ guest, sessionId, answers, index, firstDish, onDone }) {
+function GenerateDish({ guest, sessionId, answers, index, firstDish, onError, onDone }) {
   useEffect(() => {
     let cancelled = false;
 
@@ -342,12 +386,15 @@ function GenerateDish({ guest, sessionId, answers, index, firstDish, onDone }) {
       index,
     }).then((result) => {
       if (!cancelled) onDone(index, result.dish, result);
+    }).catch((err) => {
+      console.error('generateDish failed:', err);
+      if (!cancelled) onError('菜品生成失败，请重试。');
     });
 
     return () => {
       cancelled = true;
     };
-  }, [answers, guest, index, onDone]);
+  }, [answers, guest, index, onDone, onError, sessionId]);
 
   return (
     <section className="screen dish-wait-screen">
@@ -432,19 +479,6 @@ function FusionIngredient({ dish, className = '' }) {
       )}
       <span>{dish?.name || '灵感料理'}</span>
     </div>
-  );
-}
-
-function FinalReveal({ guest, finalDish }) {
-  return (
-    <section className="screen final-reveal-screen">
-      <div className="serving-trail" aria-hidden="true" />
-      <div className="final-spotlight">
-        <StageBadge>料理完成</StageBadge>
-        <DishCard dish={finalDish} index="Final" />
-        <p>主厨把新料理端到{guest.name}面前。</p>
-      </div>
-    </section>
   );
 }
 
