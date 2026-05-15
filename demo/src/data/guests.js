@@ -106,5 +106,3 @@ export const guests = [
     feedback: '我想起来了，是窗下那张木桌，还有有人喊我趁热吃。谢谢你把它端回来。',
   },
 ];
-
-export const fallbackGuest = guests[0];

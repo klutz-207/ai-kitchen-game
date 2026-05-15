@@ -5,7 +5,7 @@ export function useTypewriter(text, speed = 28, active = true) {
   const [done, setDone] = useState(false);
 
   useEffect(() => {
-    if (!active) {
+    if (!active || !text) {
       setDisplayed('');
       setDone(false);
       return undefined;
