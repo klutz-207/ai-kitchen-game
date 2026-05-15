@@ -1,0 +1,111 @@
+{
+  "name": "ai-kitchen-art-library",
+  "style": "warm hand-drawn storybook pixel art kitchen game",
+  "publicBasePath": "/assets/art-library",
+  "assets": {
+    "backgrounds": {
+      "kitchenMain": {
+        "path": "/assets/art-library/backgrounds/kitchen-main.png",
+        "workspacePath": "assets/art-library/backgrounds/kitchen-main.png",
+        "size": [1672, 941],
+        "background": "opaque",
+        "usage": "main kitchen scene background"
+      },
+      "creationThoughtSpace": {
+        "path": "/assets/art-library/backgrounds/creation-thought-space.png",
+        "workspacePath": "assets/art-library/backgrounds/creation-thought-space.png",
+        "size": [1672, 941],
+        "background": "opaque",
+        "usage": "creation and dialogue screen background"
+      }
+    },
+    "characters": {
+      "chefs": {
+        "classicRedActions": {
+          "path": "/assets/art-library/characters/chefs/chef-classic-red-actions.png",
+          "workspacePath": "assets/art-library/characters/chefs/chef-classic-red-actions.png",
+          "size": [1717, 916],
+          "background": "transparent",
+          "usage": "classic red scarf chef, horizontal three-pose action sheet"
+        },
+        "cozyGreenActions": {
+          "path": "/assets/art-library/characters/chefs/chef-cozy-green-actions.png",
+          "workspacePath": "assets/art-library/characters/chefs/chef-cozy-green-actions.png",
+          "size": [1760, 894],
+          "background": "transparent",
+          "usage": "green cozy chef, horizontal three-pose action sheet"
+        },
+        "bakeryPinkActions": {
+          "path": "/assets/art-library/characters/chefs/chef-bakery-pink-actions.png",
+          "workspacePath": "assets/art-library/characters/chefs/chef-bakery-pink-actions.png",
+          "size": [1774, 887],
+          "background": "transparent",
+          "usage": "pink bow bakery chef, horizontal three-pose action sheet"
+        },
+        "avatars": {
+          "classicRed": {
+            "path": "/assets/art-library/characters/chefs/avatars/chef-classic-red-avatar.png",
+            "workspacePath": "assets/art-library/characters/chefs/avatars/chef-classic-red-avatar.png",
+            "size": [1254, 1254],
+            "background": "transparent",
+            "usage": "front-facing square avatar for classic red chef"
+          },
+          "cozyGreen": {
+            "path": "/assets/art-library/characters/chefs/avatars/chef-cozy-green-avatar.png",
+            "workspacePath": "assets/art-library/characters/chefs/avatars/chef-cozy-green-avatar.png",
+            "size": [1254, 1254],
+            "background": "transparent",
+            "usage": "front-facing square avatar for cozy green chef"
+          },
+          "bakeryPink": {
+            "path": "/assets/art-library/characters/chefs/avatars/chef-bakery-pink-avatar.png",
+            "workspacePath": "assets/art-library/characters/chefs/avatars/chef-bakery-pink-avatar.png",
+            "size": [1254, 1254],
+            "background": "transparent",
+            "usage": "front-facing square avatar for bakery pink chef"
+          }
+        }
+      },
+      "guests": {
+        "heartbrokenGirl": {
+          "path": "/assets/art-library/characters/guests/guest-heartbroken-girl.png",
+          "workspacePath": "assets/art-library/characters/guests/guest-heartbroken-girl.png",
+          "size": [1024, 1536],
+          "background": "transparent",
+          "usage": "heartbroken girl customer, front three-quarter view facing left toward the chef",
+          "profile": {
+            "label": "哭红眼睛的失恋女生",
+            "opening": "哭了一整晚，心里又咸又苦，能不能给我一份能盖住所有难过的味道。",
+            "guide": "我来给她加点狠料……",
+            "os": "或许我可以把榴莲、腐乳、臭豆腐拼起来试一试呢"
+          }
+        }
+      }
+    },
+    "ui": {
+      "dialogueSheet": {
+        "path": "/assets/art-library/ui/ui-dialogue-sheet.png",
+        "workspacePath": "assets/art-library/ui/ui-dialogue-sheet.png",
+        "size": [1774, 887],
+        "background": "transparent",
+        "usage": "speech bubbles, thought bubble, dialogue panels, tags"
+      },
+      "controlsSheet": {
+        "path": "/assets/art-library/ui/ui-controls-sheet.png",
+        "workspacePath": "assets/art-library/ui/ui-controls-sheet.png",
+        "size": [1663, 946],
+        "background": "transparent",
+        "usage": "buttons, recipe tray, score bar, badges, icon frames"
+      }
+    },
+    "effects": {
+      "kitchenEffectsSheet": {
+        "path": "/assets/art-library/effects/effects-kitchen-sheet.png",
+        "workspacePath": "assets/art-library/effects/effects-kitchen-sheet.png",
+        "size": [1774, 887],
+        "background": "transparent",
+        "usage": "steam, sparkles, fusion burst, cooking dust, aroma trails"
+      }
+    }
+  }
+}

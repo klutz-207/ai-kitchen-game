@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI厨房 - Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    /* ─── 像素字体 ─── */
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans SC', sans-serif;
+      background: #1a1a2e;
+      color: #eee;
+      overflow: hidden;
+      height: 100vh;
+    }
+    .pixel-font { font-family: 'Press Start 2P', cursive; font-size: 10px; line-height: 1.6; }
+
+    /* ─── Acrylic 毛玻璃 ─── */
+    .acrylic {
+      background: rgba(30, 30, 60, 0.7);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    }
+    .acrylic-light {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    /* ─── 像素边框 ─── */
+    .pixel-border {
+      border: 3px solid;
+      border-image: repeating-linear-gradient(90deg, #ff6b9d 0px, #ff6b9d 4px, transparent 4px, transparent 8px) 3;
+      image-rendering: pixelated;
+    }
+    .pixel-border-green {
+      border: 3px solid;
+      border-image: repeating-linear-gradient(90deg, #4ade80 0px, #4ade80 4px, transparent 4px, transparent 8px) 3;
+    }
+
+    /* ─── 动画关键帧 ─── */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 8px rgba(255,107,157,0.3); }
+      50% { box-shadow: 0 0 24px rgba(255,107,157,0.7); }
+    }
+    @keyframes dot-blink {
+      0%, 20% { opacity: 0; }
+      40% { opacity: 1; }
+      60% { opacity: 0; }
+    }
+    @keyframes typewriter { from { width: 0; } to { width: 100%; } }
+    @keyframes slide-up {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes slide-in-right {
+      from { transform: translateX(60px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slide-in-left {
+      from { transform: translateX(-60px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scale-in {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    @keyframes bubble-expand {
+      0% { transform: scale(0.05); border-radius: 50%; }
+      60% { transform: scale(1.1); border-radius: 20%; }
+      100% { transform: scale(1); border-radius: 0; }
+    }
+    @keyframes bubble-shrink {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(0.05); opacity: 0; }
+    }
+    @keyframes dash-pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
+    @keyframes fusion-rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(720deg); }
+    }
+    @keyframes beam-burst {
+      0% { transform: scale(0); opacity: 1; }
+      50% { transform: scale(3); opacity: 0.8; }
+      100% { transform: scale(6); opacity: 0; }
+    }
+    @keyframes score-pop {
+      0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+      60% { transform: scale(1.2) rotate(3deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+    @keyframes ember-float {
+      0% { transform: translate(0, 0) scale(1); opacity: 1; }
+      100% { transform: translate(var(--ex, 40px), var(--ey, -60px)) scale(0); opacity: 0; }
+    }
+    @keyframes thinking-dots {
+      0% { content: '.'; }
+      33% { content: '..'; }
+      66% { content: '...'; }
+    }
+    @keyframes bounce-in {
+      0% { transform: scale(0); }
+      50% { transform: scale(1.15); }
+      70% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+
+    .anim-float { animation: float 3s ease-in-out infinite; }
+    .anim-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+    .anim-slide-up { animation: slide-up 0.5s ease-out forwards; }
+    .anim-slide-right { animation: slide-in-right 0.5s ease-out forwards; }
+    .anim-slide-left { animation: slide-in-left 0.5s ease-out forwards; }
+    .anim-fade-in { animation: fade-in 0.4s ease-out forwards; }
+    .anim-scale-in { animation: scale-in 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+    .anim-bounce-in { animation: bounce-in 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+    .anim-dash-pulse { animation: dash-pulse 1.5s ease-in-out infinite; }
+
+    /* ─── 滚动条隐藏 ─── */
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* ─── 像素化占位图 ─── */
+    .pixel-img {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'game-bg': '#1a1a2e',
+            'game-card': '#16213e',
+            'game-accent': '#ff6b9d',
+            'game-accent2': '#4ade80',
+            'game-warm': '#fbbf24',
+            'game-cool': '#60a5fa',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useCallback } = React;
+
+    /* ═══════════════════════════════════════════════
+     * 数据：客人库 + 对话脚本
+     * ═══════════════════════════════════════════════ */
+    const GUESTS = [
+      {
+        id: 1,
+        name: '失恋青年',
+        desc: '穿旧外套的年轻人，眼神有些落寞',
+        color: '#6366f1',
+        avatar: '🧑‍🦱',
+        opening: '我想吃点...带 her 味道的东西，你懂吗？',
+        prompts: [
+          '你说的味道，是甜蜜的、还是苦涩的？',
+          '你们一起最难忘的一顿饭是什么？',
+          '如果用一个颜色来形容她的感觉，会是什么色？',
+        ],
+        feedback: '这道菜...让我想起了那天下午的阳光。谢谢你。',
+        scores: { satisfaction: 87, creativity: 92, rarity: 78 },
+      },
+      {
+        id: 2,
+        name: '加班程序员',
+        desc: '黑眼圈很重，手里还攥着键盘',
+        color: '#10b981',
+        avatar: '👨‍💻',
+        opening: '给我来点能让我忘记 bug 的东西...',
+        prompts: [
+          '你最想念的妈妈做的菜是什么味道？',
+          '写代码时最喜欢喝什么、吃什么？',
+          '如果有一道菜能治愈你，它应该是什么感觉？',
+        ],
+        feedback: '嗯...有点像深夜写完代码后吃到的第一口热饭。暖暖的。',
+        scores: { satisfaction: 94, creativity: 76, rarity: 85 },
+      },
+      {
+        id: 3,
+        name: '旅行少女',
+        desc: '背着大背包，衣服上别满各地徽章',
+        color: '#f59e0b',
+        avatar: '🧳',
+        opening: '我在路上走了好久...想吃点有「家」的味道的。',
+        prompts: [
+          '你说的「家」，是哪个城市的家？',
+          '旅途中最怀念家乡的哪种食物？',
+          '如果把思念做成一道菜，它会长什么样？',
+        ],
+        feedback: '哇...这让我想起了奶奶的厨房。好久没回去了呢。',
+        scores: { satisfaction: 91, creativity: 88, rarity: 93 },
+      },
+    ];
+
+    /* ═══════════════════════════════════════════════
+     * 工具组件
+     * ═══════════════════════════════════════════════ */
+
+    // 打字机效果 Hook
+    function useTypewriter(text, speed = 40, trigger = true) {
+      const [displayed, setDisplayed] = useState('');
+      const [done, setDone] = useState(false);
+      useEffect(() => {
+        if (!trigger) { setDisplayed(''); setDone(false); return; }
+        setDisplayed(''); setDone(false);
+        let i = 0;
+        const timer = setInterval(() => {
+          i++;
+          setDisplayed(text.slice(0, i));
+          if (i >= text.length) { clearInterval(timer); setDone(true); }
+        }, speed);
+        return () => clearInterval(timer);
+      }, [text, trigger, speed]);
+      return { displayed, done };
+    }
+
+    // 思考中气泡
+    function ThinkingBubble({ delay = 0 }) {
+      const [dots, setDots] = useState('');
+      useEffect(() => {
+        let iv;
+        const timer = setTimeout(() => {
+          iv = setInterval(() => {
+            setDots(d => d.length >= 3 ? '' : d + '.');
+          }, 400);
+        }, delay);
+        return () => { clearTimeout(timer); if (iv) clearInterval(iv); };
+      }, [delay]);
+      return (
+        <div className="inline-flex items-center gap-1 px-4 py-2 rounded-xl acrylic-light border border-white/10">
+          <span className="text-sm text-white/60">思考中{dots}</span>
+        </div>
+      );
+    }
+
+    // 像素风格菜品占位图
+    function DishPlaceholder({ name, color, size = 160, className = '' }) {
+      return (
+        <div
+          className={`flex flex-col items-center gap-2 ${className}`}
+        >
+          <div
+            className="pixel-img rounded-lg flex items-center justify-center"
+            style={{
+              width: size, height: size,
+              background: `linear-gradient(135deg, ${color}44, ${color}88)`,
+              border: `3px solid ${color}`,
+              boxShadow: `0 0 20px ${color}44, inset 0 0 30px ${color}22`,
+            }}
+          >
+            <span className="text-4xl pixel-font" style={{ color }}>🍽</span>
+          </div>
+          <span className="pixel-font text-xs" style={{ color }}>{name}</span>
+        </div>
+      );
+    }
+
+    // 评分条目
+    function ScoreItem({ label, value, delay, color }) {
+      const [show, setShow] = useState(false);
+      useEffect(() => {
+        const t = setTimeout(() => setShow(true), delay);
+        return () => clearTimeout(t);
+      }, [delay]);
+      if (!show) return null;
+      return (
+        <div
+          className="flex items-center gap-3 px-4 py-2 rounded-lg"
+          style={{ animation: 'score-pop 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards' }}
+        >
+          <span className="text-sm text-white/60 w-16">{label}</span>
+          <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+            <div
+              className="h-full rounded-full transition-all duration-1000 ease-out"
+              style={{ width: `${value}%`, background: color, transitionDelay: '0.3s' }}
+            />
+          </div>
+          <span className="pixel-font text-sm" style={{ color }}>{value}</span>
+        </div>
+      );
+    }
+
+    /* ═══════════════════════════════════════════════
+     * 阶段组件
+     * ═══════════════════════════════════════════════ */
+
+    // 阶段一：客人到来
+    function StageGuestArrival({ guest, onStart }) {
+      return (
+        <div className="relative w-full h-full flex items-center justify-center">
+          {/* 背景装饰 */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute top-20 right-20 w-40 h-40 rounded-full opacity-10"
+              style={{ background: `radial-gradient(circle, ${guest.color}, transparent)` }} />
+          </div>
+
+          <div className="relative z-10 flex items-end gap-12 max-w-3xl w-full px-8">
+            {/* 厨师 */}
+            <div className="flex flex-col items-center gap-2 anim-slide-left" style={{ animationDelay: '0.2s' }}>
+              <div className="w-24 h-32 rounded-lg flex items-center justify-center text-4xl acrylic border border-white/10"
+                style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.3)' }}>
+                👨‍🍳
+              </div>
+              <span className="pixel-font text-[8px] text-white/40">厨师</span>
+            </div>
+
+            {/* 客人 + 气泡 */}
+            <div className="flex flex-col items-center gap-3 flex-1 anim-slide-right">
+              {/* 气泡 */}
+              <div className="anim-fade-in acrylic-light border border-white/10 rounded-2xl rounded-br-sm px-5 py-3 max-w-sm"
+                style={{ animationDelay: '0.6s', boxShadow: `0 0 30px ${guest.color}22` }}>
+                <p className="text-sm leading-relaxed">{guest.opening}</p>
+              </div>
+              {/* 客人 */}
+              <div className="flex flex-col items-center gap-2">
+                <div
+                  className="w-28 h-36 rounded-xl flex items-center justify-center text-5xl acrylic anim-float"
+                  style={{
+                    border: `2px solid ${guest.color}66`,
+                    boxShadow: `0 8px 32px rgba(0,0,0,0.3), 0 0 40px ${guest.color}22`,
+                  }}
+                >
+                  {guest.avatar}
+                </div>
+                <span className="pixel-font text-xs" style={{ color: guest.color }}>{guest.name}</span>
+                <span className="text-xs text-white/40">{guest.desc}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 开始按钮 */}
+          <button
+            onClick={onStart}
+            className="absolute bottom-12 left-1/2 -translate-x-1/2 px-8 py-3 rounded-xl font-bold text-sm
+              bg-game-accent/90 hover:bg-game-accent transition-all duration-200
+              hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-game-accent/50"
+            aria-label="开始对话"
+            style={{ boxShadow: '0 4px 20px rgba(255,107,157,0.4)' }}
+          >
+            开始对话
+          </button>
+        </div>
+      );
+    }
+
+    // 阶段二/三：创作对话
+    function StageCreation({ guest, round, onSend, transitioning }) {
+      const [input, setInput] = useState('');
+      const [history, setHistory] = useState([]);
+      const [currentPrompt, setCurrentPrompt] = useState(guest.prompts[0]);
+      const [showPrompt, setShowPrompt] = useState(false);
+      const [waitingInput, setWaitingInput] = useState(false);
+      const [finalRoundSent, setFinalRoundSent] = useState(false);
+      const chatRef = useRef(null);
+      const inputRef = useRef(null);
+
+      const { displayed: typedPrompt, done: promptDone } = useTypewriter(currentPrompt, 35, showPrompt);
+
+      useEffect(() => {
+        // 初始引导词延迟显示
+        const t = setTimeout(() => setShowPrompt(true), 800);
+        return () => clearTimeout(t);
+      }, []);
+
+      useEffect(() => {
+        if (promptDone) setWaitingInput(true);
+      }, [promptDone]);
+
+      useEffect(() => {
+        if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
+      }, [history, typedPrompt]);
+
+      useEffect(() => {
+        if (waitingInput && inputRef.current) inputRef.current.focus();
+      }, [waitingInput]);
+
+      const handleSend = () => {
+        if (!input.trim() || !waitingInput) return;
+        const userText = input.trim();
+        setInput('');
+        setWaitingInput(false);
+
+        const newHistory = [...history, { role: 'user', text: userText }];
+        setHistory(newHistory);
+
+        if (round < 3) {
+          // 下一轮引导
+          setTimeout(() => {
+            setCurrentPrompt(guest.prompts[round]); // round is 1-indexed for next prompt
+            setShowPrompt(false);
+            setTimeout(() => setShowPrompt(true), 100);
+          }, 600);
+        } else {
+          setFinalRoundSent(true);
+        }
+        onSend(userText, round);
+      };
+
+      const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          handleSend();
+        }
+      };
+
+      return (
+        <div className="relative w-full h-full flex flex-col anim-fade-in"
+          style={{ animation: transitioning ? 'bubble-shrink 0.6s ease-in forwards' : undefined }}>
+
+          {/* 顶部状态栏 */}
+          <div className="flex items-center justify-between px-6 py-3 acrylic border-b border-white/5">
+            <span className="pixel-font text-xs text-game-accent">创作中</span>
+            <span className="pixel-font text-[8px] text-white/30">第 {round}/3 轮</span>
+          </div>
+
+          {/* 对话区域 */}
+          <div ref={chatRef} className="flex-1 overflow-y-auto hide-scrollbar px-6 py-4 space-y-4">
+            {/* 历史消息 */}
+            {history.map((msg, i) => (
+              <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div className={`max-w-[70%] px-4 py-2 rounded-xl text-sm ${
+                  msg.role === 'user'
+                    ? 'bg-game-accent/20 border border-game-accent/30 rounded-br-sm'
+                    : 'acrylic-light border border-white/10 rounded-bl-sm'
+                }`}>
+                  {msg.text}
+                </div>
+              </div>
+            ))}
+
+            {/* 当前引导词 */}
+            {showPrompt && (
+              <div className="flex justify-start">
+                <div className="max-w-[70%] px-4 py-2 rounded-xl rounded-bl-sm text-sm acrylic-light border border-white/10">
+                  {typedPrompt}
+                  {!promptDone && <span className="inline-block w-0.5 h-4 bg-white/60 ml-0.5 animate-pulse" />}
+                </div>
+              </div>
+            )}
+
+            {/* 等待输入提示 */}
+            {finalRoundSent && (
+              <div className="flex justify-center anim-fade-in">
+                <span className="text-xs text-white/30">信息已足够，准备烹调...</span>
+              </div>
+            )}
+          </div>
+
+          {/* 输入区 */}
+          <div className="px-6 py-4 acrylic border-t border-white/5">
+            <div className="flex gap-3">
+              <input
+                ref={inputRef}
+                type="text"
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                disabled={!waitingInput}
+                placeholder={waitingInput ? '写下你的灵感...' : '等待引导中...'}
+                className="flex-1 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm
+                  placeholder:text-white/20 focus:outline-none focus:border-game-accent/50
+                  disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                aria-label="输入你的灵感"
+              />
+              <button
+                onClick={handleSend}
+                disabled={!waitingInput || !input.trim()}
+                className="px-5 py-2.5 rounded-xl bg-game-accent/80 hover:bg-game-accent text-sm font-bold
+                  disabled:opacity-30 disabled:cursor-not-allowed
+                  transition-all duration-150 hover:scale-105 active:scale-95
+                  focus:outline-none focus:ring-2 focus:ring-game-accent/50"
+                aria-label="发送"
+              >
+                发送
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // 阶段四/五：菜品生成
+    function StageDishGeneration({ guest, dishIndex, dishName, dishColor, onDone }) {
+      const [phase, setPhase] = useState('loading'); // loading -> reveal
+
+      useEffect(() => {
+        const t = setTimeout(() => setPhase('reveal'), 2200);
+        return () => clearTimeout(t);
+      }, []);
+
+      useEffect(() => {
+        if (phase === 'reveal') {
+          const t = setTimeout(onDone, 1200);
+          return () => clearTimeout(t);
+        }
+      }, [phase, onDone]);
+
+      return (
+        <div className="w-full h-full flex flex-col items-center justify-center gap-6 anim-fade-in">
+          {phase === 'loading' ? (
+            <>
+              <ThinkingBubble />
+              <p className="pixel-font text-xs text-game-warm anim-pulse-glow rounded-lg px-3 py-1">
+                正在烹调第{dishIndex === 1 ? '一' : '二'}道菜...
+              </p>
+              {/* 加载条 */}
+              <div className="w-48 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                <div className="h-full bg-game-warm rounded-full"
+                  style={{
+                    animation: 'loading-bar 2s ease-in-out forwards',
+                    width: '0%',
+                  }}
+                />
+              </div>
+              <style>{`
+                @keyframes loading-bar {
+                  0% { width: 0%; }
+                  70% { width: 85%; }
+                  100% { width: 100%; }
+                }
+              `}</style>
+            </>
+          ) : (
+            <div className="anim-bounce-in">
+              <DishPlaceholder name={dishName} color={dishColor} size={140} />
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // 阶段六：融合
+    function StageFusion({ dish1, dish2, guest, onDone }) {
+      const [phase, setPhase] = useState('merge'); // merge -> rotate -> beam -> reveal
+
+      useEffect(() => {
+        const timers = [
+          setTimeout(() => setPhase('rotate'), 800),
+          setTimeout(() => setPhase('beam'), 2000),
+          setTimeout(() => setPhase('reveal'), 2800),
+          setTimeout(onDone, 4500),
+        ];
+        return () => timers.forEach(clearTimeout);
+      }, [onDone]);
+
+      return (
+        <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+          {/* 背景变暗 */}
+          <div className="absolute inset-0 bg-black/60 anim-fade-in" />
+
+          {phase === 'merge' && (
+            <div className="relative z-10 flex items-center gap-4">
+              <div style={{ animation: 'merge-left 0.8s ease-in forwards' }}>
+                <DishPlaceholder name={dish1.name} color={dish1.color} size={120} />
+              </div>
+              <div style={{ animation: 'merge-right 0.8s ease-in forwards' }}>
+                <DishPlaceholder name={dish2.name} color={dish2.color} size={120} />
+              </div>
+              <style>{`
+                @keyframes merge-left { to { transform: translateX(80px) scale(0.8); } }
+                @keyframes merge-right { to { transform: translateX(-80px) scale(0.8); } }
+              `}</style>
+            </div>
+          )}
+
+          {phase === 'rotate' && (
+            <div className="relative z-10">
+              <div style={{ animation: 'fusion-rotate 1.2s ease-in forwards' }}>
+                <DishPlaceholder name="融合中..." color="#fbbf24" size={100} />
+              </div>
+            </div>
+          )}
+
+          {phase === 'beam' && (
+            <div className="relative z-10">
+              <div className="w-32 h-32 rounded-full"
+                style={{
+                  background: 'radial-gradient(circle, #fff, #fbbf24, transparent)',
+                  animation: 'beam-burst 0.8s ease-out forwards',
+                }}
+              />
+            </div>
+          )}
+
+          {phase === 'reveal' && (
+            <div className="relative z-10 flex flex-col items-center gap-4 anim-bounce-in">
+              <DishPlaceholder name="✨ 最终料理 ✨" color="#fbbf24" size={200} />
+              <p className="pixel-font text-xs text-game-warm">{guest.name}的专属料理</p>
+            </div>
+          )}
+
+          {/* 粒子效果（CSS实现） */}
+          {(phase === 'beam' || phase === 'reveal') && (
+            <div className="absolute inset-0 pointer-events-none z-20">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div key={i} className="absolute w-2 h-2 rounded-full"
+                  style={{
+                    left: '50%', top: '50%',
+                    background: i % 2 === 0 ? '#fbbf24' : '#ff6b9d',
+                    '--ex': `${(Math.random() - 0.5) * 200}px`,
+                    '--ey': `${(Math.random() - 0.5) * 200}px`,
+                    animation: `ember-float 1.5s ease-out forwards`,
+                    animationDelay: `${i * 0.08}s`,
+                  }}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // 阶段七：客人反馈
+    function StageFeedback({ guest, onDone }) {
+      const [showThinking, setShowThinking] = useState(true);
+      const [showText, setShowText] = useState(false);
+      const [showScores, setShowScores] = useState(false);
+
+      const { displayed: typedFeedback, done: feedbackDone } = useTypewriter(
+        guest.feedback, 50, showText
+      );
+
+      useEffect(() => {
+        const timers = [
+          setTimeout(() => { setShowThinking(false); setShowText(true); }, 1500),
+          setTimeout(() => setShowScores(true), 4000),
+          setTimeout(onDone, 6500),
+        ];
+        return () => timers.forEach(clearTimeout);
+      }, [onDone]);
+
+      return (
+        <div className="w-full h-full flex flex-col items-center justify-center gap-8 anim-fade-in px-8">
+          {/* 客人头像 + 反馈 */}
+          <div className="flex items-start gap-6 max-w-lg">
+            <div className="flex flex-col items-center gap-2 flex-shrink-0">
+              <div className="w-16 h-16 rounded-full flex items-center justify-center text-3xl acrylic border border-white/10 anim-float">
+                {guest.avatar}
+              </div>
+              <span className="pixel-font text-[8px]" style={{ color: guest.color }}>{guest.name}</span>
+            </div>
+
+            <div className="flex-1">
+              {showThinking ? (
+                <ThinkingBubble />
+              ) : (
+                <div className="acrylic-light border border-white/10 rounded-2xl rounded-tl-sm px-5 py-3 anim-fade-in">
+                  <p className="text-sm leading-relaxed">
+                    {typedFeedback}
+                    {!feedbackDone && <span className="inline-block w-0.5 h-4 bg-white/60 ml-0.5 animate-pulse" />}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* 评分数值 */}
+          {showScores && (
+            <div className="w-full max-w-sm space-y-2 anim-slide-up">
+              <ScoreItem label="满意度" value={guest.scores.satisfaction} delay={0} color="#ff6b9d" />
+              <ScoreItem label="创意度" value={guest.scores.creativity} delay={300} color="#4ade80" />
+              <ScoreItem label="稀有度" value={guest.scores.rarity} delay={600} color="#fbbf24" />
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // 阶段八：结算
+    function StageSettlement({ guest, onNext }) {
+      return (
+        <div className="w-full h-full flex flex-col items-center justify-center gap-8 anim-fade-in">
+          {/* 评分总结卡片 */}
+          <div className="acrylic rounded-2xl border border-white/10 p-6 w-full max-w-sm anim-slide-up"
+            style={{ boxShadow: '0 16px 64px rgba(0,0,0,0.4)' }}>
+            <h2 className="pixel-font text-sm text-center text-game-warm mb-4">营业结算</h2>
+
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-white/60">满意度</span>
+                <span className="pixel-font text-sm text-game-accent">{guest.scores.satisfaction}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-white/60">创意度</span>
+                <span className="pixel-font text-sm text-game-accent2">{guest.scores.creativity}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-white/60">稀有度</span>
+                <span className="pixel-font text-sm text-game-warm">{guest.scores.rarity}</span>
+              </div>
+
+              <div className="border-t border-white/10 pt-3 mt-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-bold">总分</span>
+                  <span className="pixel-font text-lg text-game-warm">
+                    {Math.round((guest.scores.satisfaction + guest.scores.creativity + guest.scores.rarity) / 3)}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 下一位客人按钮 */}
+          <button
+            onClick={onNext}
+            className="px-8 py-3 rounded-xl font-bold text-sm
+              bg-game-accent2/80 hover:bg-game-accent2 transition-all duration-200
+              hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-game-accent2/50
+              anim-bounce-in"
+            style={{ animationDelay: '0.8s', boxShadow: '0 4px 20px rgba(74,222,128,0.3)' }}
+            aria-label="下一位客人"
+          >
+            下一位客人 →
+          </button>
+        </div>
+      );
+    }
+
+    /* ═══════════════════════════════════════════════
+     * 主应用：状态机
+     * ═══════════════════════════════════════════════ */
+    function App() {
+      // stage: 'start' | 'arrival' | 'creation' | 'dish1' | 'dish2' | 'fusion' | 'feedback' | 'settlement'
+      const [stage, setStage] = useState('start');
+      const [guestIndex, setGuestIndex] = useState(0);
+      const [round, setRound] = useState(1);
+      const [transitioning, setTransitioning] = useState(false);
+
+      const guest = GUESTS[guestIndex % GUESTS.length];
+
+      const dish1 = { name: '回忆碎片', color: '#6366f1' };
+      const dish2 = { name: '深夜慰藉', color: '#10b981' };
+
+      const handleStartGame = () => {
+        setStage('arrival');
+        setRound(1);
+      };
+
+      const handleStartDialogue = () => {
+        setTransitioning(true);
+        setTimeout(() => {
+          setStage('creation');
+          setTransitioning(false);
+        }, 600);
+      };
+
+      const handleSend = (text, currentRound) => {
+        if (currentRound >= 3) {
+          // 3轮完成，进入生图
+          setTimeout(() => setStage('dish1'), 1200);
+        } else {
+          setRound(currentRound + 1);
+        }
+      };
+
+      const handleDish1Done = useCallback(() => setStage('dish2'), []);
+      const handleDish2Done = useCallback(() => setStage('fusion'), []);
+      const handleFusionDone = useCallback(() => setStage('feedback'), []);
+      const handleFeedbackDone = useCallback(() => setStage('settlement'), []);
+
+      const handleNextGuest = () => {
+        setGuestIndex(i => i + 1);
+        setStage('arrival');
+        setRound(1);
+      };
+
+      return (
+        <div className="relative w-screen h-screen overflow-hidden bg-game-bg">
+          {/* 顶部标题栏 */}
+          <header className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-3 acrylic border-b border-white/5">
+            <h1 className="pixel-font text-xs text-game-accent">AI厨房</h1>
+            <span className="pixel-font text-[8px] text-white/20">Demo v0.1</span>
+          </header>
+
+          {/* 游戏主区域 */}
+          <main className="w-full h-full pt-12">
+            {stage === 'start' && (
+              <div className="w-full h-full flex flex-col items-center justify-center gap-8 anim-fade-in">
+                <div className="text-center space-y-4">
+                  <h1 className="pixel-font text-2xl text-game-accent anim-float">AI厨房</h1>
+                  <p className="text-sm text-white/40">用创意烹饪情感</p>
+                </div>
+                <button
+                  onClick={handleStartGame}
+                  className="px-10 py-4 rounded-xl font-bold text-lg
+                    bg-game-accent/90 hover:bg-game-accent transition-all duration-200
+                    hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-game-accent/50
+                    anim-pulse-glow"
+                  aria-label="开始营业"
+                >
+                  🍳 开始营业
+                </button>
+                <p className="text-xs text-white/20">点击开始，迎接你的第一位客人</p>
+              </div>
+            )}
+
+            {stage === 'arrival' && (
+              <StageGuestArrival guest={guest} onStart={handleStartDialogue} />
+            )}
+
+            {stage === 'creation' && (
+              <StageCreation guest={guest} round={round} onSend={handleSend} transitioning={transitioning} />
+            )}
+
+            {stage === 'dish1' && (
+              <StageDishGeneration guest={guest} dishIndex={1} dishName={dish1.name} dishColor={dish1.color} onDone={handleDish1Done} />
+            )}
+
+            {stage === 'dish2' && (
+              <StageDishGeneration guest={guest} dishIndex={2} dishName={dish2.name} dishColor={dish2.color} onDone={handleDish2Done} />
+            )}
+
+            {stage === 'fusion' && (
+              <StageFusion dish1={dish1} dish2={dish2} guest={guest} onDone={handleFusionDone} />
+            )}
+
+            {stage === 'feedback' && (
+              <StageFeedback guest={guest} onDone={handleFeedbackDone} />
+            )}
+
+            {stage === 'settlement' && (
+              <StageSettlement guest={guest} onNext={handleNextGuest} />
+            )}
+          </main>
+        </div>
+      );
+    }
+
+    /* ═══════════════════════════════════════════════
+     * 挂载
+     * ═══════════════════════════════════════════════ */
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

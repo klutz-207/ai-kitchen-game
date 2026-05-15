@@ -1,0 +1,22 @@
+{
+  "name": "ai-game",
+  "version": "1.0.0",
+  "description": "AI Kitchen Game",
+  "main": "index.js",
+  "scripts": {
+    "check": "node scripts/check-workspace.cjs",
+    "check:ai": "node scripts/check-ai.cjs",
+    "check:ai:live": "node scripts/check-ai.cjs --live",
+    "dev": "node --use-env-proxy scripts/dev-all.cjs",
+    "dev:api": "node --use-env-proxy scripts/dev-api.cjs",
+    "dev:demo": "cd demo && npm run dev",
+    "test": "node --test tests/*.test.js",
+    "build:demo": "cd demo && npm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "docx": "^9.6.1"
+  }
+}
