@@ -1,4 +1,4 @@
-const { callQwenJson } = require('./llm-client');
+const { callZhipuJson } = require('./llm-client');
 const { generateImageToImage, generateTextToImage } = require('./sd-client');
 const {
   buildFeedbackMessages,
@@ -125,7 +125,7 @@ async function submitRound({ sessionId, playerInput }) {
   const fallback = makeMockRoundOutput({ guest: session.guest, playerInput, round });
   const roundOutput = useMock()
     ? fallback
-    : normalizeRoundOutput(await callQwenJson(buildRoundMessages({
+    : normalizeRoundOutput(await callZhipuJson(buildRoundMessages({
       guest: session.guest,
       round,
       playerInput,
@@ -228,7 +228,7 @@ async function createFeedback({ sessionId }) {
 
   const result = useMock()
     ? fallback
-    : normalizeFeedback(await callQwenJson(buildFeedbackMessages({
+    : normalizeFeedback(await callZhipuJson(buildFeedbackMessages({
       guest: session.guest,
       answers: session.rounds.map((round) => round.playerInput),
       finalDish: session.finalDish,

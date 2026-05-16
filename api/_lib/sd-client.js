@@ -2,7 +2,7 @@ const { getEnv } = require('./env');
 const { fetchJson, withRetry } = require('./retry');
 
 function getImageProvider() {
-  return getEnv('IMAGE_PROVIDER', 'sd-webui').toLowerCase();
+  return getEnv('IMAGE_PROVIDER', 'zhipu').toLowerCase();
 }
 
 function getAuthHeader() {
@@ -49,14 +49,14 @@ async function postSd(path, payload) {
   });
 }
 
-function getDashScopeApiKey() {
-  return getEnv('DASHSCOPE_API_KEY') || getEnv('QWEN_API_KEY');
+function getZhipuApiKey() {
+  return getEnv('ZHIPU_API_KEY');
 }
 
-function getDashScopeHeaders() {
-  const apiKey = getDashScopeApiKey();
+function getZhipuHeaders() {
+  const apiKey = getZhipuApiKey();
   if (!apiKey) {
-    throw new Error('DASHSCOPE_API_KEY or QWEN_API_KEY is not configured.');
+    throw new Error('ZHIPU_API_KEY is not configured.');
   }
 
   return {
@@ -65,41 +65,9 @@ function getDashScopeHeaders() {
   };
 }
 
-function getDashScopeUrl() {
-  const baseUrl = getEnv('DASHSCOPE_BASE_URL', 'https://dashscope.aliyuncs.com/api/v1').replace(/\/$/, '');
-  const endpoint = getEnv('DASHSCOPE_IMAGE_ENDPOINT', '/services/aigc/multimodal-generation/generation');
-  return `${baseUrl}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
-}
-
-function buildDashScopeText(prompt, negativePrompt) {
-  const avoid = negativePrompt ? `\n\nAvoid: ${negativePrompt}` : '';
-  return `${prompt}${avoid}`;
-}
-
-function buildDashScopeContent({ prompt, negativePrompt, imageUrls = [] }) {
-  const images = imageUrls
-    .filter(Boolean)
-    .slice(0, Number(getEnv('DASHSCOPE_MAX_INPUT_IMAGES', '2')))
-    .map((image) => ({ image }));
-
-  return [
-    ...images,
-    { text: buildDashScopeText(prompt, negativePrompt) },
-  ];
-}
-
-function extractDashScopeImage(data) {
-  const choices = data?.output?.choices || [];
-  for (const choice of choices) {
-    const content = choice?.message?.content || [];
-    const imageItem = content.find((item) => item?.image);
-    if (imageItem?.image) return imageItem.image;
-  }
-
-  const resultUrl = data?.output?.results?.[0]?.url || data?.output?.results?.[0]?.image;
-  if (resultUrl) return resultUrl;
-
-  return '';
+function getZhipuImageUrl() {
+  const baseUrl = getEnv('ZHIPU_BASE_URL', 'https://open.bigmodel.cn/api/paas/v4').replace(/\/$/, '');
+  return `${baseUrl}/images/generations`;
 }
 
 async function fetchImageAsDataUrl(imageUrl) {
@@ -123,45 +91,41 @@ async function fetchImageAsDataUrl(imageUrl) {
   }
 }
 
-async function generateDashScopeImage({ prompt, negativePrompt, imageUrls = [] }) {
-  const model = getEnv('DASHSCOPE_IMAGE_MODEL', 'wan2.7-image');
-  const data = await fetchJson(getDashScopeUrl(), {
+async function generateZhipuImage({ prompt }) {
+  const model = getEnv('ZHIPU_IMAGE_MODEL', 'cogview-3-flash');
+  const size = getEnv('ZHIPU_IMAGE_SIZE', '1024x1024');
+  const quality = getEnv('ZHIPU_IMAGE_QUALITY', 'standard');
+
+  const data = await fetchJson(getZhipuImageUrl(), {
     method: 'POST',
-    headers: getDashScopeHeaders(),
+    headers: getZhipuHeaders(),
     body: JSON.stringify({
       model,
-      input: {
-        messages: [
-          {
-            role: 'user',
-            content: buildDashScopeContent({ prompt, negativePrompt, imageUrls }),
-          },
-        ],
-      },
-      parameters: {
-        size: getEnv('DASHSCOPE_IMAGE_SIZE', '1K'),
-        n: 1,
-        watermark: getEnv('DASHSCOPE_IMAGE_WATERMARK', 'false').toLowerCase() === 'true',
-        thinking_mode: getEnv('DASHSCOPE_IMAGE_THINKING_MODE', 'false').toLowerCase() === 'true',
-      },
+      prompt,
+      size,
+      quality,
+      n: 1,
     }),
   });
 
-  const imageUrl = extractDashScopeImage(data);
+  const imageUrl = data?.data?.[0]?.url || '';
+  if (!imageUrl) {
+    throw new Error('Zhipu CogView returned no image URL.');
+  }
+
   return {
     imageUrl: await fetchImageAsDataUrl(imageUrl),
     info: JSON.stringify({
-      provider: 'dashscope',
+      provider: 'zhipu',
       model,
-      requestId: data?.request_id || '',
-      usage: data?.usage || null,
+      created: data?.created || '',
     }),
   };
 }
 
 async function generateTextToImage({ prompt, negativePrompt, checkpoint }) {
-  if (getImageProvider() === 'dashscope') {
-    return withRetry(() => generateDashScopeImage({ prompt, negativePrompt }));
+  if (getImageProvider() === 'zhipu') {
+    return withRetry(() => generateZhipuImage({ prompt }));
   }
 
   return withRetry(async () => {
@@ -186,8 +150,9 @@ async function generateTextToImage({ prompt, negativePrompt, checkpoint }) {
 }
 
 async function generateImageToImage({ prompt, negativePrompt, imageUrls, checkpoint }) {
-  if (getImageProvider() === 'dashscope') {
-    return withRetry(() => generateDashScopeImage({ prompt, negativePrompt, imageUrls }));
+  // TODO: Zhipu CogView-3-Flash 不直接支持图生图，需要后续选择图生图模型
+  if (getImageProvider() === 'zhipu') {
+    throw new Error('Zhipu CogView-3-Flash does not support image-to-image. Please use sd-webui or configure a different provider.');
   }
 
   return withRetry(async () => {

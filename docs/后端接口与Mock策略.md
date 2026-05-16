@@ -5,21 +5,23 @@
 当前 demo 后端采用 Vercel Serverless API 形态，支持两套运行方式：
 
 1. `AI_KITCHEN_USE_MOCK=true`：使用本地 Mock，保证没有模型 key 时也能完整演示。
-2. `AI_KITCHEN_USE_MOCK=false`：使用 Qwen Flash + Stable Diffusion WebUI 的真实 AI cuisine pipeline。
+2. `AI_KITCHEN_USE_MOCK=false`：使用智谱 GLM-4.7-flash + CogView-3-Flash 的真实 AI cuisine pipeline。
 
 真实 pipeline 的顺序是：
 
 ```text
 创建 session
 → 第 1 轮玩家输入
-→ Qwen Flash 提取情绪/视觉概念并生成 image prompt
-→ PixelRTXL txt2img 生成菜品 1
+→ 智谱 GLM-4.7-flash 提取情绪/视觉概念并生成 image prompt
+→ 智谱 CogView-3-Flash 生成菜品 1
 → 第 2 轮玩家输入
-→ Qwen Flash 提取更深概念并生成 image prompt
-→ PixelRTXL txt2img 生成菜品 2
-→ Stable Diffusion img2img 融合两张图
-→ Qwen Flash 生成客人反馈
+→ 智谱 GLM-4.7-flash 提取更深概念并生成 image prompt
+→ 智谱 CogView-3-Flash 生成菜品 2
+→ 图生图模型融合两张图（待定）
+→ 智谱 GLM-4.7-flash 生成客人反馈
 ```
+
+注意：CogView-3-Flash 不直接支持图生图，融合阶段需要额外配置图生图模型或使用 Stable Diffusion。
 
 ## API 约定
 
@@ -62,7 +64,7 @@ cd demo && npm run dev
 
 ## Prompt Skill Layer
 
-后端会自动读取这些项目风格来源，并注入到每次 Qwen、txt2img 和 img2img prompt 中：
+后端会自动读取这些项目风格来源，并注入到每次 LLM、txt2img 和 img2img prompt 中：
 
 - `docs/美术风格定义.md`
 - `docs/美术实现规范.md`
@@ -75,22 +77,20 @@ cd demo && npm run dev
 复制 `.env.example` 为 `.env`，至少配置：
 
 ```bash
-QWEN_API_KEY=
-QWEN_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
-QWEN_MODEL=qwen-flash
-SD_WEBUI_BASE_URL=http://127.0.0.1:7860
+ZHIPU_API_KEY=
+ZHIPU_BASE_URL=https://open.bigmodel.cn/api/paas/v4
+ZHIPU_MODEL=glm-4.7-flash
+IMAGE_PROVIDER=zhipu
+ZHIPU_IMAGE_MODEL=cogview-3-flash
 AI_KITCHEN_USE_MOCK=false
 ```
 
-Stable Diffusion WebUI 需要用 `--api` 启动。PixelRTXL 如果作为 checkpoint 使用，填写：
+如果需要使用 Stable Diffusion WebUI 进行图生图融合，配置：
 
 ```bash
+IMAGE_PROVIDER=sd-webui
+SD_WEBUI_BASE_URL=http://127.0.0.1:7860
 PIXELRTXL_CHECKPOINT=你的PixelRTXL模型名称
-```
-
-融合模型可选：
-
-```bash
 SD_FUSION_CHECKPOINT=你的融合模型名称
 ```
 
