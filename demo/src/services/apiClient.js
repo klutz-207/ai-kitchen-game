@@ -1,26 +1,31 @@
 import { feedbackMock, generateDishMock, guideMock } from './mockAgents';
 
-export async function chatAgent({ sessionId, playerInput }) {
+export async function chatAgent({ sessionId, playerInput, chatTurns = 0 }) {
   if (sessionId) {
     try {
       const data = await requestApi(`/api/v1/sessions/${encodeURIComponent(sessionId)}/chat`, {
         playerInput,
       });
+      console.log('Chat API response:', data);
       return {
         assistantText: data.assistantText,
         shouldGenerateDish: data.shouldGenerateDish,
         round: data.round,
       };
-    } catch {
-      // Fall through to mock below.
+    } catch (err) {
+      console.error('Chat API failed, falling back to mock:', err);
     }
   }
 
-  // Mock fallback
+  // Mock fallback - 检测是否为名词，或超过3轮强制结束
+  const isNoun = playerInput.length <= 6 && !playerInput.includes('我') && !playerInput.includes('想') && !playerInput.includes('很');
+  const shouldEnd = isNoun || chatTurns >= 3;
   return {
-    assistantText: '我抓住了第一层味道，再告诉我它入口时会留下什么画面。',
-    shouldGenerateDish: false,
-    round: 1,
+    assistantText: shouldEnd
+      ? `「${playerInput}」...我感受到了，这就是你要的食材。`
+      : '我抓住了第一层味道，再告诉我它入口时会留下什么画面。',
+    shouldGenerateDish: shouldEnd,
+    round: chatTurns + 1,
   };
 }
 

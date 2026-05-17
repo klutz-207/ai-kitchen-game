@@ -133,12 +133,16 @@ async function chatRound({ sessionId, playerInput }) {
   });
 
   // 调用 LLM 进行对话
+  // Mock fallback: 检测是否为名词，或超过3轮强制结束
+  const chatTurns = session[chatHistoryKey].filter(m => m.role === 'assistant').length;
+  const isNoun = playerInput.length <= 6 && !playerInput.includes('我') && !playerInput.includes('想') && !playerInput.includes('很');
+  const shouldEnd = isNoun || chatTurns >= 3;
   const fallback = {
-    assistantText: round === 1
-      ? '我抓住了第一层味道，再告诉我它入口时会留下什么画面。'
-      : '两份灵感已经成形，可以开始烹调了。',
-    shouldGenerateDish: false,
-    keywords: playerInput,
+    assistantText: shouldEnd
+      ? `「${playerInput}」...我感受到了，这就是你要的食材。`
+      : '我抓住了第一层味道，再告诉我它入口时会留下什么画面。',
+    shouldGenerateDish: shouldEnd,
+    keywords: shouldEnd ? playerInput : '',
   };
 
   const chatOutput = useMock()

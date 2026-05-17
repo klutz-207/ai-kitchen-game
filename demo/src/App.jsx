@@ -99,6 +99,7 @@ export default function App() {
       const result = await chatAgent({
         sessionId: currentRun.sessionId,
         playerInput: answer,
+        chatTurns: currentRun.chatTurns,
       });
 
       setRun((current) => ({
