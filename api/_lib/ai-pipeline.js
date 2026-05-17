@@ -1,6 +1,7 @@
 const { callZhipuJson } = require('./llm-client');
 const { generateImageToImage, generateTextToImage } = require('./sd-client');
 const {
+  buildChatMessages,
   buildFeedbackMessages,
   buildFusionPrompt,
   buildRoundMessages,
@@ -102,6 +103,80 @@ async function startSession({ guestId }) {
   };
 }
 
+async function chatRound({ sessionId, playerInput }) {
+  const session = ensureSession(sessionId);
+  if (!playerInput || !String(playerInput).trim()) {
+    const error = new Error('playerInput is required.');
+    error.statusCode = 400;
+    error.code = 'validation_error';
+    throw error;
+  }
+
+  const round = session.rounds.length + 1;
+  if (round > 2) {
+    const error = new Error('This session already has two rounds.');
+    error.statusCode = 409;
+    error.code = 'round_limit_reached';
+    throw error;
+  }
+
+  // 获取当前轮次的对话历史
+  const chatHistoryKey = `chat_history_${round}`;
+  if (!session[chatHistoryKey]) {
+    session[chatHistoryKey] = [];
+  }
+
+  // 将玩家输入添加到对话历史
+  session[chatHistoryKey].push({
+    role: 'player',
+    content: playerInput,
+  });
+
+  // 调用 LLM 进行对话
+  const fallback = {
+    assistantText: round === 1
+      ? '我抓住了第一层味道，再告诉我它入口时会留下什么画面。'
+      : '两份灵感已经成形，可以开始烹调了。',
+    shouldGenerateDish: false,
+    keywords: playerInput,
+  };
+
+  const chatOutput = useMock()
+    ? fallback
+    : normalizeChatOutput(await callZhipuJson(buildChatMessages({
+      guest: session.guest,
+      chatHistory: session[chatHistoryKey],
+      playerInput,
+      round,
+    })), fallback);
+
+  // 将 AI 回复添加到对话历史
+  session[chatHistoryKey].push({
+    role: 'assistant',
+    content: chatOutput.assistantText,
+  });
+
+  // 保存关键词
+  session[`keywords_${round}`] = chatOutput.keywords || playerInput;
+
+  saveSession(session);
+
+  return {
+    ...serializeSession(session),
+    assistantText: chatOutput.assistantText,
+    shouldGenerateDish: chatOutput.shouldGenerateDish,
+    round,
+  };
+}
+
+function normalizeChatOutput(output, fallback) {
+  return {
+    assistantText: output.assistantText || fallback.assistantText,
+    shouldGenerateDish: output.shouldGenerateDish === true,
+    keywords: output.keywords || fallback.keywords,
+  };
+}
+
 async function submitRound({ sessionId, playerInput }) {
   const session = ensureSession(sessionId);
   if (!playerInput || !String(playerInput).trim()) {
@@ -181,13 +256,26 @@ async function fuseSession({ sessionId }) {
 
   const [dish1, dish2] = session.dishes;
   const mockFinal = mockFuseDishes({ guestId: session.guest.id, dish1, dish2 });
-  const imageResult = useMock()
-    ? { imageUrl: '' }
-    : await generateImageToImage({
-      prompt: buildFusionPrompt({ guest: session.guest, dish1, dish2, rounds: session.rounds }),
-      negativePrompt: defaultNegativePrompt(),
-      imageUrls: [dish1.imageUrl, dish2.imageUrl].filter(Boolean),
-    });
+  const fusionPrompt = buildFusionPrompt({ guest: session.guest, dish1, dish2, rounds: session.rounds });
+
+  let imageResult;
+  if (useMock()) {
+    imageResult = { imageUrl: '' };
+  } else {
+    try {
+      imageResult = await generateImageToImage({
+        prompt: fusionPrompt,
+        negativePrompt: defaultNegativePrompt(),
+        imageUrls: [dish1.imageUrl, dish2.imageUrl].filter(Boolean),
+      });
+    } catch {
+      // CogView-3-Flash 等不支持图生图的 provider 回退到文生图
+      imageResult = await generateTextToImage({
+        prompt: fusionPrompt,
+        negativePrompt: defaultNegativePrompt(),
+      });
+    }
+  }
 
   const finalDish = {
     ...mockFinal,
@@ -245,6 +333,7 @@ async function createFeedback({ sessionId }) {
 }
 
 module.exports = {
+  chatRound,
   createFeedback,
   fuseSession,
   startSession,

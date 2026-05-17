@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowRight, ChefHat, Heart, Send, Sparkles, Utensils } from 'lucide-react';
 import { guests } from './data/guests';
 import { chefs, defaultChef } from './data/chefs';
-import { feedbackAgent, fuseDishesAgent, generateDishAgent, guideAgent, startSessionAgent } from './services/apiClient';
+import { chatAgent, feedbackAgent, fuseDishesAgent, generateDishAgent, guideAgent, startSessionAgent } from './services/apiClient';
 import { useTypewriter } from './hooks/useTypewriter';
 import { ChefStand, GuestStand } from './components/Actors';
 import { DishCard } from './components/DishCard';
@@ -27,6 +27,8 @@ const initialRun = {
   finalDish: null,
   feedback: null,
   error: '',
+  chatTurns: 0,
+  shouldGenerate: false,
 };
 
 export default function App() {
@@ -78,12 +80,46 @@ export default function App() {
     }
   }, [guest]);
 
-  const submitAnswer = useCallback((answer) => {
+  const submitAnswer = useCallback(async (answer) => {
+    const currentRun = runRef.current;
+    const newAnswers = [...currentRun.answers, answer];
+    const newAllAnswers = [...currentRun.allAnswers, answer];
+
+    // 添加用户消息到聊天记录
     setRun((current) => ({
       ...current,
-      answers: [...current.answers, answer],
-      allAnswers: [...current.allAnswers, answer],
-      prompt: '灵感已经足够，炉火准备好了。',
+      answers: newAnswers,
+      allAnswers: newAllAnswers,
+      prompt: '',
+      chatTurns: current.chatTurns + 1,
+    }));
+
+    // 调用对话API
+    try {
+      const result = await chatAgent({
+        sessionId: currentRun.sessionId,
+        playerInput: answer,
+      });
+
+      setRun((current) => ({
+        ...current,
+        prompt: result.assistantText,
+        shouldGenerate: result.shouldGenerateDish,
+      }));
+    } catch (err) {
+      console.error('Chat failed:', err);
+      // Fallback: 直接进入生成阶段
+      setRun((current) => ({
+        ...current,
+        prompt: '灵感已经足够，炉火准备好了。',
+        shouldGenerate: true,
+      }));
+    }
+  }, []);
+
+  const startGeneration = useCallback(() => {
+    setRun((current) => ({
+      ...current,
       stage: current.activeDishIndex === 1 ? 'generating1' : 'generating2',
     }));
   }, []);
@@ -179,7 +215,7 @@ export default function App() {
       {run.stage === 'arrival' ? <Arrival guest={guest} chef={selectedChef} onStart={startCreation} /> : null}
       {run.stage === 'bubbleTransition' ? <BubbleTransition guest={guest} chef={selectedChef} /> : null}
       {run.stage === 'creation' ? (
-        <Creation guest={guest} prompt={run.prompt} round={run.round} answers={run.answers} onSubmit={submitAnswer} />
+        <Creation guest={guest} prompt={run.prompt} round={run.round} answers={run.answers} onSubmit={submitAnswer} onStartGeneration={startGeneration} shouldGenerate={run.shouldGenerate} />
       ) : null}
       {run.stage === 'generating1' ? (
         <GenerateDish guest={guest} sessionId={run.sessionId} answers={run.answers} index={1} onDone={finishDish} onError={handleGenerateError} />
@@ -303,7 +339,7 @@ function BubbleTransition({ guest, chef }) {
   );
 }
 
-function Creation({ guest, prompt, round, answers, onSubmit }) {
+function Creation({ guest, prompt, round, answers, onSubmit, onStartGeneration, shouldGenerate }) {
   const [input, setInput] = useState('');
   const [readyToType, setReadyToType] = useState(false);
   const isThinking = !prompt;
@@ -361,14 +397,22 @@ function Creation({ guest, prompt, round, answers, onSubmit }) {
           <input
             value={input}
             onChange={(event) => setInput(event.target.value)}
-            disabled={isThinking}
-            placeholder={isThinking ? '等待灵感...' : '可以先写，等主厨说完后发送'}
+            disabled={isThinking || shouldGenerate}
+            placeholder={isThinking ? '等待灵感...' : shouldGenerate ? '灵感已足够，可以开始烹调' : '可以先写，等主厨说完后发送'}
             aria-label="创作输入"
           />
-          <PixelButton type="submit" icon={Send} disabled={!input.trim() || isThinking || !readyToType || !done}>
+          <PixelButton type="submit" icon={Send} disabled={!input.trim() || isThinking || !readyToType || !done || shouldGenerate}>
             发送
           </PixelButton>
         </form>
+
+        {shouldGenerate && (
+          <div className="generation-ready">
+            <PixelButton onClick={onStartGeneration} icon={Sparkles}>
+              灵感已足够，开始烹调
+            </PixelButton>
+          </div>
+        )}
       </div>
     </section>
   );

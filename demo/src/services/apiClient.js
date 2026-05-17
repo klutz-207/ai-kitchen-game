@@ -1,5 +1,29 @@
 import { feedbackMock, generateDishMock, guideMock } from './mockAgents';
 
+export async function chatAgent({ sessionId, playerInput }) {
+  if (sessionId) {
+    try {
+      const data = await requestApi(`/api/v1/sessions/${encodeURIComponent(sessionId)}/chat`, {
+        playerInput,
+      });
+      return {
+        assistantText: data.assistantText,
+        shouldGenerateDish: data.shouldGenerateDish,
+        round: data.round,
+      };
+    } catch {
+      // Fall through to mock below.
+    }
+  }
+
+  // Mock fallback
+  return {
+    assistantText: '我抓住了第一层味道，再告诉我它入口时会留下什么画面。',
+    shouldGenerateDish: false,
+    round: 1,
+  };
+}
+
 async function requestApi(path, payload) {
   const response = await fetch(path, {
     method: 'POST',
