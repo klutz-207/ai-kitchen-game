@@ -9,6 +9,7 @@ import { DishCard } from './components/DishCard';
 import { PixelButton } from './components/PixelButton';
 import { ScoreBars } from './components/ScoreBars';
 import { StageBadge } from './components/StageBadge';
+import { playSound, startLoop, stopLoop, unlockSound } from './services/soundEffects';
 
 const maxRounds = 2;
 const gameLogo = '/assets/art-library/ui/title-kit/title-lockup-compact.png';
@@ -35,13 +36,71 @@ export default function App() {
   const [run, setRun] = useState(initialRun);
   const [selectedChefId, setSelectedChefId] = useState(defaultChef.id);
   const runRef = useRef(run);
+  const previousStageRef = useRef(run.stage);
+  const previousFeedbackRef = useRef(run.feedback);
   runRef.current = run;
   const guest = guests[run.guestIndex % guests.length];
   const selectedChef = chefs.find((chef) => chef.id === selectedChefId) || defaultChef;
 
   const setStage = (stage) => setRun((current) => ({ ...current, stage, error: '' }));
 
+  useEffect(() => {
+    const previousStage = previousStageRef.current;
+    if (previousStage === run.stage) return;
+
+    previousStageRef.current = run.stage;
+
+    if (run.stage !== 'generating1' && run.stage !== 'generating2') {
+      stopLoop('cookingLoop');
+    }
+    if (run.stage !== 'bubbleTransition') {
+      stopLoop('thinkingDots');
+    }
+    if (run.stage !== 'fusion') {
+      stopLoop('fusionOrbit');
+    }
+
+    if (run.stage === 'arrival') playSound('guestArrival');
+    if (run.stage === 'bubbleTransition') {
+      playSound('speechBubble');
+      playSound('bubbleExpand');
+      startLoop('thinkingDots');
+    }
+    if (run.stage === 'creation') {
+      playSound(previousStage === 'bubbleTransition' ? 'creationReveal' : 'aiGuide');
+    }
+    if (run.stage === 'generating1' || run.stage === 'generating2') {
+      playSound('cookingStart');
+      startLoop('cookingLoop');
+    }
+    if (run.stage === 'betweenDishes') playSound('pageFlip');
+    if (run.stage === 'kitchen') playSound('fusionButton');
+    if (run.stage === 'fusion') {
+      playSound('fusionBurst');
+      startLoop('fusionOrbit');
+    }
+    if (run.stage === 'feedback') playSound('guestThinking');
+    if (run.stage === 'settlement') playSound('settlementSlide');
+  }, [run.stage]);
+
+  useEffect(() => {
+    if (run.error) playSound('errorSoft');
+  }, [run.error]);
+
+  useEffect(() => {
+    if (run.stage === 'feedback' && run.feedback && previousFeedbackRef.current !== run.feedback) {
+      playSound('satisfied');
+      window.setTimeout(() => playSound('scorePop'), 520);
+      window.setTimeout(() => playSound('rarityReveal'), 860);
+    }
+
+    previousFeedbackRef.current = run.feedback;
+  }, [run.feedback, run.stage]);
+
   const beginGuest = () => {
+    unlockSound();
+    playSound('serviceStart');
+    startLoop('ambience');
     setRun((current) => ({
       ...initialRun,
       guestIndex: current.guestIndex,
@@ -50,6 +109,8 @@ export default function App() {
   };
 
   const startCreation = async () => {
+    unlockSound();
+    playSound('understand');
     setRun((current) => ({ ...current, stage: 'bubbleTransition', prompt: '', round: 1, answers: [], activeDishIndex: 1, error: '' }));
     const sessionPromise = startSessionAgent(guest);
     window.setTimeout(async () => {
@@ -81,6 +142,7 @@ export default function App() {
   }, [guest]);
 
   const submitAnswer = useCallback((answer) => {
+    playSound('sendIdea');
     setRun((current) => {
       const answers = [...current.answers, answer];
       const allAnswers = [...current.allAnswers, answer];
@@ -108,6 +170,7 @@ export default function App() {
   }, [guest]);
 
   const finishDish = useCallback((index, dish, meta = {}) => {
+    playSound('dishReveal');
     setRun((current) => ({
       ...current,
       [`dish${index}`]: dish,
@@ -117,6 +180,7 @@ export default function App() {
   }, []);
 
   const redoDish = useCallback((index) => {
+    playSound('pageFlip');
     setRun((current) => ({
       ...current,
       stage: 'creation',
@@ -128,6 +192,7 @@ export default function App() {
   }, [guest]);
 
   const fuseDishes = useCallback(async () => {
+    playSound('fusionStart');
     setRun((current) => ({ ...current, error: '' }));
     try {
       const current = runRef.current;
@@ -140,6 +205,7 @@ export default function App() {
   }, [guest]);
 
   const serveFinalDish = useCallback(async () => {
+    playSound('serveDish');
     setRun((current) => ({ ...current, stage: 'feedback', feedback: null, error: '' }));
     try {
       const current = runRef.current;
@@ -168,6 +234,7 @@ export default function App() {
   }, [startCreation, startSecondCreation, fuseDishes, serveFinalDish, guest]);
 
   const nextGuest = () => {
+    playSound('nextGuest');
     setRun((current) => ({
       ...initialRun,
       guestIndex: current.guestIndex + 1,
@@ -245,7 +312,12 @@ function StartScreen({ chef, selectedChefId, onSelectChef, onStart }) {
               type="button"
               role="radio"
               aria-checked={option.id === selectedChefId}
-              onClick={() => onSelectChef(option.id)}
+              onClick={() => {
+                unlockSound();
+                playSound('chefSelect');
+                onSelectChef(option.id);
+              }}
+              onPointerEnter={() => playSound('hover')}
               style={{ '--chef-accent': option.accent }}
             >
               <span className="chef-avatar-frame">
@@ -307,7 +379,13 @@ function Arrival({ guest, chef, onStart }) {
 
         <div className="dialogue-action-row">
           <span>把她的话变成料理灵感</span>
-          <button className="star-start" type="button" onClick={onStart} aria-label="理解这份心情">
+          <button
+            className="star-start"
+            type="button"
+            onClick={onStart}
+            onPointerEnter={() => playSound('hover')}
+            aria-label="理解这份心情"
+          >
             理解这份心情
           </button>
         </div>
@@ -413,6 +491,7 @@ function Creation({ guest, prompt, round, answers, onSubmit }) {
             disabled={isThinking}
             placeholder={isThinking ? '等待灵感...' : '可以先写，等主厨说完后发送'}
             aria-label="创作输入"
+            onFocus={() => playSound('inputFocus')}
           />
           <PixelButton type="submit" icon={Send} disabled={!input.trim() || isThinking || !readyToType || !done}>
             发送
@@ -523,7 +602,12 @@ function FusionIngredient({ dish, className = '' }) {
   return (
     <div className={`fusion-ingredient ${className}`}>
       {dish?.imageUrl ? (
-        <img className="generated-dish-image pixelated" src={dish.imageUrl} alt="" draggable="false" />
+        <img
+          className={`generated-dish-image pixelated ${dish.imageFit === 'full-card' ? 'full-card-art' : ''}`}
+          src={dish.imageUrl}
+          alt=""
+          draggable="false"
+        />
       ) : (
         <div
           className="pixel-dish"

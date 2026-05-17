@@ -36,7 +36,12 @@ export function DishCard({ dish, index, loading = false, onRedo, onEmptyClick })
   return (
     <section className={`dish-card ${dish.motion === 'spark' ? 'spark-dish' : 'float-dish'}`}>
       {dish.imageUrl ? (
-        <img className="generated-dish-image pixelated" src={dish.imageUrl} alt={dish.name} draggable="false" />
+        <img
+          className={`generated-dish-image pixelated ${dish.imageFit === 'full-card' ? 'full-card-art' : ''}`}
+          src={dish.imageUrl}
+          alt={dish.name}
+          draggable="false"
+        />
       ) : (
         <div
           className="pixel-dish"

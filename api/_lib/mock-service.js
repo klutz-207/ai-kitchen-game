@@ -1,4 +1,4 @@
-const { dishNameSets, fallbackDishNames, fallbackGuest, guests, scoreBands } = require('./game-data');
+const { dishNameSets, fallbackDishNames, fallbackGuest, guests, presetDishArt, scoreBands } = require('./game-data');
 
 function pickBySeed(items, seed) {
   return items[Math.abs(seed) % items.length];
@@ -41,14 +41,17 @@ function generateDish({ guestId, answers, index }) {
   const safeIndex = Number(index) === 2 ? 2 : 1;
   const seed = textSeed([guest.id, safeIndex, ...safeAnswers]);
   const names = getDishNames(guest.id, safeIndex);
+  const preset = presetDishArt[guest.id]?.dishes?.[safeIndex];
 
   return {
     id: `${guest.id}-dish-${safeIndex}-${seed}`,
-    name: pickBySeed(names, seed + safeIndex),
+    name: preset?.name || pickBySeed(names, seed + safeIndex),
     color: guest.dishPalette[(safeIndex - 1) % guest.dishPalette.length],
     accent: guest.dishPalette[safeIndex % guest.dishPalette.length],
-    ingredient: pickBySeed(safeAnswers, seed) || guest.mood,
+    ingredient: preset?.ingredient || pickBySeed(safeAnswers, seed) || guest.mood,
     motion: safeIndex === 1 ? 'float' : 'spark',
+    imageUrl: preset?.imageUrl || '',
+    imageFit: preset?.imageFit || '',
   };
 }
 
@@ -56,6 +59,7 @@ function fuseDishes({ guestId, dish1, dish2 }) {
   const guest = getGuest(guestId);
   const first = dish1 || {};
   const second = dish2 || {};
+  const preset = presetDishArt[guest.id]?.fusion;
 
   return {
     id: `${first.id || 'dish-1'}-${second.id || 'dish-2'}-fusion`,
@@ -64,6 +68,8 @@ function fuseDishes({ guestId, dish1, dish2 }) {
     accent: guest.color,
     ingredient: '两份灵感被轻轻融合',
     motion: 'spark',
+    imageUrl: preset?.imageUrl || '',
+    imageFit: preset?.imageFit || '',
   };
 }
 

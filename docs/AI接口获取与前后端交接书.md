@@ -65,7 +65,7 @@ ZHIPU_MODEL=glm-4.7-flash
 
 - 文生图：生成菜品图 1 和菜品图 2
 - 云端运行：适合发行 demo，不依赖本机 GPU 或本地 WebUI
-- 注意：CogView-3-Flash 不直接支持图生图，融合阶段需要额外配置
+- 注意：CogView-3-Flash 不直接支持图生图；当前后端会在融合生图不可用时使用 mock 融合菜继续 session，后续如需真实融合图再额外配置图生图服务。
 
 需要提供到 `.env` 的变量：
 
@@ -206,7 +206,7 @@ feedback = {
 
 1. 复制 `.env.example` 为 `.env`。
 2. 填写智谱 GLM 和 CogView 配置。
-3. 确认阿里云百炼账号有可用额度。
+3. 确认智谱 AI 账号有可用额度。
 4. 先检查配置：
 
 ```powershell

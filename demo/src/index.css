@@ -1119,6 +1119,17 @@ input {
   filter: drop-shadow(0 14px 18px rgba(46, 42, 39, 0.18));
 }
 
+.generated-dish-image.full-card-art {
+  width: min(100%, 250px);
+  height: auto;
+  max-height: 225px;
+  aspect-ratio: auto;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  object-fit: contain;
+}
+
 .empty-plate {
   border-style: dashed;
   background: rgba(215, 236, 245, 0.45);
@@ -5102,6 +5113,18 @@ input {
   transition: transform 200ms ease-out, filter 200ms ease-out;
 }
 
+.dish-card .generated-dish-image.full-card-art {
+  width: min(100%, 270px) !important;
+  height: auto !important;
+  max-height: 230px;
+  aspect-ratio: auto !important;
+  border: 0 !important;
+  border-radius: 10px;
+  background: transparent !important;
+  box-shadow: 0 12px 22px rgba(70, 41, 25, 0.16) !important;
+  object-fit: contain;
+}
+
 .dish-card:hover,
 .actionable-card:hover {
   transform: translateY(-5px) rotate(-0.4deg);
@@ -5202,6 +5225,17 @@ input {
   line-height: 1.25;
 }
 
+.stage-fusion .evolved-dish .generated-dish-image.full-card-art {
+  width: min(100%, 220px) !important;
+  height: auto !important;
+  max-height: 140px;
+  aspect-ratio: auto !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: 0 10px 20px rgba(70, 41, 25, 0.16) !important;
+  object-fit: contain;
+}
+
 .stage-fusion .fusion-actions {
   margin-top: 18px !important;
 }
@@ -5293,6 +5327,17 @@ input {
   background: var(--color-paper);
   padding: 10px;
   box-shadow: 0 4px 0 rgba(77, 43, 24, 0.54);
+}
+
+.fusion-ingredient .generated-dish-image.full-card-art {
+  width: min(150px, 22vw) !important;
+  height: auto !important;
+  max-height: 160px;
+  aspect-ratio: auto !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  object-fit: contain;
 }
 
 .fusion-glow {

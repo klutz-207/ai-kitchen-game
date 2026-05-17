@@ -1,0 +1,157 @@
+{
+  "generatedAt": "2026-05-17T14:40:57.201Z",
+  "sampleRate": 44100,
+  "format": "wav, mono, 16-bit PCM",
+  "assets": [
+    {
+      "file": "amb_kitchen_loop.wav",
+      "duration": 12,
+      "description": "Loopable warm kitchen ambience: stove, bubbles, soft room tone."
+    },
+    {
+      "file": "sfx_ui_hover.wav",
+      "duration": 0.22,
+      "description": "Tiny warm UI hover tick."
+    },
+    {
+      "file": "sfx_chef_select.wav",
+      "duration": 0.5,
+      "description": "Positive chef selection chime."
+    },
+    {
+      "file": "sfx_service_start.wav",
+      "duration": 0.95,
+      "description": "Counter bell and stove whoosh for starting service."
+    },
+    {
+      "file": "sfx_guest_arrival.wav",
+      "duration": 1.35,
+      "description": "Guest enters with door chime and soft steps."
+    },
+    {
+      "file": "sfx_speech_bubble.wav",
+      "duration": 0.42,
+      "description": "Soft bubble pop for dialogue."
+    },
+    {
+      "file": "sfx_type_tick.wav",
+      "duration": 0.09,
+      "description": "Single subtle typewriter tick."
+    },
+    {
+      "file": "sfx_understand.wav",
+      "duration": 0.78,
+      "description": "Warm button cue for understanding the guest."
+    },
+    {
+      "file": "sfx_thinking_dots_loop.wav",
+      "duration": 1,
+      "description": "Loopable three-dot thinking blips."
+    },
+    {
+      "file": "sfx_bubble_expand.wav",
+      "duration": 2.2,
+      "description": "Thought bubble expanding into creation space."
+    },
+    {
+      "file": "sfx_creation_reveal.wav",
+      "duration": 0.85,
+      "description": "Creative white-space reveal."
+    },
+    {
+      "file": "sfx_input_focus.wav",
+      "duration": 0.22,
+      "description": "Tiny input focus cue."
+    },
+    {
+      "file": "sfx_send_idea.wav",
+      "duration": 0.62,
+      "description": "Paper note and ingredient drop into the pot."
+    },
+    {
+      "file": "sfx_ai_guide.wav",
+      "duration": 0.66,
+      "description": "AI guide response appears."
+    },
+    {
+      "file": "sfx_cooking_start.wav",
+      "duration": 1.15,
+      "description": "Stove ignition and magical cooking start."
+    },
+    {
+      "file": "sfx_cooking_loader_loop.wav",
+      "duration": 4,
+      "description": "Loopable magical cooking loader."
+    },
+    {
+      "file": "sfx_dish_reveal.wav",
+      "duration": 1,
+      "description": "Dish appears on a ceramic plate."
+    },
+    {
+      "file": "sfx_page_flip.wav",
+      "duration": 0.72,
+      "description": "Recipe page turns to the second dish."
+    },
+    {
+      "file": "sfx_fusion_button.wav",
+      "duration": 0.68,
+      "description": "Fusion button bounce and sparkle."
+    },
+    {
+      "file": "sfx_fusion_start.wav",
+      "duration": 1.45,
+      "description": "Two dishes pulled into magical fusion."
+    },
+    {
+      "file": "sfx_fusion_orbit_loop.wav",
+      "duration": 2,
+      "description": "Loopable swirling plate orbit for fusion animation."
+    },
+    {
+      "file": "sfx_fusion_burst.wav",
+      "duration": 2,
+      "description": "Bright final dish fusion burst."
+    },
+    {
+      "file": "sfx_serve_dish.wav",
+      "duration": 0.82,
+      "description": "Plate placed gently on the counter."
+    },
+    {
+      "file": "sfx_guest_thinking.wav",
+      "duration": 0.9,
+      "description": "Guest tasting and thinking cue."
+    },
+    {
+      "file": "sfx_satisfied.wav",
+      "duration": 1.45,
+      "description": "Tender satisfied emotional response."
+    },
+    {
+      "file": "sfx_score_pop.wav",
+      "duration": 0.78,
+      "description": "Three ascending score bar pops."
+    },
+    {
+      "file": "sfx_rarity_reveal.wav",
+      "duration": 1.18,
+      "description": "Rare rating reveal flourish."
+    },
+    {
+      "file": "sfx_settlement_slide.wav",
+      "duration": 0.82,
+      "description": "Receipt card slides up and settles."
+    },
+    {
+      "file": "sfx_next_guest.wav",
+      "duration": 0.88,
+      "description": "Next guest transition bell and page flip."
+    },
+    {
+      "file": "sfx_error_soft.wav",
+      "duration": 0.58,
+      "description": "Friendly soft error sputter."
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { playSound } from '../services/soundEffects';
 
 export function useTypewriter(text, speed = 28, active = true) {
   const [displayed, setDisplayed] = useState('');
@@ -17,6 +18,9 @@ export function useTypewriter(text, speed = 28, active = true) {
     const timer = window.setInterval(() => {
       index += 1;
       setDisplayed(text.slice(0, index));
+      if (index % 3 === 0 && text[index - 1] !== ' ') {
+        playSound('typeTick');
+      }
       if (index >= text.length) {
         window.clearInterval(timer);
         setDone(true);

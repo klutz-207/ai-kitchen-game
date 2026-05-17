@@ -3,6 +3,31 @@ export const fallbackDishNames = {
   second: ['月光冻酪', '记忆酥片', '透明糖盏', '慢融布丁'],
 };
 
+export const presetDishArt = {
+  heartbreak: {
+    dishes: {
+      1: {
+        name: '氧化糖苹果',
+        ingredient: '最甜的部分先开始改变，留下发酸的回忆香气',
+        imageUrl: '/assets/art-library/dishes/heartbreak/ingredient-oxidizing-candy-apple.png',
+        imageFit: 'full-card',
+      },
+      2: {
+        name: '旧信酥塔',
+        ingredient: '旧信、酥片与粉色回忆被轻轻叠成一页甜点',
+        imageUrl: '/assets/art-library/dishes/heartbreak/ingredient-memory-tart.png',
+        imageFit: 'full-card',
+      },
+    },
+    fusion: {
+      name: '酸甜记忆凝冻',
+      ingredient: '酸甜记忆凝成的果冻，漂浮着融化的爱与未说完的再见',
+      imageUrl: '/assets/art-library/dishes/heartbreak/final-cosmic-memory-jelly.png',
+      imageFit: 'full-card',
+    },
+  },
+};
+
 export const dishNameSets = {
   heartbreak: fallbackDishNames,
   programmer: {

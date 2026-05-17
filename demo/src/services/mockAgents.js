@@ -1,4 +1,4 @@
-import { dishNameSets, fallbackDishNames, scoreBands } from '../data/mockDishes';
+import { dishNameSets, fallbackDishNames, presetDishArt, scoreBands } from '../data/mockDishes';
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -28,14 +28,17 @@ export async function generateDishMock({ guest, answers, index }) {
   await wait(900);
   const seed = textSeed([guest.id, index, ...answers]);
   const names = getDishNames(guest.id, index);
+  const preset = presetDishArt[guest.id]?.dishes?.[index];
 
   return {
     id: `${guest.id}-dish-${index}-${seed}`,
-    name: pickBySeed(names, seed + index),
+    name: preset?.name || pickBySeed(names, seed + index),
     color: guest.dishPalette[(index - 1) % guest.dishPalette.length],
     accent: guest.dishPalette[index % guest.dishPalette.length],
-    ingredient: pickBySeed(answers, seed) || guest.mood,
+    ingredient: preset?.ingredient || pickBySeed(answers, seed) || guest.mood,
     motion: index === 1 ? 'float' : 'spark',
+    imageUrl: preset?.imageUrl || '',
+    imageFit: preset?.imageFit || '',
   };
 }
 

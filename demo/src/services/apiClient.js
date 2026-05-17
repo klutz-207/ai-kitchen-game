@@ -1,4 +1,5 @@
 import { feedbackMock, generateDishMock, guideMock } from './mockAgents';
+import { presetDishArt } from '../data/mockDishes';
 
 async function requestApi(path, payload) {
   const response = await fetch(path, {
@@ -19,6 +20,32 @@ async function requestApi(path, payload) {
   }
 
   return result.data;
+}
+
+function applyPresetDishArt(guest, dish, index) {
+  const preset = presetDishArt[guest.id]?.dishes?.[index];
+  if (!preset) return dish;
+
+  return {
+    ...dish,
+    name: preset.name,
+    ingredient: preset.ingredient,
+    imageUrl: preset.imageUrl,
+    imageFit: preset.imageFit,
+  };
+}
+
+function applyPresetFusionArt(guest, finalDish) {
+  const preset = presetDishArt[guest.id]?.fusion;
+  if (!preset) return finalDish;
+
+  return {
+    ...finalDish,
+    name: preset.name,
+    ingredient: preset.ingredient,
+    imageUrl: preset.imageUrl,
+    imageFit: preset.imageFit,
+  };
 }
 
 export async function startSessionAgent(guest) {
@@ -59,7 +86,7 @@ export async function generateDishAgent({ guest, sessionId, answer, answers, ind
       });
 
       return {
-        dish: data.dish,
+        dish: applyPresetDishArt(guest, data.dish, index),
         nextPrompt: data.nextPrompt,
         session: data,
       };
@@ -75,7 +102,7 @@ export async function generateDishAgent({ guest, sessionId, answer, answers, ind
       index,
     });
     return {
-      dish: data.dish,
+      dish: applyPresetDishArt(guest, data.dish, index),
       nextPrompt: '',
       session: null,
     };
@@ -92,7 +119,7 @@ export async function fuseDishesAgent({ guest, sessionId, dish1, dish2 }) {
   if (sessionId) {
     try {
       const data = await requestApi(`/api/v1/sessions/${encodeURIComponent(sessionId)}/fusion`, {});
-      return data.finalDish;
+      return applyPresetFusionArt(guest, data.finalDish);
     } catch {
       // Fall through to legacy endpoint below.
     }
@@ -104,16 +131,16 @@ export async function fuseDishesAgent({ guest, sessionId, dish1, dish2 }) {
       dish1,
       dish2,
     });
-    return data.finalDish;
+    return applyPresetFusionArt(guest, data.finalDish);
   } catch {
-    return {
+    return applyPresetFusionArt(guest, {
       id: `${dish1.id}-${dish2.id}-fusion`,
       name: `${dish1.name}与${dish2.name}的合奏`,
       color: '#f6bd4f',
       accent: guest.color,
       ingredient: '两份灵感被轻轻融合',
       motion: 'spark',
-    };
+    });
   }
 }
 

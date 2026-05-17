@@ -12,7 +12,7 @@
 ## 技术栈
 - 前端：React + Tailwind CSS + Vite demo
 - 后端：Vercel Serverless API routes + Node.js
-- 大模型：Qwen Flash（文本理解/反馈）+ Stable Diffusion WebUI / PixelRTXL（图像生成）
+- 大模型：智谱 GLM-4.7-flash（文本理解/反馈）+ CogView-3-Flash（云端图像生成），Stable Diffusion WebUI 作为可选图生图/本地方案
 - 兜底：Mock API，保证无真实 key 时也能完整演示
 - 部署：Vercel（前端与轻 API），真实生图服务建议本地或独立 GPU 服务
 
