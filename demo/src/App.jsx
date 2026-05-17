@@ -11,6 +11,8 @@ import { ScoreBars } from './components/ScoreBars';
 import { StageBadge } from './components/StageBadge';
 
 const maxRounds = 2;
+const gameLogo = '/assets/art-library/ui/title-kit/title-lockup-compact.png';
+const ideasPerDish = 2;
 
 const initialRun = {
   guestIndex: 0,
@@ -70,7 +72,7 @@ export default function App() {
     const secondPrompt = runRef.current.secondPrompt;
     setRun((current) => ({ ...current, stage: 'creation', prompt: '', round: 2, answers: [], activeDishIndex: 2, error: '' }));
     try {
-      const prompt = secondPrompt || await guideAgent(guest, 2);
+      const prompt = secondPrompt || guest.prompts[2] || await guideAgent(guest, 2);
       setRun((current) => ({ ...current, prompt }));
     } catch (err) {
       console.error('startSecondCreation failed:', err);
@@ -79,14 +81,31 @@ export default function App() {
   }, [guest]);
 
   const submitAnswer = useCallback((answer) => {
-    setRun((current) => ({
-      ...current,
-      answers: [...current.answers, answer],
-      allAnswers: [...current.allAnswers, answer],
-      prompt: '灵感已经足够，炉火准备好了。',
-      stage: current.activeDishIndex === 1 ? 'generating1' : 'generating2',
-    }));
-  }, []);
+    setRun((current) => {
+      const answers = [...current.answers, answer];
+      const allAnswers = [...current.allAnswers, answer];
+      const nextPromptIndex = current.activeDishIndex === 1 ? answers.length : answers.length + ideasPerDish;
+      const nextPrompt = guest.prompts[nextPromptIndex];
+
+      if (answers.length < ideasPerDish && nextPrompt) {
+        return {
+          ...current,
+          answers,
+          allAnswers,
+          prompt: nextPrompt,
+          error: '',
+        };
+      }
+
+      return {
+        ...current,
+        answers,
+        allAnswers,
+        prompt: '灵感已经足够，炉火准备好了。',
+        stage: current.activeDishIndex === 1 ? 'generating1' : 'generating2',
+      };
+    });
+  }, [guest]);
 
   const finishDish = useCallback((index, dish, meta = {}) => {
     setRun((current) => ({
@@ -157,7 +176,8 @@ export default function App() {
   };
 
   return (
-    <main className="app-shell">
+    <main className={`app-shell stage-${run.stage}`}>
+      <img className="game-logo-corner" src={gameLogo} alt="记忆厨房" draggable="false" />
       <header className="topbar">
         <div className="brand-mark">
           <ChefHat size={20} />
@@ -210,11 +230,13 @@ function StartScreen({ chef, selectedChefId, onSelectChef, onStart }) {
   return (
     <section className="screen start-screen chef-select-screen">
       <div className="hero-copy chef-select-copy">
+        <img className="opening-game-logo" src={gameLogo} alt="记忆厨房" draggable="false" />
         <StageBadge>营业准备</StageBadge>
         <h1>把情绪，做成一道会发光的菜。</h1>
         <p>
           客人会带着说不清的愿望来到厨房。你要作为主厨，把那些抽象的情绪变成料理。
         </p>
+        <PixelButton icon={Utensils} onClick={onStart}>开始营业</PixelButton>
         <div className="chef-picker" role="radiogroup" aria-label="选择主厨形象">
           {chefs.map((option) => (
             <button
@@ -234,9 +256,8 @@ function StartScreen({ chef, selectedChefId, onSelectChef, onStart }) {
             </button>
           ))}
         </div>
-        <PixelButton icon={Utensils} onClick={onStart}>开始营业</PixelButton>
       </div>
-      <div className="counter-scene chef-preview-scene">
+      <div className="counter-scene chef-preview-scene kitchen-stage">
         <ChefStand chef={chef} action="explain" />
         <div className="serving-window">
           <span />
@@ -251,29 +272,57 @@ function StartScreen({ chef, selectedChefId, onSelectChef, onStart }) {
 function Arrival({ guest, chef, onStart }) {
   return (
     <section className="screen game-scene arrival-scene">
-      <div className="guest-tag">
-        <StageBadge>今日客人</StageBadge>
-        <strong>{guest.label}</strong>
+      <div className="arrival-room-shell" aria-hidden="true">
+        <img className="arrival-env-wall" src="/assets/art-library/environment/arrival-env-wall.png" alt="" draggable="false" />
+        <img className="arrival-env-lantern arrival-env-lantern-left" src="/assets/art-library/environment/arrival-env-lantern-left.png" alt="" draggable="false" />
+        <img className="arrival-env-lantern arrival-env-lantern-right" src="/assets/art-library/environment/arrival-env-lantern-right.png" alt="" draggable="false" />
       </div>
 
-      <div className="guest-request">
-        <p>{guest.opening}</p>
+      <div className="arrival-guest-ticket" aria-hidden="true">
+        {guest.art?.src ? <img src={guest.art.src} alt="" draggable="false" /> : null}
+        <div>
+          <strong>今日客人</strong>
+          <span>{guest.label}</span>
+        </div>
+      </div>
+
+      <div className="arrival-stove-foreground" aria-hidden="true">
+        <img className="arrival-env-counter-left" src="/assets/art-library/environment/arrival-env-counter.png" alt="" draggable="false" />
+      </div>
+
+      <div className="arrival-counter-midground" aria-hidden="true">
+        <img className="arrival-env-counter-main" src="/assets/art-library/environment/arrival-env-counter.png" alt="" draggable="false" />
+        <img className="arrival-env-steam-asset" src="/assets/art-library/environment/arrival-env-steam.png" alt="" draggable="false" />
+      </div>
+
+      <div className="guest-dialogue-group">
+        <div className="guest-tag">
+          <StageBadge>今日客人</StageBadge>
+          <strong>{guest.label}</strong>
+        </div>
+
+        <div className="guest-request">
+          <p>{guest.opening}</p>
+        </div>
+
+        <div className="dialogue-action-row">
+          <span>把她的话变成料理灵感</span>
+          <button className="star-start" type="button" onClick={onStart} aria-label="理解这份心情">
+            理解这份心情
+          </button>
+        </div>
       </div>
       <div className="scene-steam steam-left" aria-hidden="true" />
       <div className="scene-steam steam-right" aria-hidden="true" />
       <div className="scene-sparkle" aria-hidden="true" />
 
-      <div className="scene-actor chef-anchor">
+      <div className="scene-actor chef-anchor chef-character">
         <ChefStand chef={chef} action="idle" />
       </div>
 
-      <div className="scene-actor guest-anchor">
+      <div className="scene-actor guest-anchor guest-character">
         <GuestStand guest={guest} />
       </div>
-
-      <button className="star-start" type="button" onClick={onStart} aria-label="start">
-        STAR
-      </button>
     </section>
   );
 }
@@ -281,7 +330,7 @@ function Arrival({ guest, chef, onStart }) {
 function BubbleTransition({ guest, chef }) {
   return (
     <section className="screen game-scene bubble-scene">
-      <div className="scene-actor chef-anchor">
+      <div className="scene-actor chef-anchor chef-character">
         <ChefStand chef={chef} action="thinking" />
       </div>
       <div className="thinking-dots" aria-hidden="true">
@@ -289,7 +338,7 @@ function BubbleTransition({ guest, chef }) {
         <i />
         <i />
       </div>
-      <div className="scene-actor guest-anchor ghosted">
+      <div className="scene-actor guest-anchor guest-character ghosted">
         <GuestStand guest={guest} />
       </div>
       <div className="chef-thought-bubble">
@@ -330,12 +379,12 @@ function Creation({ guest, prompt, round, answers, onSubmit }) {
       <div className="creation-context">
         <StageBadge>主厨的心理对白</StageBadge>
         <h2>{guest.mood}</h2>
-        <p>把客人的愿望藏进食材、形状、火候和回忆里。</p>
+        <p>把客人的愿望藏进食材、形状、火候和回忆里。连续记下 {ideasPerDish} 份灵感后再开火。</p>
       </div>
 
       <div className="chat-panel fullscreen-chat">
         <div className="chat-header">
-          <StageBadge>第 {round}/{maxRounds} 轮</StageBadge>
+          <StageBadge>第 {round}/{maxRounds} 轮 · 灵感 {Math.min(answers.length + 1, ideasPerDish)}/{ideasPerDish}</StageBadge>
           <span>把抽象情绪转译成可烹饪的概念</span>
         </div>
 
@@ -408,15 +457,26 @@ function GenerateDish({ guest, sessionId, answers, index, firstDish, onError, on
 }
 
 function BetweenDishes({ dish, onNext }) {
+  useEffect(() => {
+    const timer = window.setTimeout(onNext, 1200);
+    return () => window.clearTimeout(timer);
+  }, [onNext]);
+
   return (
-    <section className="screen dish-wait-screen">
+    <section className="screen dish-wait-screen between-dishes-auto" aria-live="polite">
       <div className="dish-generation-stage">
         <DishCard dish={dish} index={1} />
-        <DishCard index={2} onEmptyClick={onNext} />
+        <section className="dish-card empty-card auto-next-card">
+          <div className="empty-plate" />
+          <h3>第二页食谱正在翻开</h3>
+          <p>主厨会继续追问这份心情，不需要手动点击。</p>
+          <span className="auto-next-dots" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+          </span>
+        </section>
       </div>
-      <button className="next-arrow" type="button" onClick={onNext} aria-label="继续创作第二道菜">
-        <ArrowRight aria-hidden="true" size={34} strokeWidth={3} />
-      </button>
     </section>
   );
 }
@@ -445,9 +505,9 @@ function Fusion({ guest, dish1, dish2, finalDish, onServe }) {
         <FusionIngredient dish={dish1} className="fusion-left" />
         <div className="fusion-glow" />
         <FusionIngredient dish={dish2} className="fusion-right" />
-      </div>
-      <div className="evolved-dish">
-        <DishCard dish={finalDish} index="Final" />
+        <div className="evolved-dish">
+          <DishCard dish={finalDish} index="Final" />
+        </div>
       </div>
       <div className="fusion-actions">
         <p>{guest.name}正在等待第一口。</p>

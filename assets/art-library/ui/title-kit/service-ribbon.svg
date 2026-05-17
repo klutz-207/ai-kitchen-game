@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="540" height="150" viewBox="0 0 540 150">
+  
+    <style>
+      .pixel { shape-rendering: crispEdges; }
+      .label {
+        font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+        font-weight: 900;
+        paint-order: stroke fill;
+        stroke-linejoin: round;
+      }
+      .small {
+        font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+        font-weight: 800;
+      }
+      
+    </style>
+  
+        <path d="M52 42 H488 L450 76 L488 110 H52 L90 76 Z" fill="#49643a" stroke="#2e2a27" stroke-width="6" stroke-linejoin="round"/>
+        <path d="M98 52 H442 V100 H98Z" fill="#97d8b2" stroke="#2e2a27" stroke-width="5"/>
+        <path class="pixel" d="M112 30 L114.5 35.5 L120 38 L114.5 40.5 L112 46 L109.5 40.5 L104 38 L109.5 35.5 Z" fill="#ffe59a" stroke="#2e2a27" stroke-width="1"/>
+        <path class="pixel" d="M428 104 L430.5 109.5 L436 112 L430.5 114.5 L428 120 L425.5 114.5 L420 112 L425.5 109.5 Z" fill="#ffe59a" stroke="#2e2a27" stroke-width="1"/>
+        
+    <text x="270" y="88" text-anchor="middle" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" font-size="45" font-weight="900" letter-spacing="0" fill="#5b331e" opacity="0.35" transform="translate(7 7)">灵感下锅</text>
+    <text x="270" y="88" text-anchor="middle" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" font-size="45" font-weight="900" letter-spacing="0" fill="#ef7762" opacity="0.72" transform="translate(3 4)" stroke="#fffdf2" stroke-width="3" paint-order="stroke fill" stroke-linejoin="round">灵感下锅</text>
+    <text x="270" y="88" text-anchor="middle" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" font-size="45" font-weight="900" letter-spacing="0" fill="#5b331e" stroke="#fffdf2" stroke-width="6" paint-order="stroke fill" stroke-linejoin="round">灵感下锅</text>
+      
+</svg>

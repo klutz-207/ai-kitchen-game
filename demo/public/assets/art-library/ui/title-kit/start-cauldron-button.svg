@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="190" viewBox="0 0 560 190">
+  
+    <style>
+      .pixel { shape-rendering: crispEdges; }
+      .label {
+        font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+        font-weight: 900;
+        paint-order: stroke fill;
+        stroke-linejoin: round;
+      }
+      .small {
+        font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+        font-weight: 800;
+      }
+      
+    </style>
+  
+        <rect x="58" y="46" width="444" height="88" rx="18" fill="#2e2a27" opacity="0.28"/>
+        <rect x="48" y="36" width="444" height="88" rx="18" fill="#b94b38" stroke="#2e2a27" stroke-width="6"/>
+        <rect x="62" y="47" width="416" height="58" rx="11" fill="#ef7762" stroke="#7a4427" stroke-width="4"/>
+        <path d="M82 58 H198 V65 H82Z" fill="#fffdf2" opacity="0.36"/>
+        
+    <g transform="translate(358 0) scale(0.5)">
+      <ellipse cx="120" cy="188" rx="74" ry="14" fill="#2e2a27" opacity="0.18"/>
+      <path d="M63 96 C35 91 25 130 53 146 C65 153 75 148 80 136 L77 104 Z" fill="#d96f5c" stroke="#2e2a27" stroke-width="8"/>
+      <path d="M177 96 C205 91 215 130 187 146 C175 153 165 148 160 136 L163 104 Z" fill="#d96f5c" stroke="#2e2a27" stroke-width="8"/>
+      <path d="M45 91 C48 66 71 54 120 54 C169 54 192 66 195 91 L180 164 C174 190 66 190 60 164 Z" fill="#ef7762" stroke="#2e2a27" stroke-width="9" stroke-linejoin="round"/>
+      <path d="M68 108 C82 91 159 91 174 108 L164 158 C151 172 89 172 76 158 Z" fill="#ffb39e" opacity="0.76"/>
+      <rect x="48" y="70" width="144" height="42" rx="18" fill="#7a4427" stroke="#2e2a27" stroke-width="9"/>
+      <path d="M63 80 H177 V96 H63Z" fill="#ffe59a" opacity="0.92"/>
+      <circle cx="88" cy="83" r="7" fill="#fffdf2" opacity="0.8"/>
+      <circle cx="115" cy="75" r="5" fill="#fffdf2" opacity="0.85"/>
+      <circle cx="151" cy="84" r="6" fill="#fffdf2" opacity="0.75"/>
+      <rect x="90" y="44" width="60" height="31" rx="10" fill="#f6bd4f" stroke="#2e2a27" stroke-width="7"/>
+      <path d="M83 42 C73 16 100 8 116 24 C132 1 165 14 158 43 C176 42 186 58 171 72 H70 C54 59 63 42 83 42Z" fill="#fffdf2" stroke="#2e2a27" stroke-width="7"/>
+      <path d="M91 48 C102 61 143 61 155 48" fill="none" stroke="#e7c99f" stroke-width="3"/>
+      <rect x="83" y="126" width="13" height="13" rx="2" fill="#2e2a27"/><rect x="144" y="126" width="13" height="13" rx="2" fill="#2e2a27"/><rect x="67" y="143" width="22" height="10" rx="5" fill="#f39a8a" opacity="0.82"/><rect x="152" y="143" width="22" height="10" rx="5" fill="#f39a8a" opacity="0.82"/><path d="M104 147 C111 156 130 156 137 147" fill="none" stroke="#2e2a27" stroke-width="6" stroke-linecap="round"/>
+      <path d="M71 117 H99" stroke="#fffdf2" stroke-width="5" opacity="0.26"/>
+      <path d="M78 174 H98 V188 H70 Z" fill="#7a4427" stroke="#2e2a27" stroke-width="4"/>
+      <path d="M142 174 H162 L170 188 H142 Z" fill="#7a4427" stroke="#2e2a27" stroke-width="4"/>
+    </g>
+        <path class="pixel" d="M72 25.6 L75.25 32.75 L82.4 36 L75.25 39.25 L72 46.4 L68.75 39.25 L61.6 36 L68.75 32.75 Z" fill="#ffe59a" stroke="#2e2a27" stroke-width="1.3"/>
+        
+      <text x="173" y="94" text-anchor="middle" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" font-size="46" font-weight="1000" letter-spacing="0" fill="#5b331e" opacity="0.28" transform="rotate(-2 173 78.66666666666667) translate(7 8)">开</text>
+      <text x="173" y="94" text-anchor="middle" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" font-size="46" font-weight="1000" letter-spacing="0" fill="#ef7762" stroke="#5b331e" stroke-width="3" paint-order="stroke fill" stroke-linejoin="round" transform="rotate(-2 173 78.66666666666667) translate(3 4)">开</text>
+      <text x="173" y="94" text-anchor="middle" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" font-size="46" font-weight="1000" letter-spacing="0" fill="#fffdf2" stroke="#5b331e" stroke-width="5" paint-order="stroke fill" stroke-linejoin="round" transform="rotate(-2 173 78.66666666666667)">开</text>
+      <rect class="pixel" x="167.02" y="60.88" width="11.96" height="3.22" fill="#fffdf2" opacity="0.42" transform="rotate(-2 173 78.66666666666667)"/>
+    
+      <text x="227" y="94" text-anchor="middle" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" font-size="46" font-weight="1000" letter-spacing="0" fill="#5b331e" opacity="0.28" transform="rotate(2 227 78.66666666666667) translate(7 8)">锅</text>
+      <text x="227" y="94" text-anchor="middle" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" font-size="46" font-weight="1000" letter-spacing="0" fill="#ef7762" stroke="#5b331e" stroke-width="3" paint-order="stroke fill" stroke-linejoin="round" transform="rotate(2 227 78.66666666666667) translate(3 4)">锅</text>
+      <text x="227" y="94" text-anchor="middle" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" font-size="46" font-weight="1000" letter-spacing="0" fill="#ffe59a" stroke="#5b331e" stroke-width="5" paint-order="stroke fill" stroke-linejoin="round" transform="rotate(2 227 78.66666666666667)">锅</text>
+      <rect class="pixel" x="221.02" y="60.88" width="11.96" height="3.22" fill="#fffdf2" opacity="0.42" transform="rotate(2 227 78.66666666666667)"/>
+    
+      <text x="281" y="94" text-anchor="middle" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" font-size="46" font-weight="1000" letter-spacing="0" fill="#5b331e" opacity="0.28" transform="rotate(-2 281 78.66666666666667) translate(7 8)">营</text>
+      <text x="281" y="94" text-anchor="middle" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" font-size="46" font-weight="1000" letter-spacing="0" fill="#ef7762" stroke="#5b331e" stroke-width="3" paint-order="stroke fill" stroke-linejoin="round" transform="rotate(-2 281 78.66666666666667) translate(3 4)">营</text>
+      <text x="281" y="94" text-anchor="middle" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" font-size="46" font-weight="1000" letter-spacing="0" fill="#fffdf2" stroke="#5b331e" stroke-width="5" paint-order="stroke fill" stroke-linejoin="round" transform="rotate(-2 281 78.66666666666667)">营</text>
+      <rect class="pixel" x="275.02" y="60.88" width="11.96" height="3.22" fill="#fffdf2" opacity="0.42" transform="rotate(-2 281 78.66666666666667)"/>
+    
+      <text x="335" y="94" text-anchor="middle" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" font-size="46" font-weight="1000" letter-spacing="0" fill="#5b331e" opacity="0.28" transform="rotate(2 335 78.66666666666667) translate(7 8)">业</text>
+      <text x="335" y="94" text-anchor="middle" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" font-size="46" font-weight="1000" letter-spacing="0" fill="#ef7762" stroke="#5b331e" stroke-width="3" paint-order="stroke fill" stroke-linejoin="round" transform="rotate(2 335 78.66666666666667) translate(3 4)">业</text>
+      <text x="335" y="94" text-anchor="middle" font-family="Noto Sans SC, Microsoft YaHei, sans-serif" font-size="46" font-weight="1000" letter-spacing="0" fill="#ffe59a" stroke="#5b331e" stroke-width="5" paint-order="stroke fill" stroke-linejoin="round" transform="rotate(2 335 78.66666666666667)">业</text>
+      <rect class="pixel" x="329.02" y="60.88" width="11.96" height="3.22" fill="#fffdf2" opacity="0.42" transform="rotate(2 335 78.66666666666667)"/>
+    
+        <text x="254" y="150" text-anchor="middle" class="small" font-size="19" fill="#5b331e">今日锅气：满格</text>
+      
+</svg>

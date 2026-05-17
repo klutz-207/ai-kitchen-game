@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="240" viewBox="0 0 360 240">
+  
+    <style>
+      .pixel { shape-rendering: crispEdges; }
+      .label {
+        font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+        font-weight: 900;
+        paint-order: stroke fill;
+        stroke-linejoin: round;
+      }
+      .small {
+        font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+        font-weight: 800;
+      }
+      
+    </style>
+  
+        <path d="M98 202 C54 160 114 132 82 94 C61 68 78 44 106 28" fill="none" stroke="#fffdf2" stroke-width="18" stroke-linecap="round" opacity="0.66"/>
+        <path d="M176 214 C128 176 204 143 164 100 C136 70 158 43 196 28" fill="none" stroke="#fffdf2" stroke-width="20" stroke-linecap="round" opacity="0.76"/>
+        <path d="M250 205 C216 167 276 143 250 106 C226 72 248 46 286 32" fill="none" stroke="#fffdf2" stroke-width="16" stroke-linecap="round" opacity="0.6"/>
+        <path class="pixel" d="M65 66.48 L68.6 74.4 L76.52 78 L68.6 81.6 L65 89.52 L61.4 81.6 L53.480000000000004 78 L61.4 74.4 Z" fill="#ffe59a" stroke="#2e2a27" stroke-width="1.44"/>
+        <path class="pixel" d="M303 72.08 L306.1 78.9 L312.92 82 L306.1 85.1 L303 91.92 L299.9 85.1 L293.08 82 L299.9 78.9 Z" fill="#97d8b2" stroke="#2e2a27" stroke-width="1.24"/>
+        <path class="pixel" d="M224 34.8 L226.25 39.75 L231.2 42 L226.25 44.25 L224 49.2 L221.75 44.25 L216.8 42 L221.75 39.75 Z" fill="#ffe59a" stroke="#2e2a27" stroke-width="0.9"/>
+        <path class="pixel" d="M118 171.28 L120.1 175.9 L124.72 178 L120.1 180.1 L118 184.72 L115.9 180.1 L111.28 178 L115.9 175.9 Z" fill="#ef7762" stroke="#2e2a27" stroke-width="0.84"/>
+      
+</svg>

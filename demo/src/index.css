@@ -3923,3 +3923,3657 @@ input {
   background: #b91c1c;
   color: white;
 }
+
+/* Cozy kitchen rebuild v2: reference-aligned UI pass. */
+.app-shell {
+  --kitchen-ink: #3b2719;
+  --kitchen-line: #7a4a2e;
+  --kitchen-paper: #fff1cf;
+  --kitchen-paper-light: #fff9e8;
+  --kitchen-wood: #a96335;
+  --kitchen-wood-dark: #59321f;
+  --kitchen-mint: #91c16f;
+  --kitchen-tomato: #dc6250;
+  --kitchen-gold: #f6c661;
+  --stage-pad-top: clamp(54px, 8vh, 78px);
+  --stage-pad-bottom: clamp(88px, 14vh, 124px);
+  min-height: 100svh;
+  color: var(--kitchen-ink);
+  background:
+    radial-gradient(ellipse at 50% 12%, rgba(255, 232, 159, 0.72), transparent 48%),
+    linear-gradient(180deg, #5f351f, #e0a86a 4%, #f6d9a3 18%, #f2c683 100%);
+}
+
+.topbar {
+  display: none !important;
+}
+
+.screen {
+  min-height: 100svh;
+}
+
+.stage-creation,
+.stage-generating1,
+.stage-betweenDishes,
+.stage-generating2,
+.stage-kitchen,
+.stage-fusion,
+.stage-feedback,
+.stage-settlement {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(64, 34, 20, 0.42), transparent 17%, transparent 83%, rgba(64, 34, 20, 0.42)),
+    radial-gradient(ellipse at 50% 19%, rgba(255, 224, 144, 0.7), transparent 48%),
+    repeating-linear-gradient(90deg, rgba(124, 76, 43, 0.1) 0 2px, transparent 2px 10px),
+    linear-gradient(180deg, #f5d39c, #f7ddb5 46%, #e9b36c 100%);
+}
+
+.stage-creation::before,
+.stage-generating1::before,
+.stage-betweenDishes::before,
+.stage-generating2::before,
+.stage-kitchen::before,
+.stage-fusion::before,
+.stage-feedback::before,
+.stage-settlement::before,
+.stage-creation::after,
+.stage-generating1::after,
+.stage-betweenDishes::after,
+.stage-generating2::after,
+.stage-kitchen::after,
+.stage-fusion::after,
+.stage-feedback::after,
+.stage-settlement::after {
+  content: "";
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.stage-creation::before,
+.stage-generating1::before,
+.stage-betweenDishes::before,
+.stage-generating2::before,
+.stage-kitchen::before,
+.stage-fusion::before,
+.stage-feedback::before,
+.stage-settlement::before {
+  top: 0;
+  right: auto;
+  bottom: auto;
+  height: 17px;
+  opacity: 1;
+  animation: none;
+  transform: none;
+  background: repeating-linear-gradient(90deg, #6c3b22 0 90px, #8a4b27 90px 172px, #5a321f 172px 224px);
+  box-shadow: 0 3px 0 rgba(51, 29, 20, 0.58), 0 13px 28px rgba(68, 37, 23, 0.18);
+}
+
+.stage-creation::after,
+.stage-generating1::after,
+.stage-betweenDishes::after,
+.stage-generating2::after,
+.stage-kitchen::after,
+.stage-fusion::after,
+.stage-feedback::after,
+.stage-settlement::after {
+  bottom: 0;
+  top: auto;
+  height: clamp(82px, 13vh, 112px);
+  opacity: 1;
+  animation: none;
+  transform: none;
+  border-top: 4px solid #5b311e;
+  background:
+    radial-gradient(ellipse at 15% 62%, rgba(255, 245, 216, 0.85) 0 34px, transparent 35px),
+    radial-gradient(ellipse at 20% 67%, rgba(255, 245, 216, 0.7) 0 42px, transparent 43px),
+    linear-gradient(180deg, rgba(255, 205, 116, 0.22), transparent 28%),
+    repeating-linear-gradient(90deg, #9b562e 0 76px, #b56a38 76px 158px, #814627 158px 214px);
+}
+
+.stage-creation .screen,
+.stage-generating1 .screen,
+.stage-betweenDishes .screen,
+.stage-generating2 .screen,
+.stage-kitchen .screen,
+.stage-fusion .screen,
+.stage-feedback .screen,
+.stage-settlement .screen {
+  z-index: 2;
+}
+
+.stage-creation .screen::before,
+.stage-generating1 .screen::before,
+.stage-betweenDishes .screen::before,
+.stage-generating2 .screen::before,
+.stage-kitchen .screen::before,
+.stage-fusion .screen::before,
+.stage-feedback .screen::before,
+.stage-settlement .screen::before {
+  content: "";
+  position: fixed;
+  left: clamp(86px, 17vw, 220px);
+  top: 0;
+  right: auto;
+  bottom: auto;
+  z-index: 3;
+  width: 108px;
+  height: 112px;
+  opacity: 1;
+  animation: none;
+  transform: none;
+  background:
+    radial-gradient(circle at 50% 66%, rgba(255, 245, 164, 0.9) 0 14px, rgba(255, 215, 100, 0.35) 15px 33px, transparent 34px),
+    linear-gradient(180deg, transparent 0 33px, #5d3423 33px 37px, transparent 37px),
+    radial-gradient(ellipse at 50% 57%, #a8572d 0 38px, #65331f 39px 42px, transparent 43px);
+  filter: drop-shadow(0 8px 0 rgba(67, 37, 24, 0.18));
+  pointer-events: none;
+}
+
+.stage-creation .screen::after,
+.stage-generating1 .screen::after,
+.stage-betweenDishes .screen::after,
+.stage-generating2 .screen::after,
+.stage-kitchen .screen::after,
+.stage-fusion .screen::after,
+.stage-feedback .screen::after,
+.stage-settlement .screen::after {
+  content: "";
+  position: fixed;
+  top: auto;
+  left: auto;
+  right: clamp(16px, 6vw, 82px);
+  bottom: clamp(20px, 3.8vh, 44px);
+  z-index: 4;
+  width: clamp(70px, 9vw, 108px);
+  height: clamp(92px, 13vw, 138px);
+  border: 4px solid #5b3424;
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 49% 33%, #ffe6b7 0 15px, transparent 16px),
+    linear-gradient(90deg, rgba(255,255,255,0.18), transparent 42%),
+    #3e7c6c;
+  box-shadow: 7px 10px 0 rgba(58, 34, 23, 0.2);
+  opacity: 1;
+  animation: none;
+  transform: rotate(-9deg);
+  pointer-events: none;
+}
+
+.stage-badge,
+.eyebrow,
+.rarity-chip {
+  border-color: var(--kitchen-ink);
+  background: linear-gradient(180deg, #a8d27f, #75aa60);
+  color: #25391f;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.42), 0 2px 0 rgba(65, 39, 25, 0.48);
+}
+
+.chat-panel,
+.creation-context,
+.dish-card,
+.feedback-card,
+.receipt {
+  border: 3px solid rgba(63, 39, 26, 0.86);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 249, 226, 0.96), rgba(255, 229, 190, 0.92)),
+    radial-gradient(circle at 20% 12%, rgba(255,255,255,0.48), transparent 32%);
+  box-shadow:
+    inset 0 0 0 4px rgba(255, 255, 245, 0.2),
+    0 5px 0 rgba(58, 35, 23, 0.72),
+    0 22px 36px rgba(60, 35, 23, 0.16);
+}
+
+.creation-stage {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  place-items: center;
+  gap: 10px;
+  padding: var(--stage-pad-top) clamp(14px, 4vw, 34px) var(--stage-pad-bottom);
+  background: transparent;
+}
+
+.creation-context {
+  width: min(760px, calc(100vw - 42px));
+  padding: 14px clamp(18px, 3vw, 28px);
+  text-align: left;
+}
+
+.creation-context h2 {
+  margin: 10px 0 4px;
+  color: var(--kitchen-ink);
+  font-size: clamp(24px, 3vw, 38px);
+  line-height: 1.16;
+}
+
+.creation-context p {
+  margin: 0;
+  color: rgba(62, 39, 26, 0.68);
+  font-weight: 800;
+}
+
+.fullscreen-chat {
+  width: min(760px, calc(100vw - 42px));
+  min-height: min(510px, calc(100svh - 230px));
+  max-height: calc(100svh - 188px);
+}
+
+.chat-header,
+.input-row {
+  background: rgba(255, 235, 199, 0.58);
+  border-color: rgba(111, 67, 41, 0.18);
+}
+
+.message-list {
+  background:
+    radial-gradient(circle at 72% 12%, rgba(245, 198, 97, 0.14), transparent 30%),
+    rgba(255, 235, 197, 0.2);
+}
+
+.message {
+  border: 2px solid rgba(61, 38, 26, 0.82);
+  border-radius: 18px;
+  box-shadow: 0 4px 0 rgba(69, 42, 28, 0.46);
+  font-weight: 900;
+}
+
+.chef-inner-message,
+.ai-message {
+  background: #fff8e1;
+}
+
+.chef-inner-message::after,
+.ai-message::after {
+  content: "";
+  position: absolute;
+  right: 18px;
+  top: -7px;
+  width: 28px;
+  height: 22px;
+  background: linear-gradient(135deg, #d95f4c 0 52%, transparent 53%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+.user-message {
+  background: #d5e9c2;
+}
+
+.input-row input {
+  min-height: 46px;
+  border: 2px solid rgba(76, 47, 31, 0.46);
+  border-radius: 7px;
+  background: rgba(255, 254, 239, 0.88);
+  color: var(--kitchen-ink);
+  font-weight: 800;
+}
+
+.dish-wait-screen,
+.fusion-ready-screen {
+  display: grid;
+  place-items: center;
+  gap: 22px;
+  padding: var(--stage-pad-top) clamp(14px, 4vw, 34px) var(--stage-pad-bottom);
+  background: transparent;
+}
+
+.dish-generation-stage {
+  width: min(640px, calc(100vw - 44px));
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: clamp(28px, 6vw, 72px);
+  align-items: stretch;
+}
+
+.dish-card {
+  min-height: 300px;
+  padding: 24px 18px 18px;
+  text-align: center;
+  transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+}
+
+.dish-card:hover {
+  transform: translateY(-4px);
+  filter: brightness(1.03);
+}
+
+.generated-dish-image,
+.pixel-dish,
+.empty-plate,
+.dish-loader {
+  width: 128px;
+  height: 128px;
+  border: 3px solid rgba(55, 35, 24, 0.78);
+  border-radius: 8px;
+  background-color: #75a965;
+  box-shadow: inset 0 0 0 4px rgba(255,255,240,0.16), 0 5px 0 rgba(61, 37, 24, 0.5);
+}
+
+.dish-card h3 {
+  color: var(--kitchen-ink);
+  font-size: clamp(18px, 2vw, 24px);
+  line-height: 1.2;
+}
+
+.dish-card p {
+  color: rgba(60, 37, 24, 0.68);
+  font-weight: 800;
+}
+
+.fusion-ready-action {
+  min-width: 174px;
+  min-height: 58px;
+  border-color: #4a2d1f !important;
+  background: linear-gradient(180deg, #ef735f, #c64638) !important;
+  color: #fff8e7 !important;
+  font-size: 20px;
+  box-shadow: 0 6px 0 #4a2d1f, 0 16px 24px rgba(68, 38, 24, 0.24) !important;
+}
+
+.stage-kitchen .fusion-ready-action {
+  position: relative !important;
+  inset: auto !important;
+  justify-self: center;
+  align-self: start;
+  min-width: 156px;
+  min-height: 52px;
+  margin-top: -4px;
+  font-size: 18px;
+  border-radius: 14px !important;
+  box-shadow: 0 4px 0 #4a2d1f, 0 10px 18px rgba(68, 38, 24, 0.18) !important;
+  transform: none !important;
+}
+
+.stage-kitchen .fusion-ready-action:hover {
+  transform: translateY(-2px) !important;
+}
+
+.stage-kitchen .fusion-ready-action:active {
+  transform: translateY(1px) !important;
+  box-shadow: 0 2px 0 #4a2d1f, 0 7px 14px rgba(68, 38, 24, 0.16) !important;
+}
+
+.stage-kitchen .fusion-ready-action::after {
+  inset: -6px;
+  opacity: 0.35;
+}
+
+.fusion-ready-screen .guest-card {
+  position: absolute;
+  right: clamp(72px, 12vw, 170px);
+  top: 50%;
+  transform: translateY(-50%) scale(0.78);
+}
+
+.evolution-screen {
+  display: grid;
+  grid-template-rows: auto minmax(210px, 1fr) auto auto;
+  place-items: center;
+  align-content: center;
+  gap: 12px;
+  padding: var(--stage-pad-top) clamp(14px, 4vw, 34px) var(--stage-pad-bottom);
+  background: transparent;
+  overflow: hidden;
+}
+
+.fusion-copy {
+  position: relative;
+  z-index: 12;
+  text-align: center;
+}
+
+.fusion-copy h2 {
+  margin: 12px 0 0;
+  color: var(--kitchen-ink);
+  font-size: clamp(24px, 3vw, 38px);
+}
+
+.fusion-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.fusion-glow {
+  width: min(440px, 78vw);
+  height: min(440px, 78vw);
+  border-radius: 999px;
+  background:
+    repeating-conic-gradient(from 5deg, rgba(255, 244, 180, 0.5) 0 4deg, transparent 4deg 12deg),
+    radial-gradient(circle, rgba(255, 238, 147, 0.84), rgba(255, 199, 82, 0.22) 42%, transparent 67%);
+  animation: fusion-glow-pulse 2.4s ease-in-out infinite;
+}
+
+.fusion-ingredient {
+  display: none;
+}
+
+.evolved-dish {
+  z-index: 14;
+  width: min(270px, 72vw);
+  opacity: 1;
+  transform: none;
+  animation: none;
+}
+
+.evolved-dish .dish-card {
+  min-height: 240px;
+  animation: dish-float 2.6s ease-in-out infinite;
+}
+
+.fusion-actions {
+  position: relative;
+  z-index: 15;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+}
+
+.fusion-actions p {
+  margin: 0;
+  color: rgba(58, 35, 23, 0.72);
+  font-weight: 900;
+}
+
+.feedback-screen {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.35fr) minmax(320px, 620px);
+  align-items: center;
+  justify-content: center;
+  gap: clamp(22px, 5vw, 56px);
+  padding: var(--stage-pad-top) clamp(14px, 4vw, 34px) var(--stage-pad-bottom);
+  background: transparent;
+}
+
+.feedback-screen > .guest-card {
+  transform: scale(0.72);
+}
+
+.feedback-card {
+  width: min(620px, 100%);
+  padding: clamp(26px, 4vw, 44px);
+}
+
+.feedback-card h2 {
+  margin: 14px 0 8px;
+  color: var(--kitchen-ink);
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1.12;
+}
+
+.feedback-text {
+  color: rgba(58, 35, 23, 0.72);
+  font-weight: 850;
+  line-height: 1.72;
+}
+
+.score-bars {
+  display: grid;
+  gap: 12px;
+  margin: 22px 0 16px;
+}
+
+.score-row {
+  display: grid;
+  grid-template-columns: 72px minmax(150px, 1fr) 34px;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 1000;
+}
+
+.score-row > div {
+  height: 17px;
+  border: 2px solid rgba(57, 36, 25, 0.84);
+  border-radius: 999px;
+  background: rgba(255, 250, 229, 0.88);
+  overflow: hidden;
+}
+
+.score-row i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #79b66c, #e5bd55 62%, #df6751);
+}
+
+.receipt {
+  width: min(520px, calc(100vw - 42px));
+}
+
+@keyframes fusion-glow-pulse {
+  0%, 100% {
+    transform: scale(0.96) rotate(0);
+    opacity: 0.72;
+  }
+  50% {
+    transform: scale(1.04) rotate(8deg);
+    opacity: 1;
+  }
+}
+
+@keyframes dish-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@media (max-width: 900px) {
+  .dish-generation-stage {
+    width: min(440px, calc(100vw - 34px));
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .dish-card {
+    min-height: 246px;
+  }
+
+  .fusion-ready-screen .guest-card {
+    display: none;
+  }
+
+  .feedback-screen {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .feedback-screen > .guest-card {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .stage-creation .screen::before,
+  .stage-generating1 .screen::before,
+  .stage-betweenDishes .screen::before,
+  .stage-generating2 .screen::before,
+  .stage-kitchen .screen::before,
+  .stage-fusion .screen::before,
+  .stage-feedback .screen::before,
+  .stage-settlement .screen::before {
+    left: 50%;
+    transform: translateX(-50%) scale(0.82);
+    transform-origin: top center;
+  }
+
+  .stage-creation .screen::after,
+  .stage-generating1 .screen::after,
+  .stage-betweenDishes .screen::after,
+  .stage-generating2 .screen::after,
+  .stage-kitchen .screen::after,
+  .stage-fusion .screen::after,
+  .stage-feedback .screen::after,
+  .stage-settlement .screen::after {
+    display: none;
+  }
+
+  .creation-stage,
+  .dish-wait-screen,
+  .fusion-ready-screen,
+  .evolution-screen,
+  .feedback-screen,
+  .settlement-screen {
+    overflow-y: auto;
+    padding: 64px 12px 112px;
+  }
+
+  .creation-context,
+  .fullscreen-chat {
+    width: calc(100vw - 24px);
+  }
+
+  .fullscreen-chat {
+    min-height: calc(100svh - 210px);
+    max-height: none;
+  }
+
+  .chat-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .input-row {
+    grid-template-columns: 1fr;
+  }
+
+  .message {
+    max-width: 96%;
+  }
+
+  .score-row {
+    grid-template-columns: 58px minmax(110px, 1fr) 28px;
+    gap: 8px;
+  }
+}
+
+/* Continuity pass: chef journal stays inside the same warm kitchen world. */
+.stage-bubbleTransition,
+.stage-creation {
+  background:
+    linear-gradient(90deg, rgba(74, 39, 23, 0.34), transparent 16%, transparent 84%, rgba(74, 39, 23, 0.34)),
+    radial-gradient(ellipse at 50% 18%, rgba(255, 232, 150, 0.66), transparent 50%),
+    radial-gradient(circle at 16% 60%, rgba(255, 250, 220, 0.28), transparent 25%),
+    radial-gradient(circle at 86% 56%, rgba(255, 238, 198, 0.25), transparent 26%),
+    repeating-linear-gradient(90deg, rgba(111, 66, 37, 0.08) 0 2px, transparent 2px 10px),
+    linear-gradient(180deg, #e5ac6d 0, #f6d8a5 16%, #f8ddb1 72%, #d58c4c 100%) !important;
+}
+
+.stage-bubbleTransition::before,
+.stage-creation::before,
+.stage-bubbleTransition::after,
+.stage-creation::after {
+  content: "";
+  position: fixed;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.stage-bubbleTransition::before,
+.stage-creation::before {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: clamp(84px, 14vh, 118px);
+  border-top: 4px solid #5b311e;
+  background:
+    radial-gradient(ellipse at 11% 60%, rgba(255, 245, 216, 0.78) 0 42px, transparent 43px),
+    linear-gradient(180deg, rgba(255, 206, 119, 0.26), transparent 28%),
+    repeating-linear-gradient(90deg, #9b562e 0 76px, #b66d3b 76px 158px, #86492a 158px 218px);
+  box-shadow: 0 -14px 28px rgba(74, 42, 25, 0.16);
+}
+
+.stage-bubbleTransition::after,
+.stage-creation::after {
+  right: clamp(24px, 7vw, 92px);
+  bottom: clamp(22px, 4vh, 46px);
+  width: clamp(80px, 9vw, 116px);
+  height: clamp(102px, 13vw, 148px);
+  border: 4px solid #5a3524;
+  border-radius: 9px;
+  background:
+    radial-gradient(circle at 48% 34%, #ffe2ad 0 15px, transparent 16px),
+    linear-gradient(90deg, rgba(255,255,255,0.15), transparent 44%),
+    #3d7666;
+  box-shadow: 7px 10px 0 rgba(58, 34, 23, 0.18);
+  transform: rotate(-9deg);
+}
+
+.stage-creation .creation-stage {
+  position: relative;
+  z-index: 2;
+  background: transparent !important;
+}
+
+.stage-creation .creation-stage::before,
+.stage-creation .creation-stage::after {
+  content: "";
+  position: fixed;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.stage-creation .creation-stage::before {
+  left: clamp(64px, 13vw, 170px);
+  top: 0;
+  width: 104px;
+  height: 108px;
+  background:
+    radial-gradient(circle at 50% 66%, rgba(255, 246, 164, 0.9) 0 13px, rgba(255, 215, 100, 0.36) 14px 32px, transparent 33px),
+    linear-gradient(180deg, transparent 0 32px, #5d3423 32px 36px, transparent 36px),
+    radial-gradient(ellipse at 50% 57%, #a8572d 0 38px, #65331f 39px 42px, transparent 43px);
+  filter: drop-shadow(0 8px 0 rgba(67, 37, 24, 0.18));
+}
+
+.stage-creation .creation-stage::after {
+  left: clamp(16px, 5vw, 72px);
+  top: clamp(132px, 24vh, 210px);
+  width: clamp(118px, 13vw, 178px);
+  height: 122px;
+  background:
+    linear-gradient(180deg, transparent 0 55%, #6b3f22 55% 65%, transparent 65%),
+    radial-gradient(circle at 24% 38%, #7ca65b 0 10px, transparent 11px),
+    radial-gradient(circle at 43% 31%, #6f9c4f 0 11px, transparent 12px),
+    radial-gradient(circle at 62% 40%, #517c3f 0 10px, transparent 11px),
+    radial-gradient(ellipse at 22% 74%, #dca160 0 18px, transparent 19px),
+    radial-gradient(ellipse at 46% 72%, #f1d28d 0 17px, transparent 18px);
+  opacity: 0.72;
+}
+
+.stage-creation .creation-context,
+.stage-creation .fullscreen-chat {
+  position: relative;
+  z-index: 3;
+}
+
+.stage-creation .creation-context {
+  width: min(760px, calc(100vw - 42px));
+  margin-top: 4px;
+  transform: rotate(-0.25deg);
+}
+
+.stage-creation .fullscreen-chat {
+  width: min(760px, calc(100vw - 42px));
+  border-radius: 18px !important;
+  transform: rotate(0.12deg);
+}
+
+.stage-creation .chat-header {
+  background:
+    linear-gradient(180deg, rgba(255, 236, 202, 0.82), rgba(255, 224, 184, 0.64));
+}
+
+.stage-creation .message-list {
+  background:
+    radial-gradient(circle at 84% 12%, rgba(233, 71, 47, 0.08), transparent 26%),
+    linear-gradient(90deg, rgba(107, 63, 34, 0.035) 1px, transparent 1px),
+    linear-gradient(rgba(107, 63, 34, 0.035) 1px, transparent 1px),
+    rgba(255, 243, 217, 0.5);
+  background-size: auto, 22px 22px, 22px 22px, auto;
+}
+
+.stage-creation .chef-inner-message {
+  min-height: 92px;
+}
+
+.stage-creation .input-row input::placeholder {
+  color: rgba(59, 36, 24, 0.45);
+}
+
+.stage-creation .game-logo-corner,
+.stage-bubbleTransition .game-logo-corner {
+  opacity: 0.92;
+}
+
+@media (max-width: 760px) {
+  .stage-creation::after,
+  .stage-creation .creation-stage::after,
+  .stage-bubbleTransition::after {
+    display: none;
+  }
+
+  .stage-creation .creation-stage::before {
+    left: 50%;
+    transform: translateX(-50%) scale(0.82);
+    transform-origin: top center;
+  }
+}
+
+/* 1-hour emergency polish: submit-ready coherent kitchen pass. */
+:root {
+  --color-bg-warm: #f6d59b;
+  --color-paper: #fff6df;
+  --color-wood: #6b3f22;
+  --color-text: #3b2418;
+  --color-cta: #e9472f;
+  --color-green: #79b85a;
+  --shadow-soft: 0 10px 28px rgba(79, 43, 18, 0.18);
+  --radius-card: 18px;
+}
+
+.app-shell {
+  color: var(--color-text);
+  background:
+    radial-gradient(ellipse at 50% 9%, rgba(255, 238, 172, 0.7), transparent 46%),
+    linear-gradient(90deg, rgba(70, 38, 21, 0.28), transparent 17%, transparent 83%, rgba(70, 38, 21, 0.3)),
+    repeating-linear-gradient(90deg, rgba(116, 71, 39, 0.09) 0 2px, transparent 2px 10px),
+    linear-gradient(180deg, #e4aa6a 0, var(--color-bg-warm) 18%, #f5d9a7 72%, #d89152 100%);
+}
+
+.game-logo-corner {
+  position: fixed;
+  left: clamp(14px, 2.5vw, 28px);
+  top: clamp(18px, 3vh, 30px);
+  z-index: 40;
+  width: clamp(118px, 14vw, 188px);
+  image-rendering: pixelated;
+  filter: drop-shadow(0 5px 0 rgba(73, 42, 24, 0.28));
+  pointer-events: none;
+}
+
+.stage-start .game-logo-corner {
+  display: none;
+}
+
+.opening-game-logo {
+  display: block;
+  width: min(260px, 70%);
+  margin: 0 0 14px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 4px 0 rgba(73, 42, 24, 0.22));
+}
+
+.hero-copy,
+.creation-context,
+.chat-panel,
+.dish-card,
+.feedback-card,
+.receipt,
+.guest-request,
+.guest-tag strong,
+.chef-option {
+  border-color: var(--color-wood) !important;
+  border-radius: var(--radius-card) !important;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.48), transparent 28%),
+    linear-gradient(180deg, rgba(255, 250, 232, 0.96), rgba(255, 235, 198, 0.93)) !important;
+  color: var(--color-text);
+  box-shadow:
+    inset 0 0 0 4px rgba(255, 255, 245, 0.18),
+    0 5px 0 rgba(77, 43, 24, 0.72),
+    var(--shadow-soft) !important;
+}
+
+.hero-copy::before,
+.creation-context::before,
+.chat-panel::before,
+.dish-card::before,
+.feedback-card::before,
+.receipt::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(107, 63, 34, 0.16);
+  border-radius: calc(var(--radius-card) - 5px);
+  pointer-events: none;
+}
+
+.hero-copy,
+.creation-context,
+.chat-panel,
+.dish-card,
+.feedback-card,
+.receipt {
+  position: relative;
+}
+
+.stage-badge,
+.eyebrow,
+.rarity-chip {
+  border: 2px solid var(--color-wood) !important;
+  background: linear-gradient(180deg, #9bd579, var(--color-green)) !important;
+  color: #244018 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.42), 0 2px 0 rgba(75, 43, 25, 0.45) !important;
+}
+
+.pixel-button,
+.star-start,
+.fusion-ready-action,
+.serve-final-action,
+.hero-copy .inline-flex,
+.input-row .inline-flex,
+.feedback-card .inline-flex,
+.receipt .inline-flex {
+  border-color: #4b2d1f !important;
+  border-radius: 12px !important;
+  background: linear-gradient(180deg, #ff765f, var(--color-cta)) !important;
+  color: #fff9e8 !important;
+  box-shadow: 0 5px 0 #4b2d1f, 0 12px 20px rgba(74, 43, 25, 0.18) !important;
+  transition: transform 200ms ease-out, filter 200ms ease-out, box-shadow 200ms ease-out;
+}
+
+.hero-copy .inline-flex:hover,
+.input-row .inline-flex:hover,
+.feedback-card .inline-flex:hover,
+.receipt .inline-flex:hover,
+.star-start:hover,
+.fusion-ready-action:hover,
+.serve-final-action:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.04) drop-shadow(0 0 12px rgba(255, 205, 97, 0.36));
+}
+
+.hero-copy .inline-flex:active,
+.input-row .inline-flex:active,
+.feedback-card .inline-flex:active,
+.receipt .inline-flex:active,
+.star-start:active,
+.fusion-ready-action:active,
+.serve-final-action:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #4b2d1f !important;
+}
+
+.chef-select-screen {
+  max-width: 1160px;
+  min-height: 100svh;
+  padding: clamp(72px, 10vh, 92px) clamp(18px, 5vw, 60px) clamp(108px, 16vh, 140px);
+  grid-template-columns: minmax(340px, 0.9fr) minmax(360px, 1fr);
+  gap: clamp(24px, 5vw, 64px);
+}
+
+.chef-select-copy {
+  padding: clamp(24px, 4vw, 42px);
+  transform: rotate(-0.4deg);
+}
+
+.chef-select-copy h1 {
+  margin-top: 8px;
+  font-size: clamp(32px, 4.4vw, 56px);
+  line-height: 1.03;
+}
+
+.chef-select-copy > .inline-flex {
+  margin: 4px 0 18px;
+}
+
+.chef-picker {
+  gap: 12px;
+}
+
+.chef-option {
+  min-height: 166px;
+  background:
+    radial-gradient(circle at 50% 12%, color-mix(in srgb, var(--chef-accent) 22%, transparent), transparent 42%),
+    linear-gradient(180deg, #fff7df, #f2d49d) !important;
+  transition: transform 200ms ease-out, filter 200ms ease-out, box-shadow 200ms ease-out;
+}
+
+.chef-option:hover,
+.chef-option.selected {
+  transform: translateY(-4px) rotate(-0.7deg);
+}
+
+.chef-option.selected {
+  box-shadow:
+    inset 0 0 0 4px rgba(255, 255, 245, 0.16),
+    0 6px 0 rgba(58, 35, 23, 0.82),
+    0 0 0 4px color-mix(in srgb, var(--chef-accent) 32%, transparent),
+    var(--shadow-soft) !important;
+}
+
+.kitchen-stage,
+.chef-preview-scene {
+  overflow: visible;
+  border: 0;
+  background:
+    radial-gradient(ellipse at 50% 86%, rgba(66, 38, 22, 0.22), transparent 28%),
+    linear-gradient(180deg, rgba(255, 246, 218, 0.24), transparent 52%),
+    linear-gradient(180deg, transparent 0 63%, rgba(137, 79, 41, 0.34) 63% 100%);
+  box-shadow: none;
+}
+
+.chef-preview-scene .art-chef-card {
+  transform: translateY(28px) scale(1.02);
+}
+
+.chef-preview-scene .chef-portrait {
+  height: clamp(420px, 64vh, 640px);
+}
+
+.chef-preview-scene .serving-window {
+  position: absolute;
+  right: clamp(24px, 5vw, 70px);
+  top: 48%;
+  transform: translateY(-50%) rotate(1deg);
+  width: 160px;
+  height: 108px;
+  border-radius: 12px;
+  background: #fff6df;
+}
+
+.arrival-scene,
+.bubble-scene {
+  background-position: center bottom;
+}
+
+.chef-character,
+.arrival-scene .chef-anchor,
+.bubble-scene .chef-anchor {
+  left: clamp(80px, 12vw, 190px) !important;
+  right: auto !important;
+  bottom: clamp(-92px, -11vh, -58px) !important;
+  transform: scale(1.32) !important;
+  transform-origin: bottom center;
+}
+
+.guest-character,
+.arrival-scene .guest-anchor,
+.bubble-scene .guest-anchor {
+  left: auto !important;
+  right: clamp(210px, 24vw, 380px) !important;
+  bottom: clamp(26px, 5vh, 62px) !important;
+  transform: scale(0.82) !important;
+  transform-origin: bottom center;
+}
+
+.actor-ground-shadow,
+.art-chef-card::after,
+.art-guest-card::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  z-index: -1;
+  width: 62%;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(59, 34, 21, 0.24);
+  filter: blur(6px);
+  transform: translateX(-50%);
+}
+
+.arrival-scene .guest-tag {
+  right: clamp(290px, 28vw, 500px) !important;
+  top: clamp(42px, 7vh, 78px) !important;
+}
+
+.arrival-scene .guest-request {
+  right: clamp(42px, 5vw, 90px) !important;
+  top: clamp(172px, 25vh, 238px) !important;
+  width: min(390px, 32vw);
+  padding: 30px 36px;
+}
+
+.arrival-scene .guest-request::after {
+  content: "";
+  position: absolute;
+  left: -18px;
+  top: 44px;
+  width: 28px;
+  height: 22px;
+  background: inherit;
+  border-left: 3px solid var(--color-wood);
+  border-bottom: 3px solid var(--color-wood);
+  clip-path: polygon(0 50%, 100% 0, 100% 100%);
+}
+
+.star-start {
+  left: auto !important;
+  right: clamp(70px, 10vw, 160px) !important;
+  top: auto !important;
+  bottom: clamp(42px, 7vh, 82px) !important;
+  width: auto;
+  min-width: 168px;
+  height: 54px;
+  padding: 0 22px;
+  font-size: 15px;
+  font-weight: 1000;
+  text-shadow: none;
+}
+
+.star-start::before {
+  display: none;
+}
+
+.bubble-scene .ghosted {
+  opacity: 0.42;
+  filter: saturate(0.78) blur(0.2px);
+}
+
+.thought-white-wipe {
+  display: none;
+}
+
+.chef-thought-bubble {
+  left: clamp(240px, 28vw, 430px) !important;
+  bottom: clamp(240px, 43vh, 360px) !important;
+  border-color: var(--color-wood);
+  background: var(--color-paper);
+  box-shadow: 0 5px 0 rgba(77, 43, 24, 0.7), var(--shadow-soft);
+  animation: panel-soft-in 320ms ease-out both;
+}
+
+.creation-stage,
+.dish-wait-screen,
+.fusion-ready-screen,
+.evolution-screen,
+.feedback-screen,
+.settlement-screen {
+  animation: panel-soft-in 320ms ease-out both;
+}
+
+.creation-stage {
+  background: transparent !important;
+}
+
+.creation-context {
+  transform: rotate(-0.25deg);
+}
+
+.fullscreen-chat {
+  transform: rotate(0.18deg);
+}
+
+.chat-panel {
+  overflow: hidden;
+}
+
+.chat-header {
+  background: rgba(255, 232, 190, 0.64);
+}
+
+.message-list {
+  background:
+    linear-gradient(90deg, rgba(107, 63, 34, 0.035) 1px, transparent 1px),
+    linear-gradient(rgba(107, 63, 34, 0.035) 1px, transparent 1px),
+    rgba(255, 241, 212, 0.42);
+  background-size: 22px 22px;
+}
+
+.input-row {
+  background: rgba(255, 230, 190, 0.7);
+}
+
+.input-row input {
+  border-color: rgba(107, 63, 34, 0.45);
+  background: #fffdf2;
+  box-shadow: inset 0 2px 0 rgba(107, 63, 34, 0.08);
+}
+
+.dish-generation-stage {
+  position: relative;
+  width: min(720px, calc(100vw - 44px));
+  border: 4px solid rgba(90, 50, 29, 0.72);
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 211, 129, 0.2), transparent 30%),
+    repeating-linear-gradient(90deg, #a95f32 0 82px, #bd7140 82px 164px, #8c4c2a 164px 220px);
+  padding: clamp(18px, 3vw, 26px);
+  box-shadow: 0 8px 0 rgba(76, 43, 25, 0.65), var(--shadow-soft);
+}
+
+.dish-generation-stage::before {
+  content: "料理工作台";
+  position: absolute;
+  left: 24px;
+  top: -18px;
+  border: 2px solid var(--color-wood);
+  border-radius: 999px;
+  background: var(--color-green);
+  padding: 3px 12px;
+  color: #244018;
+  font-size: 12px;
+  font-weight: 1000;
+}
+
+.dish-card {
+  min-height: 270px;
+  border-radius: 16px !important;
+  transition: transform 200ms ease-out, filter 200ms ease-out;
+}
+
+.dish-card:hover,
+.actionable-card:hover {
+  transform: translateY(-5px) rotate(-0.4deg);
+  filter: brightness(1.03);
+}
+
+.empty-card {
+  background:
+    radial-gradient(circle at 50% 31%, rgba(255,255,255,0.34), transparent 30%),
+    linear-gradient(180deg, rgba(255, 246, 226, 0.9), rgba(238, 205, 158, 0.88)) !important;
+}
+
+.between-dishes-auto .auto-next-card {
+  cursor: default;
+}
+
+.between-dishes-auto .auto-next-card:hover {
+  transform: none;
+  filter: none;
+}
+
+.auto-next-dots {
+  display: inline-flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.auto-next-dots i {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--color-green);
+  box-shadow: 0 1px 0 rgba(75, 43, 25, 0.36);
+  animation: auto-next-pulse 860ms ease-in-out infinite;
+}
+
+.auto-next-dots i:nth-child(2) {
+  animation-delay: 120ms;
+}
+
+.auto-next-dots i:nth-child(3) {
+  animation-delay: 240ms;
+}
+
+/* Fusion final alignment fix: keep glow and final card sharing one center. */
+.stage-fusion .fusion-stage {
+  display: block;
+  position: relative;
+  min-height: 300px;
+  overflow: visible;
+}
+
+.stage-fusion .fusion-glow {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  width: min(320px, 46vw) !important;
+  height: min(320px, 46vw) !important;
+  transform: translate(-50%, -50%) scale(1) rotate(0deg) !important;
+  transform-origin: center center !important;
+  animation: fusion-glow-centered 2.8s ease-in-out infinite !important;
+}
+
+.stage-fusion .evolved-dish {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  z-index: 14;
+  width: min(236px, 70vw) !important;
+  opacity: 1 !important;
+  transform: translate(-50%, -50%) !important;
+  animation: none !important;
+}
+
+.stage-fusion .evolved-dish .dish-card {
+  width: 100% !important;
+  min-height: 198px !important;
+  margin: 0 !important;
+  padding: 16px 14px 14px;
+  animation: final-card-centered-breathe 3s ease-in-out infinite !important;
+}
+
+.stage-fusion .evolved-dish .generated-dish-image,
+.stage-fusion .evolved-dish .pixel-dish {
+  width: 108px !important;
+  height: 108px !important;
+}
+
+.stage-fusion .evolved-dish h3 {
+  margin-top: 8px;
+  font-size: clamp(16px, 1.45vw, 21px) !important;
+  line-height: 1.16 !important;
+}
+
+.stage-fusion .evolved-dish p {
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.stage-fusion .fusion-actions {
+  margin-top: 18px !important;
+}
+
+@keyframes fusion-glow-centered {
+  0%, 100% {
+    opacity: 0.64;
+    transform: translate(-50%, -50%) scale(0.96) rotate(0deg);
+  }
+  50% {
+    opacity: 0.96;
+    transform: translate(-50%, -50%) scale(1.04) rotate(8deg);
+  }
+}
+
+@keyframes final-card-centered-breathe {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.next-arrow {
+  border: 3px solid var(--color-wood);
+  border-radius: 999px;
+  background: var(--color-paper);
+  color: var(--color-cta);
+  box-shadow: 0 5px 0 rgba(77, 43, 24, 0.65), var(--shadow-soft);
+}
+
+.fusion-ready-action {
+  position: relative;
+  z-index: 3;
+}
+
+.fusion-ready-action::after,
+.serve-final-action::after {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  z-index: -1;
+  border-radius: 18px;
+  background: radial-gradient(circle, rgba(255, 216, 111, 0.34), transparent 70%);
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+
+.fusion-ready-action:hover::after,
+.serve-final-action:hover::after {
+  opacity: 1;
+}
+
+.fusion-ready-screen .guest-card {
+  right: clamp(58px, 10vw, 138px) !important;
+  bottom: clamp(84px, 14vh, 128px);
+  top: auto;
+  transform: scale(0.58) !important;
+  transform-origin: bottom center;
+}
+
+.evolution-screen {
+  background: transparent !important;
+}
+
+.fusion-copy {
+  z-index: 12;
+}
+
+.fusion-stage {
+  position: relative;
+  z-index: 8;
+  width: min(760px, calc(100vw - 44px));
+  min-height: 260px;
+  border: 4px solid rgba(90, 50, 29, 0.62);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 225, 116, 0.62), transparent 38%),
+    repeating-linear-gradient(90deg, #a95f32 0 82px, #bd7140 82px 164px, #8c4c2a 164px 220px);
+  box-shadow: 0 8px 0 rgba(76, 43, 25, 0.65), var(--shadow-soft);
+}
+
+.fusion-ingredient {
+  display: grid !important;
+  z-index: 10;
+  border: 2px solid var(--color-wood);
+  border-radius: 14px;
+  background: var(--color-paper);
+  padding: 10px;
+  box-shadow: 0 4px 0 rgba(77, 43, 24, 0.54);
+}
+
+.fusion-glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 9;
+  width: min(330px, 52vw);
+  height: min(330px, 52vw);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.evolved-dish {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 14;
+  width: min(280px, 76vw);
+  transform: translate(-50%, -50%);
+}
+
+.evolved-dish .dish-card {
+  min-height: 220px;
+  margin: 0;
+  box-shadow:
+    0 0 46px rgba(255, 211, 97, 0.52),
+    0 5px 0 rgba(77, 43, 24, 0.72),
+    var(--shadow-soft) !important;
+}
+
+.stage-fusion .fusion-actions {
+  position: relative;
+  z-index: 16;
+  width: min(760px, calc(100vw - 44px));
+  margin-top: 14px;
+  justify-items: center;
+}
+
+.stage-fusion .fusion-actions p {
+  margin: 0 0 4px;
+  color: rgba(59, 36, 24, 0.72);
+  font-weight: 1000;
+}
+
+.stage-fusion .serve-final-action {
+  position: relative !important;
+  inset: auto !important;
+  min-width: 168px;
+  min-height: 50px;
+  border-radius: 14px !important;
+  box-shadow: 0 4px 0 #4a2d1f, 0 10px 18px rgba(68, 38, 24, 0.18) !important;
+}
+
+.feedback-card {
+  transform: rotate(0.2deg);
+}
+
+.feedback-screen > .guest-card {
+  align-self: end;
+  transform: scale(0.62) !important;
+  transform-origin: bottom center;
+}
+
+.score-row > div {
+  background: #fff4d8;
+}
+
+.score-row i {
+  background: linear-gradient(90deg, #78b763, #f0be54 58%, #df5e4a) !important;
+}
+
+.feedback-card .rarity-chip {
+  margin: 4px 0 14px;
+}
+
+@keyframes panel-soft-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes auto-next-pulse {
+  0%, 100% {
+    opacity: 0.38;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+}
+
+@media (max-width: 900px) {
+  .game-logo-corner {
+    width: 112px;
+  }
+
+  .chef-select-screen {
+    grid-template-columns: 1fr;
+    padding-top: 62px;
+    overflow-y: auto;
+  }
+
+  .chef-preview-scene {
+    min-height: 320px;
+  }
+
+  .chef-preview-scene .chef-portrait {
+    height: min(350px, 48vh);
+  }
+
+  .chef-character,
+  .arrival-scene .chef-anchor,
+  .bubble-scene .chef-anchor {
+    left: -12px !important;
+    bottom: -72px !important;
+    transform: scale(0.92) !important;
+  }
+
+  .guest-character,
+  .arrival-scene .guest-anchor,
+  .bubble-scene .guest-anchor {
+    right: 24px !important;
+    bottom: 24px !important;
+    transform: scale(0.66) !important;
+  }
+
+  .arrival-scene .guest-tag {
+    left: 12px !important;
+    right: auto !important;
+    top: 68px !important;
+    max-width: min(300px, calc(100vw - 24px));
+  }
+
+  .arrival-scene .guest-request {
+    left: 12px !important;
+    right: 12px !important;
+    top: 160px !important;
+    width: auto;
+    padding: 22px;
+  }
+
+  .star-start {
+    right: 18px !important;
+    bottom: 22px !important;
+    min-width: 148px;
+  }
+
+  .chef-thought-bubble {
+    left: 50% !important;
+    bottom: 45vh !important;
+    transform: translateX(-50%);
+    width: min(300px, calc(100vw - 36px));
+  }
+
+  .dish-generation-stage,
+  .fusion-stage {
+    width: min(430px, calc(100vw - 28px));
+    grid-template-columns: 1fr;
+  }
+
+  .feedback-screen > .guest-card {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .game-logo-corner {
+    left: 12px;
+    top: 14px;
+    width: 96px;
+  }
+
+  .opening-game-logo {
+    width: min(220px, 82%);
+  }
+
+  .chef-select-copy h1 {
+    font-size: 34px;
+  }
+
+  .chef-option {
+    min-height: 118px;
+  }
+
+  .creation-stage,
+  .dish-wait-screen,
+  .fusion-ready-screen,
+  .evolution-screen,
+  .feedback-screen,
+  .settlement-screen {
+    padding-inline: 12px;
+  }
+
+  .message {
+    max-width: 96%;
+    overflow-wrap: anywhere;
+  }
+
+  .score-row {
+    grid-template-columns: 58px minmax(90px, 1fr) 28px;
+  }
+}
+
+/* Second-pass refinement, first two screens only. */
+.stage-start {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 68% 28%, rgba(255, 233, 145, 0.68), transparent 34%),
+    radial-gradient(ellipse at 27% 22%, rgba(255, 247, 219, 0.48), transparent 32%),
+    linear-gradient(90deg, rgba(74, 39, 23, 0.24), transparent 18%, transparent 82%, rgba(74, 39, 23, 0.24)),
+    repeating-linear-gradient(90deg, rgba(111, 66, 37, 0.1) 0 2px, transparent 2px 10px),
+    linear-gradient(180deg, #e4aa6a 0, #f7d99f 16%, #f7dfa9 68%, #d58c4c 100%);
+}
+
+.stage-start::before,
+.stage-start::after {
+  content: "";
+  position: fixed;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.stage-start::before {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: clamp(76px, 13vh, 116px);
+  border-top: 4px solid #5b311e;
+  background:
+    linear-gradient(180deg, rgba(255, 206, 119, 0.26), transparent 28%),
+    repeating-linear-gradient(90deg, #9b562e 0 76px, #b66d3b 76px 158px, #86492a 158px 218px);
+  box-shadow: 0 -14px 28px rgba(74, 42, 25, 0.16);
+}
+
+.stage-start::after {
+  right: clamp(42px, 7vw, 92px);
+  top: clamp(54px, 10vh, 94px);
+  width: clamp(130px, 16vw, 210px);
+  height: clamp(90px, 11vw, 138px);
+  opacity: 0.36;
+  background:
+    linear-gradient(180deg, transparent 0 46%, #6b3f22 46% 53%, transparent 53%),
+    radial-gradient(circle at 23% 38%, #6d8c46 0 11px, transparent 12px),
+    radial-gradient(circle at 40% 30%, #79a857 0 12px, transparent 13px),
+    radial-gradient(circle at 57% 40%, #5f8743 0 11px, transparent 12px);
+  filter: blur(0.1px);
+}
+
+.stage-start .chef-select-screen {
+  position: relative;
+  z-index: 2;
+  max-width: 1180px;
+  align-items: center;
+}
+
+.stage-start .chef-select-screen::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 9%;
+  z-index: -1;
+  width: min(760px, 58vw);
+  height: min(520px, 68vh);
+  border-radius: 999px;
+  background: radial-gradient(ellipse, rgba(255, 226, 129, 0.46), transparent 67%);
+  transform: translateX(-4%);
+  pointer-events: none;
+}
+
+.stage-start .hero-copy {
+  padding: clamp(20px, 3vw, 34px);
+  border-radius: 24px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 251, 232, 0.98), rgba(255, 236, 198, 0.95)),
+    radial-gradient(circle at 17% 14%, rgba(255,255,255,0.55), transparent 28%) !important;
+  box-shadow:
+    inset 0 0 0 5px rgba(255, 255, 245, 0.18),
+    0 7px 0 rgba(74, 42, 25, 0.78),
+    0 24px 48px rgba(72, 41, 24, 0.22) !important;
+  transform: rotate(-0.35deg);
+  animation: opening-panel-in 340ms ease-out both;
+}
+
+.stage-start .opening-game-logo {
+  width: min(286px, 82%);
+  margin: -4px auto 16px;
+  padding: 8px 12px 10px;
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(118, 67, 34, 0.28), rgba(61, 35, 23, 0.06)),
+    rgba(255, 239, 205, 0.42);
+  filter:
+    drop-shadow(0 4px 0 rgba(71, 41, 25, 0.4))
+    drop-shadow(0 14px 18px rgba(73, 42, 24, 0.16));
+  transform-origin: top center;
+  animation: opening-sign-in 360ms ease-out both;
+}
+
+.stage-start .chef-select-copy h1 {
+  margin: 8px 0 12px;
+  max-width: 16ch;
+  font-size: clamp(30px, 3.25vw, 44px);
+  text-wrap: balance;
+}
+
+.stage-start .chef-select-copy p {
+  max-width: 40ch;
+  margin-bottom: 12px;
+  color: rgba(59, 36, 24, 0.72);
+  font-weight: 850;
+  line-height: 1.58;
+}
+
+.stage-start .chef-select-copy > .inline-flex {
+  min-width: 150px;
+  min-height: 48px;
+  margin: 2px 0 14px;
+}
+
+.stage-start .chef-picker {
+  margin-top: 10px;
+}
+
+.stage-start .chef-option {
+  min-height: 112px;
+  padding: 8px 7px 9px;
+  border-radius: 18px !important;
+  transform-origin: bottom center;
+}
+
+.stage-start .chef-option img {
+  height: 64px;
+}
+
+.stage-start .chef-option span:not(.chef-avatar-frame) {
+  font-size: 12px;
+}
+
+.stage-start .chef-option small {
+  font-size: 9px;
+  line-height: 1.18;
+}
+
+.stage-start .chef-option:hover {
+  transform: translateY(-5px) rotate(-0.8deg) !important;
+}
+
+.stage-start .chef-option.selected {
+  transform: translateY(-4px) rotate(-0.35deg) !important;
+}
+
+.stage-start .chef-preview-scene {
+  position: relative;
+  min-height: min(600px, calc(100svh - 160px));
+  border-radius: 30px;
+  background:
+    radial-gradient(ellipse at 50% 78%, rgba(63, 35, 21, 0.28), transparent 24%),
+    radial-gradient(ellipse at 50% 40%, rgba(255, 229, 145, 0.48), transparent 42%),
+    linear-gradient(180deg, rgba(255, 249, 224, 0.2), rgba(124, 73, 38, 0.24) 70%, rgba(116, 65, 35, 0.4) 100%);
+}
+
+.stage-start .chef-preview-scene::before,
+.stage-start .chef-preview-scene::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.stage-start .chef-preview-scene::before {
+  left: 8%;
+  right: 8%;
+  bottom: 9%;
+  height: clamp(58px, 10vh, 92px);
+  border: 3px solid rgba(87, 51, 31, 0.32);
+  border-radius: 999px;
+  background:
+    radial-gradient(ellipse at 50% 52%, rgba(57, 33, 21, 0.2), transparent 55%),
+    linear-gradient(180deg, rgba(245, 188, 95, 0.22), rgba(121, 70, 38, 0.22));
+  box-shadow: 0 12px 24px rgba(80, 45, 27, 0.14);
+}
+
+.stage-start .chef-preview-scene::after {
+  left: 5%;
+  top: 15%;
+  width: 120px;
+  height: 78px;
+  opacity: 0.28;
+  background:
+    linear-gradient(180deg, transparent 0 42%, #6b3f22 42% 52%, transparent 52%),
+    radial-gradient(circle at 24% 35%, #7ca65b 0 10px, transparent 11px),
+    radial-gradient(circle at 42% 28%, #6f9c4f 0 11px, transparent 12px),
+    radial-gradient(circle at 58% 38%, #517c3f 0 10px, transparent 11px);
+}
+
+.stage-start .chef-preview-scene .art-chef-card {
+  animation: chef-breathe 3.6s ease-in-out infinite;
+}
+
+.stage-start .chef-preview-scene .chef-portrait {
+  height: clamp(450px, 68vh, 660px);
+  filter:
+    drop-shadow(0 0 22px rgba(255, 218, 119, 0.18))
+    drop-shadow(0 24px 18px rgba(65, 37, 23, 0.24));
+}
+
+.stage-start .chef-preview-scene .serving-window {
+  display: none;
+}
+
+.stage-arrival .guest-dialogue-group {
+  position: absolute;
+  right: clamp(42px, 6vw, 98px);
+  top: clamp(78px, 13vh, 126px);
+  z-index: 18;
+  width: min(410px, 34vw);
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+  animation: dialogue-group-in 300ms ease-out both;
+}
+
+.stage-arrival .guest-dialogue-group .guest-tag,
+.stage-arrival .guest-dialogue-group .guest-request,
+.stage-arrival .guest-dialogue-group .star-start {
+  position: relative !important;
+  inset: auto !important;
+  left: auto !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+}
+
+.stage-arrival .guest-dialogue-group .guest-tag {
+  width: 100%;
+  max-width: none !important;
+  display: grid;
+  justify-items: start;
+}
+
+.stage-arrival .guest-dialogue-group .guest-tag .stage-badge {
+  margin: 0 0 -2px 18px !important;
+}
+
+.stage-arrival .guest-dialogue-group .guest-tag strong {
+  display: block;
+  width: 100%;
+  min-height: auto;
+  padding: 14px 22px;
+  font-size: clamp(14px, 1.35vw, 17px);
+  line-height: 1.18;
+  text-align: left;
+}
+
+.stage-arrival .guest-dialogue-group .guest-request {
+  width: 100% !important;
+  padding: 26px 30px 24px !important;
+  border-radius: 22px !important;
+}
+
+.stage-arrival .guest-dialogue-group .guest-request::after {
+  left: -17px;
+  top: 34px;
+}
+
+.stage-arrival .guest-dialogue-group .guest-request p {
+  max-width: none;
+  margin: 0;
+  font-size: clamp(13px, 1.05vw, 16px);
+  line-height: 1.58;
+}
+
+.dialogue-action-row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 4px 0 18px;
+}
+
+.dialogue-action-row > span {
+  color: rgba(59, 36, 24, 0.68);
+  font-size: 12px;
+  font-weight: 1000;
+  white-space: nowrap;
+}
+
+.stage-arrival .guest-dialogue-group .star-start {
+  min-width: 150px;
+  height: 48px;
+  padding: 0 18px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.stage-arrival .guest-character,
+.stage-arrival .arrival-scene .guest-anchor {
+  right: clamp(340px, 35vw, 540px) !important;
+  bottom: clamp(32px, 6vh, 70px) !important;
+  transform: scale(0.8) !important;
+}
+
+.stage-arrival .chef-character,
+.stage-arrival .arrival-scene .chef-anchor {
+  left: clamp(78px, 11vw, 176px) !important;
+  bottom: clamp(-92px, -11vh, -58px) !important;
+  transform: scale(1.26) !important;
+}
+
+@keyframes opening-sign-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) rotate(-1deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
+}
+
+@keyframes opening-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) rotate(-0.35deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(-0.35deg);
+  }
+}
+
+@keyframes dialogue-group-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes chef-breathe {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@media (max-width: 980px) {
+  .stage-arrival .guest-dialogue-group {
+    left: auto;
+    right: 18px;
+    top: 74px;
+    width: min(360px, calc(100vw - 36px));
+  }
+
+  .stage-arrival .guest-character,
+  .stage-arrival .arrival-scene .guest-anchor {
+    right: 42px !important;
+    bottom: 5vh !important;
+    transform: scale(0.62) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .stage-start .chef-select-screen {
+    padding-top: 46px;
+  }
+
+  .stage-start .opening-game-logo {
+    width: min(260px, 92%);
+  }
+
+  .stage-start .chef-preview-scene {
+    min-height: 300px;
+  }
+
+  .stage-start .chef-preview-scene .chef-portrait {
+    height: min(350px, 46vh);
+  }
+
+  .stage-arrival .guest-dialogue-group {
+    left: 12px;
+    right: 12px;
+    top: 76px;
+    width: auto;
+  }
+
+  .dialogue-action-row {
+    align-items: flex-start;
+    flex-direction: column;
+    padding-left: 10px;
+  }
+
+  .stage-arrival .guest-dialogue-group .star-start {
+    min-width: 148px;
+  }
+
+  .stage-arrival .guest-character,
+  .stage-arrival .arrival-scene .guest-anchor {
+    right: 28px !important;
+    bottom: 4vh !important;
+    transform: scale(0.56) !important;
+  }
+}
+
+/* Final local polish pass: Task 1 arrival scene + Task 2 creation background only. */
+.stage-arrival .arrival-scene {
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.stage-arrival .arrival-scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 30% 61%, rgba(255, 185, 79, 0.24), transparent 25%),
+    radial-gradient(ellipse at 80% 43%, rgba(255, 226, 145, 0.22), transparent 30%),
+    linear-gradient(90deg, rgba(72, 39, 22, 0.18), transparent 19%, transparent 80%, rgba(72, 39, 22, 0.12));
+  mix-blend-mode: multiply;
+}
+
+.stage-arrival .arrival-scene::after {
+  content: "";
+  position: absolute;
+  left: clamp(230px, 21vw, 360px);
+  top: clamp(86px, 12vh, 132px);
+  z-index: 1;
+  width: clamp(210px, 18vw, 300px);
+  height: clamp(118px, 14vh, 170px);
+  pointer-events: none;
+  opacity: 0.34;
+  background:
+    linear-gradient(90deg, transparent 0 6%, rgba(95, 55, 31, 0.9) 6% 9%, transparent 9% 19%, rgba(95, 55, 31, 0.9) 19% 22%, transparent 22% 32%, rgba(95, 55, 31, 0.9) 32% 35%, transparent 35% 100%),
+    radial-gradient(ellipse at 64% 74%, rgba(101, 62, 37, 0.55) 0 24%, transparent 25%),
+    linear-gradient(180deg, transparent 0 43%, rgba(89, 51, 29, 0.88) 43% 48%, transparent 48% 100%),
+    radial-gradient(circle at 86% 22%, rgba(116, 184, 92, 0.76) 0 8px, transparent 9px),
+    radial-gradient(circle at 93% 30%, rgba(88, 139, 73, 0.74) 0 7px, transparent 8px);
+  filter: drop-shadow(0 8px 10px rgba(61, 34, 20, 0.16));
+}
+
+.stage-arrival .scene-sparkle {
+  display: block;
+  position: absolute;
+  left: clamp(265px, 24vw, 390px);
+  bottom: clamp(90px, 16vh, 150px);
+  z-index: 2;
+  width: clamp(190px, 18vw, 280px);
+  height: clamp(150px, 20vh, 240px);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.62;
+  background:
+    radial-gradient(circle, rgba(255, 232, 150, 0.52), rgba(255, 186, 86, 0.18) 42%, transparent 68%);
+  filter: blur(2px);
+}
+
+.stage-arrival .scene-steam {
+  display: block;
+  z-index: 3;
+  opacity: 0.54;
+  filter: drop-shadow(0 0 8px rgba(255, 242, 205, 0.42));
+}
+
+.stage-arrival .steam-left {
+  left: clamp(290px, 26vw, 430px);
+  bottom: clamp(198px, 30vh, 288px);
+}
+
+.stage-arrival .steam-right {
+  left: clamp(382px, 34vw, 540px);
+  bottom: clamp(216px, 32vh, 310px);
+}
+
+.stage-arrival .chef-character,
+.stage-arrival .arrival-scene .chef-anchor {
+  left: clamp(200px, 22vw, 330px) !important;
+  right: auto !important;
+  bottom: clamp(-46px, -5vh, -24px) !important;
+  z-index: 8;
+  transform: scale(1.12) !important;
+  transform-origin: bottom center;
+}
+
+.stage-arrival .chef-character .chef-portrait {
+  filter:
+    drop-shadow(0 0 22px rgba(255, 188, 82, 0.28))
+    drop-shadow(0 28px 20px rgba(55, 31, 18, 0.3));
+}
+
+.stage-arrival .chef-character .art-chef-card::after {
+  width: 74%;
+  height: 30px;
+  bottom: 6px;
+  background: rgba(54, 30, 18, 0.34);
+  filter: blur(8px);
+}
+
+.stage-arrival .guest-character,
+.stage-arrival .arrival-scene .guest-anchor {
+  left: auto !important;
+  right: clamp(118px, 13vw, 230px) !important;
+  bottom: clamp(28px, 5vh, 62px) !important;
+  z-index: 10;
+  transform: scale(1.18) !important;
+  transform-origin: bottom center;
+}
+
+.stage-arrival .guest-character .guest-portrait {
+  filter:
+    drop-shadow(0 0 14px rgba(255, 220, 155, 0.2))
+    drop-shadow(0 20px 14px rgba(55, 31, 18, 0.26));
+}
+
+.stage-arrival .guest-character .art-guest-card::after {
+  width: 86%;
+  height: 24px;
+  bottom: 5px;
+  background: rgba(54, 30, 18, 0.3);
+  filter: blur(7px);
+}
+
+.stage-arrival .guest-dialogue-group {
+  right: clamp(34px, 4vw, 74px);
+  top: clamp(72px, 11vh, 118px);
+  z-index: 22;
+  width: min(438px, 36vw);
+  gap: 9px;
+  padding: 0;
+}
+
+.stage-arrival .guest-dialogue-group .guest-tag strong {
+  padding: 12px 20px;
+  background:
+    linear-gradient(180deg, rgba(255, 247, 225, 0.96), rgba(255, 228, 188, 0.92));
+}
+
+.stage-arrival .guest-dialogue-group .guest-request {
+  padding: 22px 26px 21px !important;
+  border-width: 3px !important;
+  box-shadow:
+    0 12px 22px rgba(74, 42, 24, 0.16),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.34);
+}
+
+.stage-arrival .guest-dialogue-group .guest-request::after {
+  left: -15px;
+  top: 42px;
+}
+
+.stage-arrival .guest-dialogue-group .guest-request p {
+  font-size: clamp(14px, 1.12vw, 16px);
+  line-height: 1.58;
+}
+
+.stage-arrival .dialogue-action-row {
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 0 0 0 20px;
+}
+
+.stage-arrival .dialogue-action-row > span {
+  position: relative;
+  padding: 4px 10px;
+  border: 2px solid rgba(107, 63, 34, 0.3);
+  border-radius: 999px;
+  background: rgba(255, 246, 223, 0.74);
+  color: rgba(59, 36, 24, 0.66);
+  font-size: 12px;
+  white-space: normal;
+  box-shadow: 0 5px 10px rgba(80, 45, 25, 0.08);
+}
+
+.stage-arrival .guest-dialogue-group .star-start {
+  align-self: flex-end;
+  min-width: 156px;
+  height: 46px;
+  margin-right: 6px;
+  border-radius: 13px;
+  box-shadow:
+    0 7px 0 #6d2e21,
+    0 12px 18px rgba(83, 40, 25, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32);
+}
+
+.stage-arrival .guest-dialogue-group .star-start:hover {
+  transform: translateY(-2px) !important;
+}
+
+.stage-arrival .guest-dialogue-group .star-start:active {
+  transform: translateY(3px) !important;
+  box-shadow:
+    0 4px 0 #6d2e21,
+    0 8px 12px rgba(83, 40, 25, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
+.stage-creation .creation-stage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 18%, rgba(255, 238, 172, 0.44), transparent 48%),
+    radial-gradient(ellipse at 13% 64%, rgba(194, 103, 49, 0.18), transparent 30%),
+    radial-gradient(ellipse at 88% 68%, rgba(125, 81, 46, 0.18), transparent 32%) !important;
+}
+
+.stage-creation .creation-stage::before {
+  content: "";
+  position: absolute;
+  left: clamp(22px, 6vw, 96px);
+  top: clamp(78px, 13vh, 138px);
+  z-index: 0;
+  width: clamp(150px, 15vw, 220px);
+  height: clamp(210px, 25vh, 310px);
+  pointer-events: none;
+  opacity: 0.42;
+  background:
+    linear-gradient(90deg, transparent 0 10%, rgba(91, 53, 31, 0.82) 10% 13%, transparent 13% 24%, rgba(91, 53, 31, 0.82) 24% 27%, transparent 27% 38%, rgba(91, 53, 31, 0.82) 38% 41%, transparent 41% 100%),
+    linear-gradient(180deg, transparent 0 30%, rgba(91, 53, 31, 0.86) 30% 34%, transparent 34% 100%),
+    radial-gradient(ellipse at 72% 74%, rgba(94, 57, 34, 0.5) 0 26%, transparent 27%),
+    radial-gradient(circle at 86% 17%, rgba(123, 178, 88, 0.78) 0 8px, transparent 9px),
+    radial-gradient(circle at 94% 24%, rgba(89, 138, 71, 0.72) 0 7px, transparent 8px);
+  filter: drop-shadow(0 12px 14px rgba(66, 37, 22, 0.16));
+}
+
+.stage-creation .creation-stage::after {
+  content: "";
+  position: absolute;
+  right: clamp(24px, 6vw, 110px);
+  top: clamp(86px, 14vh, 150px);
+  z-index: 0;
+  width: clamp(170px, 18vw, 260px);
+  height: clamp(240px, 31vh, 360px);
+  pointer-events: none;
+  opacity: 0.38;
+  background:
+    linear-gradient(180deg, transparent 0 18%, rgba(92, 54, 32, 0.82) 18% 21%, transparent 21% 100%),
+    linear-gradient(12deg, transparent 0 22%, rgba(255, 246, 220, 0.92) 22% 53%, transparent 53% 100%),
+    linear-gradient(-9deg, transparent 0 48%, rgba(239, 210, 161, 0.88) 48% 76%, transparent 76% 100%),
+    radial-gradient(circle at 20% 72%, rgba(119, 176, 87, 0.72) 0 9px, transparent 10px),
+    radial-gradient(circle at 30% 76%, rgba(87, 133, 70, 0.64) 0 8px, transparent 9px);
+  filter: drop-shadow(0 14px 14px rgba(66, 37, 22, 0.14));
+}
+
+.stage-creation .creation-context,
+.stage-creation .fullscreen-chat {
+  position: relative;
+  z-index: 2;
+}
+
+.stage-creation .creation-context {
+  box-shadow:
+    0 12px 28px rgba(79, 43, 18, 0.14),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+}
+
+.stage-creation .fullscreen-chat {
+  box-shadow:
+    0 18px 34px rgba(67, 37, 21, 0.2),
+    0 0 0 8px rgba(118, 70, 38, 0.06),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.28);
+}
+
+.stage-creation .fullscreen-chat::before {
+  content: "";
+  position: absolute;
+  right: 18px;
+  top: 14px;
+  z-index: 4;
+  width: 64px;
+  height: 18px;
+  border-radius: 999px;
+  pointer-events: none;
+  opacity: 0.48;
+  background:
+    radial-gradient(circle at 12px 50%, #79b85a 0 7px, transparent 8px),
+    radial-gradient(circle at 31px 50%, #a3c76b 0 6px, transparent 7px),
+    radial-gradient(circle at 48px 50%, #6f9c4f 0 6px, transparent 7px),
+    linear-gradient(180deg, transparent 0 42%, rgba(107, 63, 34, 0.86) 42% 58%, transparent 58%);
+}
+
+@media (max-width: 980px) {
+  .stage-arrival .chef-character,
+  .stage-arrival .arrival-scene .chef-anchor {
+    left: clamp(86px, 16vw, 170px) !important;
+    bottom: -48px !important;
+    transform: scale(0.98) !important;
+  }
+
+  .stage-arrival .guest-character,
+  .stage-arrival .arrival-scene .guest-anchor {
+    right: clamp(34px, 7vw, 84px) !important;
+    bottom: 36px !important;
+    transform: scale(0.92) !important;
+  }
+
+  .stage-arrival .guest-dialogue-group {
+    right: 18px;
+    top: 76px;
+    width: min(388px, calc(100vw - 36px));
+  }
+}
+
+@media (max-width: 760px) {
+  .stage-arrival .arrival-scene::after,
+  .stage-arrival .scene-sparkle,
+  .stage-arrival .scene-steam {
+    display: none;
+  }
+
+  .stage-arrival .guest-dialogue-group {
+    left: 12px;
+    right: 12px;
+    top: 74px;
+    width: auto;
+  }
+
+  .stage-arrival .dialogue-action-row {
+    padding-left: 8px;
+  }
+
+  .stage-arrival .guest-dialogue-group .star-start {
+    align-self: flex-start;
+    margin-right: 0;
+  }
+
+  .stage-arrival .chef-character,
+  .stage-arrival .arrival-scene .chef-anchor {
+    left: -18px !important;
+    bottom: -70px !important;
+    transform: scale(0.82) !important;
+  }
+
+  .stage-arrival .guest-character,
+  .stage-arrival .arrival-scene .guest-anchor {
+    right: 12px !important;
+    bottom: 22px !important;
+    transform: scale(0.72) !important;
+  }
+
+  .stage-creation .creation-stage::before,
+  .stage-creation .creation-stage::after {
+    opacity: 0.2;
+    transform: scale(0.72);
+    transform-origin: top center;
+  }
+}
+
+/* Final submission polish: second gameplay page only, cinematic kitchen staging. */
+.stage-arrival .bottom-nav,
+.stage-arrival .nav-cards,
+.stage-arrival .kitchen-nav,
+.stage-arrival .feature-nav,
+.stage-arrival .home-menu,
+.stage-arrival .menu-grid,
+.stage-arrival [class*="nav-card"],
+.stage-arrival [class*="bottom-card"] {
+  display: none !important;
+}
+
+.stage-arrival {
+  background:
+    radial-gradient(ellipse at 32% 47%, rgba(255, 225, 145, 0.46), transparent 34%),
+    radial-gradient(ellipse at 72% 39%, rgba(242, 161, 73, 0.18), transparent 42%),
+    linear-gradient(180deg, #d99a5d 0, #f3cf96 14%, #f4d9aa 58%, #9c5a35 100%) !important;
+}
+
+.stage-arrival .arrival-scene {
+  min-height: 100svh;
+  background-position: center bottom;
+  background-size: cover;
+}
+
+.stage-arrival .arrival-scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(54, 29, 17, 0.35), transparent 15%, transparent 82%, rgba(54, 29, 17, 0.24)),
+    radial-gradient(ellipse at 25% 42%, rgba(255, 244, 188, 0.34), transparent 28%),
+    radial-gradient(ellipse at 58% 69%, rgba(255, 184, 91, 0.2), transparent 34%),
+    linear-gradient(180deg, rgba(59, 34, 22, 0.14), transparent 34%, rgba(42, 24, 16, 0.34));
+  mix-blend-mode: multiply;
+}
+
+.stage-arrival .arrival-scene::after {
+  content: "";
+  position: absolute;
+  left: -3vw;
+  right: -3vw;
+  bottom: -2px;
+  z-index: 6;
+  height: clamp(150px, 24vh, 222px);
+  pointer-events: none;
+  border-top: 5px solid rgba(82, 45, 27, 0.9);
+  background:
+    radial-gradient(ellipse at 74% 24%, rgba(255, 247, 216, 0.84) 0 16px, transparent 17px),
+    radial-gradient(ellipse at 77% 27%, rgba(255, 247, 216, 0.72) 0 23px, transparent 24px),
+    linear-gradient(90deg, transparent 0 43%, rgba(79, 125, 99, 0.88) 43% 50%, transparent 50% 100%),
+    linear-gradient(180deg, rgba(250, 188, 103, 0.2), transparent 32%),
+    repeating-linear-gradient(90deg, #8d4c2b 0 92px, #b56535 92px 176px, #744126 176px 232px);
+  box-shadow:
+    0 -18px 38px rgba(58, 32, 20, 0.24),
+    inset 0 12px 0 rgba(255, 210, 136, 0.12);
+}
+
+.stage-arrival .scene-sparkle {
+  left: clamp(372px, 39vw, 610px);
+  bottom: clamp(132px, 22vh, 208px);
+  z-index: 5;
+  width: clamp(300px, 32vw, 460px);
+  height: clamp(180px, 25vh, 280px);
+  opacity: 0.58;
+  background:
+    radial-gradient(ellipse at 46% 58%, rgba(255, 223, 132, 0.52), rgba(234, 122, 52, 0.16) 48%, transparent 72%);
+}
+
+.stage-arrival .arrival-scene .scene-steam {
+  z-index: 12;
+  opacity: 0.72;
+}
+
+.stage-arrival .steam-left {
+  left: clamp(420px, 37vw, 620px);
+  bottom: clamp(224px, 35vh, 326px);
+}
+
+.stage-arrival .steam-right {
+  left: clamp(520px, 44vw, 740px);
+  bottom: clamp(246px, 38vh, 356px);
+}
+
+.stage-arrival .chef-character,
+.stage-arrival .arrival-scene .chef-anchor {
+  left: clamp(235px, 25vw, 390px) !important;
+  bottom: clamp(18px, 2.4vh, 38px) !important;
+  z-index: 14;
+  transform: scale(1.23) !important;
+}
+
+.stage-arrival .chef-character .chef-portrait {
+  filter:
+    drop-shadow(0 0 28px rgba(255, 181, 75, 0.34))
+    drop-shadow(0 31px 18px rgba(44, 25, 16, 0.38));
+}
+
+.stage-arrival .chef-character .art-chef-card::after {
+  width: 82%;
+  height: 32px;
+  bottom: 4px;
+  background: rgba(42, 24, 16, 0.4);
+}
+
+.stage-arrival .guest-character,
+.stage-arrival .arrival-scene .guest-anchor {
+  right: clamp(332px, 31vw, 515px) !important;
+  bottom: clamp(104px, 16vh, 162px) !important;
+  z-index: 12;
+  transform: scale(1.34) !important;
+}
+
+.stage-arrival .guest-character .guest-portrait {
+  filter:
+    drop-shadow(0 0 18px rgba(255, 225, 165, 0.24))
+    drop-shadow(0 21px 14px rgba(48, 29, 18, 0.28));
+}
+
+.stage-arrival .guest-character .art-guest-card::after {
+  width: 88%;
+  height: 27px;
+  bottom: 4px;
+  background: rgba(42, 24, 16, 0.34);
+}
+
+.stage-arrival .guest-dialogue-group {
+  right: clamp(44px, 5.5vw, 112px);
+  top: clamp(130px, 19vh, 178px);
+  z-index: 24;
+  width: min(438px, 34vw);
+  gap: 0;
+  padding: 20px 22px 22px;
+  border: 4px solid #72432a;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 248, 226, 0.98), rgba(255, 227, 190, 0.94)),
+    radial-gradient(circle at 17% 8%, rgba(255, 255, 255, 0.56), transparent 32%);
+  box-shadow:
+    inset 0 0 0 5px rgba(255, 255, 244, 0.22),
+    0 7px 0 rgba(84, 47, 29, 0.86),
+    0 22px 34px rgba(55, 31, 19, 0.22);
+}
+
+.stage-arrival .guest-dialogue-group::before {
+  content: "";
+  position: absolute;
+  left: 26px;
+  right: 26px;
+  top: 76px;
+  height: 2px;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent, rgba(123, 76, 44, 0.42), transparent);
+}
+
+.stage-arrival .guest-dialogue-group::after {
+  content: "";
+  position: absolute;
+  right: -28px;
+  bottom: -16px;
+  width: 78px;
+  height: 78px;
+  pointer-events: none;
+  opacity: 0.9;
+  background:
+    radial-gradient(circle at 62% 76%, #8d5a30 0 15px, transparent 16px),
+    radial-gradient(circle at 48% 40%, #6f9f58 0 9px, transparent 10px),
+    radial-gradient(circle at 66% 33%, #83b569 0 10px, transparent 11px),
+    radial-gradient(circle at 73% 51%, #5e8d48 0 9px, transparent 10px);
+  filter: drop-shadow(0 8px 8px rgba(58, 34, 22, 0.18));
+}
+
+.stage-arrival .guest-dialogue-group .guest-tag {
+  justify-items: center;
+  margin-bottom: 18px;
+}
+
+.stage-arrival .guest-dialogue-group .guest-tag .stage-badge {
+  margin: -34px 0 8px !important;
+  transform: rotate(-1deg);
+}
+
+.stage-arrival .guest-dialogue-group .guest-tag strong {
+  width: auto;
+  padding: 0 8px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #3b2418;
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1.2;
+  text-align: center;
+}
+
+.stage-arrival .guest-dialogue-group .guest-request {
+  width: 100% !important;
+  margin: 0;
+  padding: 22px 16px 18px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.stage-arrival .guest-dialogue-group .guest-request::after {
+  display: none;
+}
+
+.stage-arrival .guest-dialogue-group .guest-request p {
+  color: rgba(59, 36, 24, 0.9);
+  font-size: clamp(15px, 1.22vw, 18px);
+  font-weight: 950;
+  line-height: 1.68;
+  text-align: left;
+}
+
+.stage-arrival .dialogue-action-row {
+  align-items: stretch;
+  gap: 14px;
+  padding: 12px 6px 0;
+}
+
+.stage-arrival .dialogue-action-row > span {
+  align-self: stretch;
+  padding: 9px 12px 9px 34px;
+  border-color: rgba(126, 78, 45, 0.36);
+  border-radius: 13px;
+  background:
+    radial-gradient(circle at 18px 50%, #d36950 0 5px, transparent 6px),
+    linear-gradient(180deg, rgba(255, 241, 209, 0.9), rgba(244, 206, 160, 0.82));
+  color: rgba(59, 36, 24, 0.66);
+  font-size: clamp(12px, 0.95vw, 14px);
+  text-align: left;
+}
+
+.stage-arrival .guest-dialogue-group .star-start {
+  align-self: center;
+  min-width: min(240px, 82%);
+  height: 56px;
+  margin: 0;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #df7058, #ba4938);
+  color: #fff6e7;
+  font-size: clamp(15px, 1.2vw, 18px);
+  box-shadow:
+    0 7px 0 #6b2e21,
+    0 16px 22px rgba(78, 38, 23, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.stage-arrival .game-logo-corner {
+  z-index: 30;
+}
+
+@media (max-width: 980px) {
+  .stage-arrival .chef-character,
+  .stage-arrival .arrival-scene .chef-anchor {
+    left: clamp(110px, 17vw, 180px) !important;
+    bottom: 20px !important;
+    transform: scale(1.02) !important;
+  }
+
+  .stage-arrival .guest-character,
+  .stage-arrival .arrival-scene .guest-anchor {
+    right: clamp(190px, 25vw, 280px) !important;
+    bottom: 112px !important;
+    transform: scale(1.04) !important;
+  }
+
+  .stage-arrival .guest-dialogue-group {
+    right: 22px;
+    top: 112px;
+    width: min(380px, 42vw);
+  }
+}
+
+@media (max-width: 760px) {
+  .stage-arrival .arrival-scene::after {
+    display: block;
+    height: 116px;
+  }
+
+  .stage-arrival .guest-dialogue-group {
+    left: 12px;
+    right: 12px;
+    top: 76px;
+    width: auto;
+    padding: 18px 16px 18px;
+  }
+
+  .stage-arrival .guest-dialogue-group::after {
+    display: none;
+  }
+
+  .stage-arrival .guest-dialogue-group .guest-tag strong {
+    font-size: 19px;
+  }
+
+  .stage-arrival .guest-dialogue-group .guest-request p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .stage-arrival .chef-character,
+  .stage-arrival .arrival-scene .chef-anchor {
+    left: -22px !important;
+    bottom: 8px !important;
+    transform: scale(0.78) !important;
+  }
+
+  .stage-arrival .guest-character,
+  .stage-arrival .arrival-scene .guest-anchor {
+    right: 12px !important;
+    bottom: 96px !important;
+    transform: scale(0.7) !important;
+  }
+}
+
+/* Spatial correction: side-view kitchen scene, counter separates chef and guest. */
+.stage-arrival .arrival-scene {
+  perspective: none;
+}
+
+.stage-arrival .arrival-scene::before {
+  background:
+    linear-gradient(90deg, rgba(47, 26, 16, 0.34), transparent 16%, transparent 82%, rgba(47, 26, 16, 0.22)),
+    radial-gradient(ellipse at 26% 45%, rgba(255, 237, 167, 0.36), transparent 27%),
+    radial-gradient(ellipse at 47% 63%, rgba(255, 153, 58, 0.26), transparent 27%),
+    radial-gradient(ellipse at 72% 38%, rgba(255, 213, 133, 0.18), transparent 35%),
+    linear-gradient(180deg, rgba(45, 25, 16, 0.1), transparent 35%, rgba(40, 23, 15, 0.3));
+}
+
+.stage-arrival .arrival-scene::after {
+  left: -5vw;
+  right: -5vw;
+  bottom: -4px;
+  z-index: 16;
+  height: clamp(176px, 27vh, 252px);
+  border-top: 6px solid rgba(83, 46, 27, 0.94);
+  background:
+    radial-gradient(ellipse at 69% 18%, rgba(255, 247, 216, 0.9) 0 14px, transparent 15px),
+    radial-gradient(ellipse at 72% 20%, rgba(255, 247, 216, 0.72) 0 23px, transparent 24px),
+    radial-gradient(ellipse at 31% 13%, rgba(42, 24, 16, 0.24) 0 54px, transparent 55px),
+    linear-gradient(90deg, transparent 0 40%, rgba(70, 119, 95, 0.92) 40% 48%, transparent 48% 100%),
+    linear-gradient(180deg, rgba(255, 210, 135, 0.28), transparent 30%),
+    repeating-linear-gradient(90deg, #7e4528 0 78px, #a95f35 78px 162px, #6f3e25 162px 226px);
+  box-shadow:
+    0 -24px 42px rgba(48, 27, 17, 0.28),
+    inset 0 14px 0 rgba(255, 220, 150, 0.12),
+    inset 0 -22px 34px rgba(45, 25, 16, 0.26);
+}
+
+.stage-arrival .scene-sparkle {
+  left: clamp(360px, 34vw, 560px);
+  bottom: clamp(190px, 30vh, 286px);
+  z-index: 7;
+  opacity: 0.68;
+}
+
+.stage-arrival .steam-left {
+  left: clamp(390px, 34vw, 580px);
+  bottom: clamp(286px, 43vh, 386px);
+}
+
+.stage-arrival .steam-right {
+  left: clamp(485px, 41vw, 700px);
+  bottom: clamp(302px, 46vh, 410px);
+}
+
+.stage-arrival .chef-character,
+.stage-arrival .arrival-scene .chef-anchor {
+  left: clamp(178px, 19vw, 292px) !important;
+  bottom: clamp(6px, 1.2vh, 22px) !important;
+  z-index: 20;
+  transform: scale(1.3) !important;
+}
+
+.stage-arrival .guest-character,
+.stage-arrival .arrival-scene .guest-anchor {
+  right: clamp(372px, 34vw, 560px) !important;
+  bottom: clamp(128px, 19vh, 180px) !important;
+  z-index: 11;
+  transform: scale(1.16) !important;
+}
+
+.stage-arrival .guest-character .guest-portrait {
+  filter:
+    drop-shadow(0 0 12px rgba(255, 224, 164, 0.18))
+    drop-shadow(0 15px 11px rgba(48, 29, 18, 0.22));
+}
+
+.stage-arrival .guest-character .art-guest-card::after {
+  width: 72%;
+  height: 18px;
+  bottom: 2px;
+  opacity: 0.72;
+}
+
+.stage-arrival .guest-dialogue-group {
+  right: clamp(54px, 6vw, 118px);
+  top: clamp(126px, 18vh, 164px);
+  width: min(382px, 29vw);
+  z-index: 22;
+  padding: 17px 18px 19px;
+  border-width: 5px;
+  border-radius: 15px;
+  background:
+    linear-gradient(180deg, rgba(255, 246, 220, 0.97), rgba(250, 220, 181, 0.94)),
+    radial-gradient(circle at 16% 9%, rgba(255, 255, 255, 0.54), transparent 32%);
+  transform: rotate(-0.25deg);
+  box-shadow:
+    inset 0 0 0 4px rgba(255, 255, 242, 0.24),
+    0 6px 0 rgba(84, 47, 29, 0.84),
+    0 18px 28px rgba(55, 31, 19, 0.2);
+}
+
+.stage-arrival .guest-dialogue-group::before {
+  top: 68px;
+}
+
+.stage-arrival .guest-dialogue-group .guest-tag {
+  margin-bottom: 14px;
+}
+
+.stage-arrival .guest-dialogue-group .guest-tag .stage-badge {
+  margin-top: -31px !important;
+}
+
+.stage-arrival .guest-dialogue-group .guest-tag strong {
+  font-size: clamp(18px, 1.65vw, 24px);
+}
+
+.stage-arrival .guest-dialogue-group .guest-request {
+  padding: 18px 12px 14px !important;
+}
+
+.stage-arrival .guest-dialogue-group .guest-request p {
+  font-size: clamp(13px, 1.02vw, 16px);
+  line-height: 1.62;
+}
+
+.stage-arrival .dialogue-action-row {
+  gap: 11px;
+  padding-top: 8px;
+}
+
+.stage-arrival .dialogue-action-row > span {
+  padding-block: 7px;
+  font-size: 12px;
+}
+
+.stage-arrival .guest-dialogue-group .star-start {
+  height: 50px;
+  min-width: min(210px, 80%);
+  font-size: 15px;
+}
+
+@media (max-width: 980px) {
+  .stage-arrival .arrival-scene::after {
+    height: 190px;
+  }
+
+  .stage-arrival .chef-character,
+  .stage-arrival .arrival-scene .chef-anchor {
+    left: clamp(70px, 12vw, 145px) !important;
+    bottom: 10px !important;
+    transform: scale(1.04) !important;
+  }
+
+  .stage-arrival .guest-character,
+  .stage-arrival .arrival-scene .guest-anchor {
+    right: clamp(230px, 29vw, 330px) !important;
+    bottom: 128px !important;
+    transform: scale(0.92) !important;
+  }
+
+  .stage-arrival .guest-dialogue-group {
+    right: 22px;
+    top: 104px;
+    width: min(342px, 39vw);
+  }
+}
+
+@media (max-width: 760px) {
+  .stage-arrival .arrival-scene::after {
+    height: 124px;
+  }
+
+  .stage-arrival .chef-character,
+  .stage-arrival .arrival-scene .chef-anchor {
+    left: -18px !important;
+    bottom: 0 !important;
+    transform: scale(0.78) !important;
+  }
+
+  .stage-arrival .guest-character,
+  .stage-arrival .arrival-scene .guest-anchor {
+    right: 20px !important;
+    bottom: 102px !important;
+    transform: scale(0.6) !important;
+  }
+
+  .stage-arrival .guest-dialogue-group {
+    top: 70px;
+    padding: 16px 14px;
+    transform: none;
+  }
+}
+
+/* Reference rebuild: second gameplay page becomes a dense side-view cozy kitchen scene. */
+.stage-arrival {
+  overflow: hidden;
+  background: #9a5b35 !important;
+}
+
+.stage-arrival .arrival-scene {
+  min-height: 100svh;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(66, 36, 22, 0.18), transparent 18%, rgba(44, 24, 16, 0.28) 100%),
+    radial-gradient(ellipse at 24% 44%, rgba(255, 230, 150, 0.62), transparent 31%),
+    radial-gradient(ellipse at 64% 38%, rgba(255, 185, 88, 0.26), transparent 41%),
+    repeating-linear-gradient(90deg, rgba(86, 51, 31, 0.08) 0 2px, transparent 2px 12px),
+    linear-gradient(180deg, #9b5d37 0, #d99a61 8%, #f4d3a1 22%, #d19a68 73%, #7c4329 100%) !important;
+}
+
+.stage-arrival .arrival-scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(43, 24, 16, 0.42), transparent 14%, transparent 83%, rgba(43, 24, 16, 0.32)),
+    radial-gradient(ellipse at 18% 32%, rgba(255, 251, 202, 0.38), transparent 24%),
+    radial-gradient(ellipse at 50% 47%, rgba(94, 53, 31, 0.16), transparent 40%),
+    linear-gradient(180deg, rgba(255, 230, 155, 0.16), transparent 52%, rgba(45, 25, 16, 0.42));
+  mix-blend-mode: multiply;
+}
+
+.stage-arrival .arrival-scene::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 17;
+  height: clamp(118px, 16vh, 150px);
+  pointer-events: none;
+  border-top: 5px solid rgba(71, 39, 24, 0.95);
+  background:
+    linear-gradient(180deg, rgba(255, 194, 105, 0.18), transparent 32%),
+    repeating-linear-gradient(90deg, #7f4427 0 86px, #a95f35 86px 164px, #6e3d24 164px 220px);
+  box-shadow: 0 -22px 42px rgba(46, 25, 16, 0.32);
+}
+
+.stage-arrival .arrival-room-shell,
+.stage-arrival .arrival-room-shell > span,
+.stage-arrival .arrival-guest-ticket,
+.stage-arrival .arrival-stove-foreground,
+.stage-arrival .arrival-stove-foreground > span,
+.stage-arrival .arrival-counter-midground,
+.stage-arrival .arrival-counter-midground > span {
+  position: absolute;
+  pointer-events: none;
+}
+
+.stage-arrival .arrival-room-shell {
+  inset: 0;
+  z-index: 2;
+}
+
+.stage-arrival .arrival-room-shell::before {
+  content: "";
+  position: absolute;
+  left: clamp(0px, 2vw, 28px);
+  right: clamp(0px, 2vw, 28px);
+  top: clamp(54px, 7vh, 76px);
+  height: 5px;
+  background: rgba(82, 47, 29, 0.82);
+  box-shadow: 0 10px 16px rgba(57, 32, 20, 0.18);
+}
+
+.stage-arrival .arrival-window {
+  border: 7px solid rgba(101, 58, 35, 0.9);
+  border-radius: 100px 100px 8px 8px;
+  background:
+    linear-gradient(90deg, transparent 47%, rgba(109, 65, 40, 0.8) 47% 53%, transparent 53%),
+    linear-gradient(180deg, transparent 47%, rgba(109, 65, 40, 0.8) 47% 53%, transparent 53%),
+    radial-gradient(ellipse at 50% 40%, rgba(255, 247, 179, 0.95), rgba(255, 205, 101, 0.42) 46%, rgba(120, 169, 91, 0.24) 72%),
+    #ffe2a4;
+  box-shadow: 0 0 44px rgba(255, 221, 123, 0.34), inset 0 0 0 3px rgba(255,255,255,0.22);
+}
+
+.stage-arrival .arrival-window-left {
+  left: clamp(132px, 12vw, 190px);
+  top: clamp(96px, 13vh, 126px);
+  width: clamp(120px, 11vw, 170px);
+  height: clamp(200px, 30vh, 270px);
+}
+
+.stage-arrival .arrival-window-back {
+  left: clamp(605px, 48vw, 790px);
+  top: clamp(92px, 13vh, 126px);
+  width: clamp(160px, 14vw, 210px);
+  height: clamp(210px, 30vh, 280px);
+  opacity: 0.58;
+}
+
+.stage-arrival .arrival-window-back::after {
+  content: "";
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  top: 0;
+  height: 43%;
+  border-radius: 0 0 7px 7px;
+  background:
+    radial-gradient(circle at 34% 42%, rgba(255, 226, 173, 0.36) 0 7px, transparent 8px),
+    radial-gradient(circle at 65% 42%, rgba(255, 226, 173, 0.36) 0 7px, transparent 8px),
+    #b7553d;
+}
+
+.stage-arrival .arrival-lantern {
+  width: 62px;
+  height: 92px;
+  border-radius: 45% 45% 35% 35%;
+  background:
+    radial-gradient(circle at 50% 58%, rgba(255, 244, 173, 0.98) 0 15px, rgba(255, 187, 74, 0.56) 16px 28px, transparent 29px),
+    linear-gradient(180deg, #5c351f 0 13px, transparent 13px 76px, #5c351f 76px 86px),
+    radial-gradient(ellipse at 50% 54%, rgba(175, 86, 41, 0.9) 0 31px, rgba(78, 42, 26, 0.92) 32px 36px, transparent 37px);
+  filter: drop-shadow(0 0 24px rgba(255, 197, 89, 0.62));
+}
+
+.stage-arrival .arrival-lantern::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -48px;
+  width: 4px;
+  height: 56px;
+  background: #5c351f;
+  transform: translateX(-50%);
+}
+
+.stage-arrival .arrival-lantern-left {
+  left: clamp(318px, 25vw, 410px);
+  top: clamp(96px, 13vh, 130px);
+}
+
+.stage-arrival .arrival-lantern-right {
+  right: clamp(312px, 25vw, 430px);
+  top: clamp(92px, 12vh, 124px);
+  transform: scale(0.86);
+}
+
+.stage-arrival .arrival-shelf {
+  height: 96px;
+  background:
+    linear-gradient(180deg, transparent 0 48%, rgba(90, 52, 31, 0.94) 48% 58%, transparent 58%),
+    radial-gradient(circle at 18% 36%, #7aaa5f 0 15px, transparent 16px),
+    radial-gradient(circle at 29% 29%, #658f4d 0 13px, transparent 14px),
+    radial-gradient(circle at 48% 45%, #b77d48 0 13px, transparent 14px),
+    radial-gradient(circle at 62% 42%, #d0b07a 0 13px, transparent 14px),
+    radial-gradient(circle at 77% 39%, #97633a 0 12px, transparent 13px);
+  filter: drop-shadow(0 8px 8px rgba(59, 34, 21, 0.2));
+}
+
+.stage-arrival .arrival-shelf-left {
+  left: 18px;
+  top: clamp(142px, 19vh, 190px);
+  width: clamp(185px, 18vw, 260px);
+}
+
+.stage-arrival .arrival-shelf-right {
+  right: 36px;
+  top: clamp(92px, 13vh, 128px);
+  width: clamp(310px, 26vw, 430px);
+}
+
+.stage-arrival .arrival-menu-chalk {
+  left: clamp(430px, 34vw, 570px);
+  top: clamp(126px, 17vh, 162px);
+  width: 100px;
+  height: 136px;
+  border: 6px solid rgba(91, 55, 34, 0.86);
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, transparent 0 28%, rgba(238, 211, 159, 0.36) 28% 31%, transparent 31% 48%, rgba(238, 211, 159, 0.3) 48% 51%, transparent 51%),
+    #3c4737;
+  box-shadow: 0 10px 12px rgba(59, 34, 21, 0.18);
+  opacity: 0.72;
+}
+
+.stage-arrival .arrival-menu-chalk::before {
+  content: "MENU";
+  position: absolute;
+  top: 16px;
+  left: 0;
+  right: 0;
+  color: rgba(244, 218, 170, 0.72);
+  font-family: inherit;
+  font-weight: 1000;
+  text-align: center;
+}
+
+.stage-arrival .arrival-guest-ticket {
+  left: clamp(22px, 3vw, 48px);
+  top: clamp(86px, 12vh, 114px);
+  z-index: 28;
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  align-items: center;
+  gap: 12px;
+  width: min(330px, 28vw);
+  min-height: 86px;
+  padding: 12px 18px;
+  border: 4px solid #75462b;
+  border-radius: 22px 14px 22px 14px;
+  background: linear-gradient(180deg, rgba(255, 242, 214, 0.98), rgba(241, 204, 163, 0.95));
+  box-shadow: 0 5px 0 rgba(87, 49, 30, 0.78), 0 16px 22px rgba(62, 35, 22, 0.18);
+}
+
+.stage-arrival .arrival-guest-ticket img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  object-position: top center;
+  border: 2px solid rgba(102, 60, 37, 0.58);
+  border-radius: 50%;
+  background: #f6d5a2;
+}
+
+.stage-arrival .arrival-guest-ticket strong,
+.stage-arrival .arrival-guest-ticket span {
+  display: block;
+  color: #3b2418;
+}
+
+.stage-arrival .arrival-guest-ticket strong {
+  font-size: clamp(17px, 1.4vw, 22px);
+  line-height: 1.1;
+}
+
+.stage-arrival .arrival-guest-ticket span {
+  margin-top: 4px;
+  font-size: clamp(12px, 0.95vw, 15px);
+  font-weight: 900;
+  opacity: 0.82;
+}
+
+.stage-arrival .arrival-stove-foreground {
+  left: clamp(16px, 3vw, 48px);
+  bottom: clamp(92px, 13vh, 122px);
+  z-index: 22;
+  width: clamp(280px, 25vw, 370px);
+  height: clamp(132px, 18vh, 168px);
+  border: 5px solid #53301f;
+  border-radius: 12px 12px 4px 4px;
+  background:
+    linear-gradient(180deg, #6d6156 0 24%, #47423d 24% 64%, #332c29 64%),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.07) 0 5px, transparent 5px 24px);
+  box-shadow: 0 13px 0 rgba(54, 31, 20, 0.86), 0 26px 34px rgba(45, 25, 16, 0.28);
+}
+
+.stage-arrival .arrival-stove-foreground::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  top: 18px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(32, 25, 22, 0.45);
+  box-shadow:
+    0 45px 0 rgba(32, 25, 22, 0.38),
+    78px 45px 0 rgba(32, 25, 22, 0.38);
+}
+
+.stage-arrival .stove-pot {
+  bottom: 86px;
+  width: 80px;
+  height: 58px;
+  border: 4px solid #453027;
+  border-radius: 50% 50% 28% 28%;
+  box-shadow: inset 0 8px 0 rgba(255,255,255,0.13), 0 8px 10px rgba(39, 24, 18, 0.18);
+}
+
+.stage-arrival .green-pot {
+  left: 30px;
+  background: #738852;
+}
+
+.stage-arrival .red-kettle {
+  left: 132px;
+  background: #b75037;
+}
+
+.stage-arrival .red-kettle::before {
+  content: "";
+  position: absolute;
+  left: 22px;
+  top: -28px;
+  width: 35px;
+  height: 28px;
+  border: 5px solid #453027;
+  border-bottom: 0;
+  border-radius: 30px 30px 0 0;
+}
+
+.stage-arrival .stove-fire {
+  left: 75px;
+  bottom: 22px;
+  width: 132px;
+  height: 38px;
+  border-radius: 999px;
+  background: radial-gradient(ellipse, rgba(255, 231, 100, 0.96), rgba(245, 117, 43, 0.8) 48%, transparent 72%);
+  filter: blur(1px) drop-shadow(0 0 18px rgba(255, 143, 47, 0.7));
+}
+
+.stage-arrival .arrival-counter-midground {
+  left: clamp(340px, 29vw, 455px);
+  right: clamp(0px, 2vw, 26px);
+  bottom: clamp(88px, 13vh, 118px);
+  z-index: 17;
+  height: clamp(210px, 30vh, 270px);
+  border: 5px solid #633920;
+  border-radius: 10px 10px 0 0;
+  background:
+    linear-gradient(90deg, transparent 0 43%, rgba(79, 125, 99, 0.9) 43% 50%, transparent 50% 100%),
+    linear-gradient(180deg, rgba(236, 161, 80, 0.58) 0 20%, transparent 20%),
+    repeating-linear-gradient(90deg, #8c4c2b 0 88px, #b36738 88px 174px, #764225 174px 236px);
+  box-shadow: 0 16px 0 rgba(58, 34, 22, 0.62), 0 30px 42px rgba(44, 25, 16, 0.28);
+}
+
+.stage-arrival .arrival-counter-midground::before {
+  content: "";
+  position: absolute;
+  left: -18px;
+  right: -18px;
+  top: -24px;
+  height: 42px;
+  border: 5px solid #6b3d24;
+  border-radius: 10px;
+  background: repeating-linear-gradient(90deg, #a56035 0 92px, #c17642 92px 174px, #8e4d2c 174px 240px);
+  box-shadow: 0 12px 16px rgba(49, 28, 18, 0.2);
+}
+
+.stage-arrival .counter-cloth {
+  left: 25%;
+  top: -28px;
+  width: 86px;
+  height: 152px;
+  border-radius: 0 0 10px 10px;
+  background:
+    linear-gradient(90deg, transparent 44%, rgba(235, 193, 92, 0.82) 44% 48%, transparent 48% 52%, rgba(235, 193, 92, 0.82) 52% 56%, transparent 56%),
+    #477d6a;
+  box-shadow: inset 0 0 0 3px rgba(255,255,255,0.12);
+}
+
+.stage-arrival .counter-board {
+  left: 10%;
+  top: 20px;
+  width: 120px;
+  height: 48px;
+  border: 3px solid rgba(88, 50, 29, 0.72);
+  border-radius: 6px;
+  background: #a76536;
+}
+
+.stage-arrival .counter-bell {
+  left: 38%;
+  top: 5px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50% 50% 38% 38%;
+  background:
+    radial-gradient(circle at 50% 18%, #fff2ad 0 5px, transparent 6px),
+    linear-gradient(180deg, #f1c46a, #9f642f);
+  border: 3px solid #5a3522;
+}
+
+.stage-arrival .counter-flower {
+  left: 52%;
+  top: -20px;
+  width: 74px;
+  height: 72px;
+  background:
+    radial-gradient(circle at 50% 70%, #8b5a32 0 17px, transparent 18px),
+    radial-gradient(circle at 40% 34%, #fff0c6 0 7px, transparent 8px),
+    radial-gradient(circle at 57% 28%, #fff0c6 0 8px, transparent 9px),
+    radial-gradient(circle at 65% 43%, #fff0c6 0 7px, transparent 8px),
+    radial-gradient(circle at 50% 42%, #6ca55a 0 20px, transparent 21px);
+}
+
+.stage-arrival .counter-cake-case {
+  right: 15%;
+  top: 12px;
+  width: 172px;
+  height: 82px;
+  border: 5px solid #755036;
+  border-radius: 82px 82px 12px 12px;
+  background:
+    radial-gradient(ellipse at 50% 78%, rgba(255, 241, 203, 0.7) 0 40px, transparent 41px),
+    linear-gradient(90deg, rgba(255,255,255,0.2), transparent 34%, rgba(255,255,255,0.24) 68%, transparent),
+    rgba(244, 226, 194, 0.48);
+  box-shadow: 0 10px 12px rgba(50, 29, 19, 0.14);
+}
+
+.stage-arrival .chef-character,
+.stage-arrival .arrival-scene .chef-anchor {
+  left: clamp(295px, 27vw, 420px) !important;
+  bottom: clamp(92px, 13vh, 118px) !important;
+  z-index: 24;
+  transform: scale(1.02) !important;
+  transform-origin: bottom center;
+}
+
+.stage-arrival .chef-character .chef-portrait {
+  height: clamp(420px, 64vh, 570px) !important;
+  filter:
+    drop-shadow(0 0 24px rgba(255, 179, 76, 0.3))
+    drop-shadow(0 26px 18px rgba(43, 24, 16, 0.36));
+}
+
+.stage-arrival .guest-character,
+.stage-arrival .arrival-scene .guest-anchor {
+  right: clamp(510px, 42vw, 650px) !important;
+  bottom: clamp(192px, 28vh, 248px) !important;
+  z-index: 13;
+  transform: scale(0.9) !important;
+  transform-origin: bottom center;
+}
+
+.stage-arrival .guest-character .guest-portrait {
+  height: clamp(300px, 43vh, 405px) !important;
+  filter:
+    drop-shadow(0 0 18px rgba(255, 223, 150, 0.22))
+    drop-shadow(0 16px 12px rgba(50, 29, 18, 0.22));
+}
+
+.stage-arrival .guest-dialogue-group {
+  right: clamp(62px, 6vw, 110px);
+  top: clamp(172px, 22vh, 214px);
+  width: min(390px, 28vw);
+  z-index: 25;
+  padding: 20px 22px 22px;
+  transform: rotate(0.2deg);
+}
+
+.stage-arrival .guest-dialogue-group .guest-tag strong {
+  font-size: clamp(19px, 1.55vw, 25px);
+}
+
+.stage-arrival .guest-dialogue-group .guest-request p {
+  font-size: clamp(14px, 1.05vw, 17px);
+  line-height: 1.7;
+}
+
+.stage-arrival .scene-sparkle {
+  left: clamp(395px, 35vw, 610px);
+  bottom: clamp(218px, 32vh, 296px);
+  z-index: 12;
+}
+
+.stage-arrival .scene-steam {
+  z-index: 23;
+}
+
+.stage-arrival .steam-left {
+  left: clamp(148px, 12vw, 220px);
+  bottom: clamp(234px, 34vh, 300px);
+}
+
+.stage-arrival .steam-right {
+  left: clamp(222px, 18vw, 310px);
+  bottom: clamp(248px, 36vh, 324px);
+}
+
+@media (max-width: 1100px) {
+  .stage-arrival .arrival-guest-ticket {
+    width: min(300px, 32vw);
+  }
+
+  .stage-arrival .guest-dialogue-group {
+    width: min(360px, 34vw);
+    right: 28px;
+  }
+
+  .stage-arrival .guest-character,
+  .stage-arrival .arrival-scene .guest-anchor {
+    right: clamp(360px, 39vw, 470px) !important;
+    transform: scale(0.78) !important;
+  }
+
+  .stage-arrival .chef-character,
+  .stage-arrival .arrival-scene .chef-anchor {
+    left: clamp(210px, 23vw, 300px) !important;
+    transform: scale(0.86) !important;
+  }
+
+  .stage-arrival .arrival-stove-foreground {
+    width: 280px;
+  }
+}
+
+@media (max-width: 760px) {
+  .stage-arrival .arrival-window-back,
+  .stage-arrival .arrival-menu-chalk,
+  .stage-arrival .arrival-lantern-right,
+  .stage-arrival .arrival-shelf-right,
+  .stage-arrival .counter-cake-case,
+  .stage-arrival .arrival-guest-ticket {
+    display: none;
+  }
+
+  .stage-arrival .arrival-window-left {
+    left: 16px;
+    top: 98px;
+    opacity: 0.45;
+  }
+
+  .stage-arrival .arrival-stove-foreground {
+    left: -18px;
+    bottom: 86px;
+    width: 220px;
+    transform: scale(0.82);
+    transform-origin: bottom left;
+  }
+
+  .stage-arrival .arrival-counter-midground {
+    left: 132px;
+    right: -40px;
+    bottom: 82px;
+    height: 150px;
+  }
+
+  .stage-arrival .chef-character,
+  .stage-arrival .arrival-scene .chef-anchor {
+    left: 88px !important;
+    bottom: 74px !important;
+    transform: scale(0.58) !important;
+  }
+
+  .stage-arrival .chef-character .chef-portrait {
+    height: 390px !important;
+  }
+
+  .stage-arrival .guest-character,
+  .stage-arrival .arrival-scene .guest-anchor {
+    right: 84px !important;
+    bottom: 165px !important;
+    transform: scale(0.48) !important;
+  }
+
+  .stage-arrival .guest-character .guest-portrait {
+    height: 330px !important;
+  }
+
+  .stage-arrival .guest-dialogue-group {
+    left: 12px;
+    right: 12px;
+    top: 70px;
+    width: auto;
+    padding: 16px 14px;
+    transform: none;
+  }
+}
+
+/* Asset-based rebuild: second gameplay scene uses cropped environment PNG layers, not CSS props. */
+.stage-arrival .arrival-window,
+.stage-arrival .arrival-lantern,
+.stage-arrival .arrival-shelf,
+.stage-arrival .arrival-menu-chalk,
+.stage-arrival .stove-pot,
+.stage-arrival .stove-fire,
+.stage-arrival .counter-board,
+.stage-arrival .counter-bell,
+.stage-arrival .counter-cloth,
+.stage-arrival .counter-flower,
+.stage-arrival .counter-cake-case,
+.stage-arrival .arrival-room-shell::before,
+.stage-arrival .arrival-stove-foreground::before,
+.stage-arrival .arrival-counter-midground::before {
+  display: none !important;
+}
+
+.stage-arrival .arrival-scene {
+  background:
+    radial-gradient(ellipse at 29% 46%, rgba(255, 224, 139, 0.56), transparent 34%),
+    radial-gradient(ellipse at 62% 43%, rgba(222, 133, 58, 0.22), transparent 40%),
+    linear-gradient(180deg, #7a431f 0, #b36b35 12%, #d59a60 34%, #b36f3e 76%, #4b2818 100%) !important;
+}
+
+.stage-arrival .arrival-scene::before {
+  background:
+    linear-gradient(90deg, rgba(31, 17, 10, 0.48), transparent 15%, transparent 82%, rgba(31, 17, 10, 0.38)),
+    radial-gradient(ellipse at 19% 31%, rgba(255, 248, 195, 0.42), transparent 24%),
+    radial-gradient(ellipse at 49% 48%, rgba(255, 198, 101, 0.18), transparent 38%),
+    linear-gradient(180deg, transparent 0, rgba(40, 22, 14, 0.36) 100%);
+  mix-blend-mode: multiply;
+}
+
+.stage-arrival .arrival-scene::after {
+  height: clamp(110px, 15vh, 142px);
+  z-index: 26;
+  background:
+    linear-gradient(180deg, rgba(255, 186, 98, 0.15), transparent 35%),
+    repeating-linear-gradient(90deg, #673820 0 88px, #864a2a 88px 166px, #552f1e 166px 224px);
+}
+
+.stage-arrival .arrival-room-shell {
+  inset: 0;
+  z-index: 3;
+}
+
+.stage-arrival .arrival-room-shell img,
+.stage-arrival .arrival-stove-foreground img,
+.stage-arrival .arrival-counter-midground img {
+  display: block;
+  user-select: none;
+  image-rendering: auto;
+}
+
+.stage-arrival .arrival-env-wall {
+  position: absolute;
+  left: 50%;
+  top: clamp(70px, 9vh, 96px);
+  width: min(1120px, 86vw);
+  max-width: none;
+  transform: translateX(-50%);
+  filter:
+    drop-shadow(0 20px 28px rgba(42, 23, 14, 0.22))
+    saturate(1.08)
+    brightness(1.03);
+}
+
+.stage-arrival .arrival-env-lantern {
+  position: absolute;
+  z-index: 6;
+  width: clamp(86px, 8vw, 128px);
+  filter:
+    drop-shadow(0 0 24px rgba(255, 200, 89, 0.66))
+    drop-shadow(0 10px 12px rgba(40, 22, 14, 0.16));
+}
+
+.stage-arrival .arrival-env-lantern-left {
+  left: clamp(276px, 25vw, 390px);
+  top: clamp(150px, 20vh, 202px);
+}
+
+.stage-arrival .arrival-env-lantern-right {
+  right: clamp(248px, 22vw, 368px);
+  top: clamp(134px, 18vh, 186px);
+  transform: scale(0.86);
+}
+
+.stage-arrival .arrival-stove-foreground {
+  left: clamp(-210px, -11vw, -72px);
+  bottom: clamp(76px, 10vh, 112px);
+  z-index: 23;
+  width: clamp(540px, 43vw, 760px);
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.stage-arrival .arrival-env-counter-left {
+  width: 100%;
+  opacity: 0.95;
+  filter:
+    drop-shadow(0 22px 20px rgba(38, 21, 13, 0.38))
+    saturate(1.06);
+}
+
+.stage-arrival .arrival-counter-midground {
+  left: clamp(360px, 31vw, 510px);
+  right: clamp(-230px, -9vw, -90px);
+  bottom: clamp(78px, 11vh, 114px);
+  z-index: 18;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.stage-arrival .arrival-env-counter-main {
+  width: min(1050px, 74vw);
+  max-width: none;
+  filter:
+    drop-shadow(0 24px 22px rgba(38, 21, 13, 0.36))
+    saturate(1.05);
+}
+
+.stage-arrival .arrival-env-steam-asset {
+  position: absolute;
+  left: clamp(-70px, -4vw, -28px);
+  bottom: clamp(128px, 18vh, 182px);
+  width: clamp(120px, 11vw, 180px);
+  opacity: 0.72;
+  mix-blend-mode: screen;
+  filter: blur(0.2px) drop-shadow(0 0 14px rgba(255, 238, 180, 0.44));
+}
+
+.stage-arrival .scene-steam {
+  display: none !important;
+}
+
+.stage-arrival .scene-sparkle {
+  left: clamp(350px, 33vw, 600px);
+  bottom: clamp(230px, 34vh, 330px);
+  z-index: 10;
+  opacity: 0.38;
+}
+
+.stage-arrival .chef-character,
+.stage-arrival .arrival-scene .chef-anchor {
+  left: clamp(270px, 25vw, 405px) !important;
+  bottom: clamp(86px, 11vh, 116px) !important;
+  z-index: 25;
+  transform: scale(0.98) !important;
+}
+
+.stage-arrival .guest-character,
+.stage-arrival .arrival-scene .guest-anchor {
+  right: clamp(470px, 40vw, 625px) !important;
+  bottom: clamp(190px, 27vh, 245px) !important;
+  z-index: 14;
+  transform: scale(0.86) !important;
+}
+
+.stage-arrival .guest-dialogue-group {
+  right: clamp(54px, 5.5vw, 100px);
+  top: clamp(168px, 22vh, 212px);
+  width: min(382px, 27vw);
+  z-index: 28;
+}
+
+@media (max-width: 1100px) {
+  .stage-arrival .arrival-env-wall {
+    width: 980px;
+    left: 53%;
+  }
+
+  .stage-arrival .arrival-counter-midground {
+    left: clamp(280px, 29vw, 390px);
+    right: -220px;
+  }
+
+  .stage-arrival .arrival-env-counter-main {
+    width: 880px;
+  }
+
+  .stage-arrival .chef-character,
+  .stage-arrival .arrival-scene .chef-anchor {
+    left: clamp(180px, 22vw, 285px) !important;
+    transform: scale(0.82) !important;
+  }
+
+  .stage-arrival .guest-character,
+  .stage-arrival .arrival-scene .guest-anchor {
+    right: clamp(340px, 38vw, 465px) !important;
+    transform: scale(0.72) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .stage-arrival .arrival-env-wall {
+    left: 56%;
+    top: 86px;
+    width: 760px;
+  }
+
+  .stage-arrival .arrival-env-lantern {
+    display: none;
+  }
+
+  .stage-arrival .arrival-stove-foreground {
+    left: -170px;
+    bottom: 72px;
+    width: 420px;
+    transform: none;
+  }
+
+  .stage-arrival .arrival-counter-midground {
+    left: 115px;
+    right: -310px;
+    bottom: 72px;
+  }
+
+  .stage-arrival .arrival-env-counter-main {
+    width: 620px;
+  }
+
+  .stage-arrival .arrival-env-steam-asset {
+    display: none;
+  }
+
+  .stage-arrival .chef-character,
+  .stage-arrival .arrival-scene .chef-anchor {
+    left: 70px !important;
+    bottom: 70px !important;
+    transform: scale(0.52) !important;
+  }
+
+  .stage-arrival .guest-character,
+  .stage-arrival .arrival-scene .guest-anchor {
+    right: 72px !important;
+    bottom: 150px !important;
+    transform: scale(0.42) !important;
+  }
+}
