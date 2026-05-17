@@ -1,6 +1,6 @@
 # AI 厨房小游戏交付说明
 
-更新时间：2026-05-14
+更新时间：2026-05-16
 
 ## 一句话
 
@@ -15,8 +15,8 @@
 5. 两道菜可以融合成最终料理。
 6. 客人会给文字反馈和分数。
 7. 没有真实 API 时，也有 mock 兜底，保证能演示。
-8. 文本 AI 已接 Qwen Flash。
-9. 图片 AI 已改成阿里云 DashScope 万相云端接口。
+8. 文本 AI 已接智谱 GLM-4.7-flash。
+9. 图片 AI 已接智谱 CogView-3-Flash 云端接口。
 10. 本地 Stable Diffusion 不是默认方案了，发行 demo 不需要队友电脑跑本地模型。
 
 ## 现在的状态
@@ -25,12 +25,12 @@
 
 ```text
 玩家输入
-→ Qwen Flash 理解内容
-→ DashScope 万相云端生成图片
-→ Qwen Flash 生成反馈
+→ 智谱 GLM-4.7-flash 理解内容
+→ 智谱 CogView-3-Flash 云端生成图片
+→ 智谱 GLM-4.7-flash 生成反馈
 ```
 
-但是：阿里云额度已经用完，需要先续费或恢复额度，真实 AI 才能继续生成图片。
+注意：CogView-3-Flash 不直接支持图生图。当前融合阶段会在真实融合图不可用时使用 mock 融合菜继续流程，保证客人反馈和演示闭环不断；如果要生成真实融合图，需要额外配置图生图模型或使用 Stable Diffusion。
 
 ## 队友拿到后怎么跑
 
@@ -49,12 +49,12 @@ cd ..
 copy .env.example .env
 ```
 
-然后把自己的阿里云百炼 API Key 填进 `.env`：
+然后把自己的智谱 AI API Key 填进 `.env`：
 
 ```text
-QWEN_API_KEY=你的key
+ZHIPU_API_KEY=你的key
 AI_KITCHEN_USE_MOCK=false
-IMAGE_PROVIDER=dashscope
+IMAGE_PROVIDER=zhipu
 ```
 
 启动：
@@ -81,7 +81,7 @@ AI_KITCHEN_USE_MOCK=true
 
 ## 接下来要做什么
 
-1. 阿里云百炼续费或确认额度。
+1. 申请智谱 AI API Key 并确认额度。
 2. 跑一次真实完整流程：开始营业 → 第 1 轮 → 第 2 轮 → 融合 → 客人反馈。
 3. 挑 1 到 2 个最好看的案例截图，放进比赛展示材料。
 4. 确认上线前 `.env` 不要发给别人，不要提交真实 key。

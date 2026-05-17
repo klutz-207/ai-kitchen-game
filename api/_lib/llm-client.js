@@ -2,23 +2,23 @@ const { getEnv } = require('./env');
 const { fetchJson, withRetry } = require('./retry');
 
 function extractJson(text) {
-  if (!text) throw new Error('Qwen returned empty content.');
+  if (!text) throw new Error('GLM returned empty content.');
 
   try {
     return JSON.parse(text);
   } catch {
     const match = text.match(/\{[\s\S]*\}/);
-    if (!match) throw new Error('Qwen response did not contain JSON.');
+    if (!match) throw new Error('GLM response did not contain JSON.');
     return JSON.parse(match[0]);
   }
 }
 
-async function callQwen(messages, options = {}) {
-  const apiKey = getEnv('QWEN_API_KEY');
-  if (!apiKey) throw new Error('QWEN_API_KEY is required when AI_KITCHEN_USE_MOCK=false.');
+async function callZhipu(messages, options = {}) {
+  const apiKey = getEnv('ZHIPU_API_KEY');
+  if (!apiKey) throw new Error('ZHIPU_API_KEY is required when AI_KITCHEN_USE_MOCK=false.');
 
-  const baseUrl = getEnv('QWEN_BASE_URL', 'https://dashscope.aliyuncs.com/compatible-mode/v1').replace(/\/$/, '');
-  const model = getEnv('QWEN_MODEL', 'qwen-flash');
+  const baseUrl = getEnv('ZHIPU_BASE_URL', 'https://open.bigmodel.cn/api/paas/v4').replace(/\/$/, '');
+  const model = getEnv('ZHIPU_MODEL', 'glm-4.7-flash');
 
   const data = await fetchJson(`${baseUrl}/chat/completions`, {
     method: 'POST',
@@ -38,7 +38,7 @@ async function callQwen(messages, options = {}) {
   return extractJson(content);
 }
 
-async function callQwenJson(messages, options = {}) {
+async function callZhipuJson(messages, options = {}) {
   return withRetry(async (attempt) => {
     const nextMessages = attempt === 0
       ? messages
@@ -50,11 +50,11 @@ async function callQwenJson(messages, options = {}) {
         },
       ];
 
-    return callQwen(nextMessages, options);
+    return callZhipu(nextMessages, options);
   }, { retries: 1 });
 }
 
 module.exports = {
-  callQwenJson,
+  callZhipuJson,
   extractJson,
 };

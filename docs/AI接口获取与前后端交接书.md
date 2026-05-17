@@ -1,6 +1,6 @@
 # AI 接口获取与前后端交接书
 
-更新时间：2026-05-14
+更新时间：2026-05-16
 
 ## 目标
 
@@ -8,27 +8,27 @@
 
 ```text
 玩家第 1 轮输入
-→ Qwen Flash 理解情绪与视觉概念
-→ DashScope 万相云端生成菜品图 1
+→ 智谱 GLM-4.7-flash 理解情绪与视觉概念
+→ 智谱 CogView-3-Flash 云端生成菜品图 1
 → 玩家第 2 轮输入
-→ Qwen Flash 理解更深概念
-→ DashScope 万相云端生成菜品图 2
-→ DashScope 万相云端参考两张图融合最终料理
-→ Qwen Flash 生成客人反馈与评分
+→ 智谱 GLM-4.7-flash 理解更深概念
+→ 智谱 CogView-3-Flash 云端生成菜品图 2
+→ 图生图模型融合最终料理（待定）
+→ 智谱 GLM-4.7-flash 生成客人反馈与评分
 ```
 
 当前代码已实现后端 pipeline、session API、mock fallback 和前端最小接入。现在需要补齐真实模型服务的账号、权限和运行地址。
 
-2026-05-14 更新：已新增 API 接入健康检查：
+2026-05-16 更新：已新增 API 接入健康检查：
 
 - `GET /api/v1/health`：查看当前配置，不发起远程调用。
-- `GET /api/v1/health?live=true`：实际测试 Qwen，并验证当前图像提供方配置。
+- `GET /api/v1/health?live=true`：实际测试智谱 GLM，并验证当前图像提供方配置。
 - `npm run check:ai`：命令行查看配置状态。
 - `npm run check:ai:live`：命令行实际连通性测试。云端图像生成会在真实游戏流程中产生费用，因此健康检查只做配置校验。
 
 ## 需要你获取的内容
 
-### 1. Qwen Flash API
+### 1. 智谱 GLM-4.7-flash API
 
 用途：
 
@@ -42,58 +42,48 @@
 需要提供到 `.env` 的变量：
 
 ```bash
-QWEN_API_KEY=
-QWEN_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
-QWEN_MODEL=qwen-flash
+ZHIPU_API_KEY=
+ZHIPU_BASE_URL=https://open.bigmodel.cn/api/paas/v4
+ZHIPU_MODEL=glm-4.7-flash
 ```
 
 你需要操作：
 
-1. 登录阿里云账号。
-2. 进入阿里云百炼 / Model Studio。
-3. 开通百炼模型服务。
-4. 创建 API Key。
-5. 确认账号有调用 Qwen 模型的权限。
-6. 将 API Key 填入项目根目录 `.env`，不要提交到 Git。
+1. 注册/登录智谱 AI 开放平台：https://open.bigmodel.cn
+2. 进入控制台，创建 API Key。
+3. 确认账号有调用 GLM-4.7-flash 模型的权限。
+4. 将 API Key 填入项目根目录 `.env`，不要提交到 Git。
 
 官方参考：
 
-- 获取 API Key：https://help.aliyun.com/zh/model-studio/get-api-key
-- 文本生成 / OpenAI 兼容调用：https://help.aliyun.com/zh/model-studio/text-generation
+- 智谱 AI 开放平台：https://open.bigmodel.cn
+- API 文档：https://open.bigmodel.cn/dev/api
 
-### 2. DashScope 万相图像 API
+### 2. 智谱 CogView-3-Flash 图像 API
 
 用途：
 
 - 文生图：生成菜品图 1 和菜品图 2
-- 图像编辑 / 多图参考：参考两张菜品图，生成最终幻想料理
 - 云端运行：适合发行 demo，不依赖本机 GPU 或本地 WebUI
+- 注意：CogView-3-Flash 不直接支持图生图，融合阶段需要额外配置
 
 需要提供到 `.env` 的变量：
 
 ```bash
-IMAGE_PROVIDER=dashscope
-DASHSCOPE_API_KEY=
-DASHSCOPE_BASE_URL=https://dashscope.aliyuncs.com/api/v1
-DASHSCOPE_IMAGE_ENDPOINT=/services/aigc/multimodal-generation/generation
-DASHSCOPE_IMAGE_MODEL=wan2.7-image
-DASHSCOPE_IMAGE_SIZE=1K
-DASHSCOPE_IMAGE_WATERMARK=false
-DASHSCOPE_IMAGE_THINKING_MODE=false
+IMAGE_PROVIDER=zhipu
+ZHIPU_IMAGE_MODEL=cogview-3-flash
+ZHIPU_IMAGE_SIZE=1024x1024
+ZHIPU_IMAGE_QUALITY=standard
 ```
 
 你需要操作：
 
-1. 登录阿里云账号。
-2. 进入阿里云百炼 / Model Studio。
-3. 确认百炼 API Key 余额和模型权限可用。
-4. 如果 `DASHSCOPE_API_KEY` 留空，后端会复用 `QWEN_API_KEY`。
-5. 若需要独立管理图像额度，可以单独填写 `DASHSCOPE_API_KEY`。
+1. 使用同一个智谱 AI API Key。
+2. 确认账号有调用 CogView-3-Flash 模型的权限和可用额度。
 
 官方参考：
 
-- 万相图像生成与编辑 API：https://help.aliyun.com/zh/model-studio/wan-image-generation-and-editing-api-reference
-- 获取 API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+- CogView API 文档：https://open.bigmodel.cn/dev/api/image/cogview-3
 
 ### 3. 可选：Stable Diffusion WebUI 本地模式
 
@@ -130,16 +120,14 @@ AI_KITCHEN_USE_MOCK=true
 复制 `.env.example` 为 `.env`，然后填写：
 
 ```bash
-QWEN_API_KEY=你的百炼APIKey
-QWEN_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1
-QWEN_MODEL=qwen-flash
+ZHIPU_API_KEY=你的智谱AI_APIKey
+ZHIPU_BASE_URL=https://open.bigmodel.cn/api/paas/v4
+ZHIPU_MODEL=glm-4.7-flash
 
-IMAGE_PROVIDER=dashscope
-DASHSCOPE_API_KEY=
-DASHSCOPE_BASE_URL=https://dashscope.aliyuncs.com/api/v1
-DASHSCOPE_IMAGE_ENDPOINT=/services/aigc/multimodal-generation/generation
-DASHSCOPE_IMAGE_MODEL=wan2.7-image
-DASHSCOPE_IMAGE_SIZE=1K
+IMAGE_PROVIDER=zhipu
+ZHIPU_IMAGE_MODEL=cogview-3-flash
+ZHIPU_IMAGE_SIZE=1024x1024
+ZHIPU_IMAGE_QUALITY=standard
 
 AI_KITCHEN_USE_MOCK=false
 AI_KITCHEN_REQUEST_TIMEOUT_MS=60000
@@ -217,7 +205,7 @@ feedback = {
 ## 联调步骤
 
 1. 复制 `.env.example` 为 `.env`。
-2. 填写 Qwen 和 DashScope 万相配置。
+2. 填写智谱 GLM 和 CogView 配置。
 3. 确认阿里云百炼账号有可用额度。
 4. 先检查配置：
 
@@ -267,8 +255,8 @@ npm run build:demo
 
 如果 `npm run check:ai:live` 失败，优先看：
 
-- Qwen 失败：确认 `QWEN_API_KEY` 是否填入 `.env`，账号是否开通百炼模型服务，`QWEN_BASE_URL` 是否为兼容模式地址。
-- DashScope 图像失败：确认 `IMAGE_PROVIDER=dashscope`，账号是否有万相图像模型权限和可用额度。
+- 智谱 GLM 失败：确认 `ZHIPU_API_KEY` 是否填入 `.env`，账号是否开通 GLM-4.7-flash，`ZHIPU_BASE_URL` 是否正确。
+- CogView 图像失败：确认 `IMAGE_PROVIDER=zhipu`，账号是否有 CogView-3-Flash 权限和可用额度。
 - 如切回本地 SD：确认 WebUI 是否用 `--api` 启动，`SD_WEBUI_BASE_URL` 是否能打开 `/docs`，如设置了用户名密码需同步填写。
 
 ## 你需要回填给后端的信息
@@ -276,9 +264,11 @@ npm run build:demo
 请不要把真实 key 发到群里或提交到 Git。你只需要完成 `.env` 填写，然后告诉后端：
 
 ```text
-Qwen API Key 已填
-DashScope 图像额度可用
-IMAGE_PROVIDER=dashscope
+智谱 API Key 已填
+CogView 图像额度可用
+IMAGE_PROVIDER=zhipu
 ```
 
 后端收到后负责做连通性测试、修参数、确认完整流程。
+
+

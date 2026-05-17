@@ -1,4 +1,4 @@
-const { callQwenJson } = require('./llm-client');
+const { callZhipuJson } = require('./llm-client');
 const { generateImageToImage, generateTextToImage } = require('./sd-client');
 const {
   buildFeedbackMessages,
@@ -125,7 +125,7 @@ async function submitRound({ sessionId, playerInput }) {
   const fallback = makeMockRoundOutput({ guest: session.guest, playerInput, round });
   const roundOutput = useMock()
     ? fallback
-    : normalizeRoundOutput(await callQwenJson(buildRoundMessages({
+    : normalizeRoundOutput(await callZhipuJson(buildRoundMessages({
       guest: session.guest,
       round,
       playerInput,
@@ -181,24 +181,35 @@ async function fuseSession({ sessionId }) {
 
   const [dish1, dish2] = session.dishes;
   const mockFinal = mockFuseDishes({ guestId: session.guest.id, dish1, dish2 });
-  const imageResult = useMock()
-    ? { imageUrl: '' }
-    : await generateImageToImage({
-      prompt: buildFusionPrompt({ guest: session.guest, dish1, dish2, rounds: session.rounds }),
-      negativePrompt: defaultNegativePrompt(),
-      imageUrls: [dish1.imageUrl, dish2.imageUrl].filter(Boolean),
-    });
+  const fusionPrompt = buildFusionPrompt({ guest: session.guest, dish1, dish2, rounds: session.rounds });
+  let imageResult = { imageUrl: '', error: '' };
+
+  if (!useMock()) {
+    try {
+      imageResult = await generateImageToImage({
+        prompt: fusionPrompt,
+        negativePrompt: defaultNegativePrompt(),
+        imageUrls: [dish1.imageUrl, dish2.imageUrl].filter(Boolean),
+      });
+    } catch (error) {
+      imageResult = {
+        imageUrl: '',
+        error: error.message || 'Fusion image generation failed.',
+      };
+    }
+  }
 
   const finalDish = {
     ...mockFinal,
     imageUrl: imageResult.imageUrl || '',
-    prompt: useMock() ? '' : buildFusionPrompt({ guest: session.guest, dish1, dish2, rounds: session.rounds }),
+    prompt: useMock() ? '' : fusionPrompt,
     concepts: {
       emotionConcepts: session.rounds.flatMap((round) => round.emotionConcepts || []),
       visualConcepts: session.rounds.flatMap((round) => round.visualConcepts || []),
       fusionHint: session.rounds.map((round) => round.fusionHint).filter(Boolean).join('; '),
     },
     status: imageResult.imageUrl ? 'generated' : 'mocked',
+    imageError: imageResult.error || '',
   };
 
   session.finalDish = finalDish;
@@ -228,7 +239,7 @@ async function createFeedback({ sessionId }) {
 
   const result = useMock()
     ? fallback
-    : normalizeFeedback(await callQwenJson(buildFeedbackMessages({
+    : normalizeFeedback(await callZhipuJson(buildFeedbackMessages({
       guest: session.guest,
       answers: session.rounds.map((round) => round.playerInput),
       finalDish: session.finalDish,

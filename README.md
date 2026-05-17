@@ -43,9 +43,10 @@ npm run dev         # 同时启动 API mock 和 demo 前端
 - 6 个情绪客人：失恋、加班、旅行、观星、上台紧张、记忆唤醒。
 - 两轮文字创作：每轮生成一道情绪料理。
 - 融合与反馈：两道菜融合为最终料理，客人给出文字反馈和评分。
-- 双链路：默认 mock 稳定演示，可切换 Qwen Flash + Stable Diffusion WebUI / PixelRTXL 真实链路。
+- 双链路：默认 mock 稳定演示，可切换 智谱 GLM-4.7-flash + CogView-3-Flash 真实链路。
 - 展示材料：[docs/比赛展示脚本.md](docs/比赛展示脚本.md)。
 
 ## 协作方式
 
 先看 [docs/工作环境指南.md](docs/工作环境指南.md)，再按 [docs/协作看板.md](docs/协作看板.md) 认领下一步。需要 Codex 接手时，尽量说明目标、文件范围、验收方式；我会优先复用现有文档和脚本，保持改动可回看、可验证。
+
