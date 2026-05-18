@@ -1,6 +1,7 @@
 const { callZhipuJson } = require('./llm-client');
 const { generateImageToImage, generateTextToImage } = require('./sd-client');
 const {
+  buildChatMessages,
   buildFeedbackMessages,
   buildFusionPrompt,
   buildRoundMessages,
@@ -102,6 +103,84 @@ async function startSession({ guestId }) {
   };
 }
 
+async function chatRound({ sessionId, playerInput }) {
+  const session = ensureSession(sessionId);
+  if (!playerInput || !String(playerInput).trim()) {
+    const error = new Error('playerInput is required.');
+    error.statusCode = 400;
+    error.code = 'validation_error';
+    throw error;
+  }
+
+  const round = session.rounds.length + 1;
+  if (round > 2) {
+    const error = new Error('This session already has two rounds.');
+    error.statusCode = 409;
+    error.code = 'round_limit_reached';
+    throw error;
+  }
+
+  // 获取当前轮次的对话历史
+  const chatHistoryKey = `chat_history_${round}`;
+  if (!session[chatHistoryKey]) {
+    session[chatHistoryKey] = [];
+  }
+
+  // 将玩家输入添加到对话历史
+  session[chatHistoryKey].push({
+    role: 'player',
+    content: playerInput,
+  });
+
+  // 调用 LLM 进行对话
+  // Mock fallback: 检测是否为名词，或超过3轮强制结束
+  const chatTurns = session[chatHistoryKey].filter(m => m.role === 'assistant').length;
+  const isNoun = playerInput.length <= 6 && !playerInput.includes('我') && !playerInput.includes('想') && !playerInput.includes('很');
+  const shouldEnd = isNoun || chatTurns >= 3;
+  const fallback = {
+    assistantText: shouldEnd
+      ? `「${playerInput}」...我感受到了，这就是你要的食材。`
+      : '我抓住了第一层味道，再告诉我它入口时会留下什么画面。',
+    shouldGenerateDish: shouldEnd,
+    keywords: shouldEnd ? playerInput : '',
+  };
+
+  const chatOutput = useMock()
+    ? fallback
+    : normalizeChatOutput(await callZhipuJson(buildChatMessages({
+      guest: session.guest,
+      chatHistory: session[chatHistoryKey],
+      playerInput,
+      round,
+    })), fallback);
+
+  // 将 AI 回复添加到对话历史
+  session[chatHistoryKey].push({
+    role: 'assistant',
+    content: chatOutput.assistantText,
+  });
+
+  // 保存关键词
+  session[`keywords_${round}`] = chatOutput.keywords || playerInput;
+
+  saveSession(session);
+
+  return {
+    ...serializeSession(session),
+    assistantText: chatOutput.assistantText,
+    shouldGenerateDish: chatOutput.shouldGenerateDish,
+    round,
+  };
+}
+
+function normalizeChatOutput(output, fallback) {
+  return {
+    assistantText: output.assistantText || fallback.assistantText,
+    shouldGenerateDish: output.shouldGenerateDish === true,
+    keywords: output.keywords || fallback.keywords,
+  };
+}
+
 async function submitRound({ sessionId, playerInput }) {
   const session = ensureSession(sessionId);
   if (!playerInput || !String(playerInput).trim()) {
@@ -191,11 +270,18 @@ async function fuseSession({ sessionId }) {
         negativePrompt: defaultNegativePrompt(),
         imageUrls: [dish1.imageUrl, dish2.imageUrl].filter(Boolean),
       });
-    } catch (error) {
-      imageResult = {
-        imageUrl: '',
-        error: error.message || 'Fusion image generation failed.',
-      };
+    } catch (imageToImageError) {
+      try {
+        imageResult = await generateTextToImage({
+          prompt: fusionPrompt,
+          negativePrompt: defaultNegativePrompt(),
+        });
+      } catch (textToImageError) {
+        imageResult = {
+          imageUrl: '',
+          error: textToImageError.message || imageToImageError.message || 'Fusion image generation failed.',
+        };
+      }
     }
   }
 
@@ -256,6 +342,7 @@ async function createFeedback({ sessionId }) {
 }
 
 module.exports = {
+  chatRound,
   createFeedback,
   fuseSession,
   startSession,

@@ -28,7 +28,8 @@ test('prompt skill injects guest input and style context', () => {
   });
 
   assert.equal(messages.length, 2);
-  assert.match(messages[0].content, /Prompt Skill/);
+  assert.match(messages[0].content, /幻想食材炼金师/);
+  assert.match(messages[0].content, /strictly isolated single object/);
   assert.match(messages[0].content, /温暖手绘感像素童话厨房风/);
   assert.match(messages[1].content, /初恋的晚风和透明糖霜/);
 });

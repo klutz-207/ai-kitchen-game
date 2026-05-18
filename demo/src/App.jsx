@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowRight, ChefHat, Heart, Send, Sparkles, Utensils } from 'lucide-react';
 import { guests } from './data/guests';
 import { chefs, defaultChef } from './data/chefs';
-import { feedbackAgent, fuseDishesAgent, generateDishAgent, guideAgent, startSessionAgent } from './services/apiClient';
+import { chatAgent, feedbackAgent, fuseDishesAgent, generateDishAgent, guideAgent, startSessionAgent } from './services/apiClient';
 import { useTypewriter } from './hooks/useTypewriter';
 import { ChefStand, GuestStand } from './components/Actors';
 import { DishCard } from './components/DishCard';
@@ -13,7 +13,6 @@ import { playSound, startLoop, stopLoop, unlockSound } from './services/soundEff
 
 const maxRounds = 2;
 const gameLogo = '/assets/art-library/ui/title-kit/title-lockup-compact.png';
-const ideasPerDish = 2;
 
 const initialRun = {
   guestIndex: 0,
@@ -30,6 +29,8 @@ const initialRun = {
   finalDish: null,
   feedback: null,
   error: '',
+  chatTurns: 0,
+  shouldGenerate: false,
 };
 
 export default function App() {
@@ -111,7 +112,17 @@ export default function App() {
   const startCreation = async () => {
     unlockSound();
     playSound('understand');
-    setRun((current) => ({ ...current, stage: 'bubbleTransition', prompt: '', round: 1, answers: [], activeDishIndex: 1, error: '' }));
+    setRun((current) => ({
+      ...current,
+      stage: 'bubbleTransition',
+      prompt: '',
+      round: 1,
+      answers: [],
+      activeDishIndex: 1,
+      error: '',
+      chatTurns: 0,
+      shouldGenerate: false,
+    }));
     const sessionPromise = startSessionAgent(guest);
     window.setTimeout(async () => {
       try {
@@ -131,7 +142,17 @@ export default function App() {
 
   const startSecondCreation = useCallback(async () => {
     const secondPrompt = runRef.current.secondPrompt;
-    setRun((current) => ({ ...current, stage: 'creation', prompt: '', round: 2, answers: [], activeDishIndex: 2, error: '' }));
+    setRun((current) => ({
+      ...current,
+      stage: 'creation',
+      prompt: '',
+      round: 2,
+      answers: [],
+      activeDishIndex: 2,
+      error: '',
+      chatTurns: 0,
+      shouldGenerate: false,
+    }));
     try {
       const prompt = secondPrompt || guest.prompts[2] || await guideAgent(guest, 2);
       setRun((current) => ({ ...current, prompt }));
@@ -141,33 +162,52 @@ export default function App() {
     }
   }, [guest]);
 
-  const submitAnswer = useCallback((answer) => {
+  const submitAnswer = useCallback(async (answer) => {
     playSound('sendIdea');
-    setRun((current) => {
-      const answers = [...current.answers, answer];
-      const allAnswers = [...current.allAnswers, answer];
-      const nextPromptIndex = current.activeDishIndex === 1 ? answers.length : answers.length + ideasPerDish;
-      const nextPrompt = guest.prompts[nextPromptIndex];
+    const currentRun = runRef.current;
+    const newAnswers = [...currentRun.answers, answer];
+    const newAllAnswers = [...currentRun.allAnswers, answer];
 
-      if (answers.length < ideasPerDish && nextPrompt) {
-        return {
-          ...current,
-          answers,
-          allAnswers,
-          prompt: nextPrompt,
-          error: '',
-        };
-      }
+    // 添加用户消息到聊天记录
+    setRun((current) => ({
+      ...current,
+      answers: newAnswers,
+      allAnswers: newAllAnswers,
+      prompt: '',
+      chatTurns: current.chatTurns + 1,
+    }));
 
-      return {
+    // 调用对话API
+    try {
+      const result = await chatAgent({
+        sessionId: currentRun.sessionId,
+        playerInput: answer,
+        chatTurns: currentRun.chatTurns,
+      });
+
+      setRun((current) => ({
         ...current,
-        answers,
-        allAnswers,
+        prompt: result.assistantText,
+        shouldGenerate: result.shouldGenerateDish,
+      }));
+    } catch (err) {
+      console.error('Chat failed:', err);
+      // Fallback: 直接进入生成阶段
+      setRun((current) => ({
+        ...current,
         prompt: '灵感已经足够，炉火准备好了。',
-        stage: current.activeDishIndex === 1 ? 'generating1' : 'generating2',
-      };
-    });
-  }, [guest]);
+        shouldGenerate: true,
+      }));
+    }
+  }, []);
+
+  const startGeneration = useCallback(() => {
+    setRun((current) => ({
+      ...current,
+      stage: current.activeDishIndex === 1 ? 'generating1' : 'generating2',
+      shouldGenerate: false,
+    }));
+  }, []);
 
   const finishDish = useCallback((index, dish, meta = {}) => {
     playSound('dishReveal');
@@ -187,6 +227,8 @@ export default function App() {
       activeDishIndex: index,
       answers: [],
       prompt: guest.prompts[0],
+      chatTurns: 0,
+      shouldGenerate: false,
       [`dish${index}`]: null,
     }));
   }, [guest]);
@@ -266,7 +308,7 @@ export default function App() {
       {run.stage === 'arrival' ? <Arrival guest={guest} chef={selectedChef} onStart={startCreation} /> : null}
       {run.stage === 'bubbleTransition' ? <BubbleTransition guest={guest} chef={selectedChef} /> : null}
       {run.stage === 'creation' ? (
-        <Creation guest={guest} prompt={run.prompt} round={run.round} answers={run.answers} onSubmit={submitAnswer} />
+        <Creation guest={guest} prompt={run.prompt} round={run.round} answers={run.answers} onSubmit={submitAnswer} onStartGeneration={startGeneration} shouldGenerate={run.shouldGenerate} />
       ) : null}
       {run.stage === 'generating1' ? (
         <GenerateDish guest={guest} sessionId={run.sessionId} answers={run.answers} index={1} onDone={finishDish} onError={handleGenerateError} />
@@ -430,7 +472,7 @@ function BubbleTransition({ guest, chef }) {
   );
 }
 
-function Creation({ guest, prompt, round, answers, onSubmit }) {
+function Creation({ guest, prompt, round, answers, onSubmit, onStartGeneration, shouldGenerate }) {
   const [input, setInput] = useState('');
   const [readyToType, setReadyToType] = useState(false);
   const isThinking = !prompt;
@@ -457,12 +499,12 @@ function Creation({ guest, prompt, round, answers, onSubmit }) {
       <div className="creation-context">
         <StageBadge>主厨的心理对白</StageBadge>
         <h2>{guest.mood}</h2>
-        <p>把客人的愿望藏进食材、形状、火候和回忆里。连续记下 {ideasPerDish} 份灵感后再开火。</p>
+        <p>把客人的愿望藏进食材、形状、火候和回忆里。主厨判断灵感足够后就能开火。</p>
       </div>
 
       <div className="chat-panel fullscreen-chat">
         <div className="chat-header">
-          <StageBadge>第 {round}/{maxRounds} 轮 · 灵感 {Math.min(answers.length + 1, ideasPerDish)}/{ideasPerDish}</StageBadge>
+          <StageBadge>第 {round}/{maxRounds} 轮 · 灵感 {answers.length + 1}</StageBadge>
           <span>把抽象情绪转译成可烹饪的概念</span>
         </div>
 
@@ -488,15 +530,23 @@ function Creation({ guest, prompt, round, answers, onSubmit }) {
           <input
             value={input}
             onChange={(event) => setInput(event.target.value)}
-            disabled={isThinking}
-            placeholder={isThinking ? '等待灵感...' : '可以先写，等主厨说完后发送'}
+            disabled={isThinking || shouldGenerate}
+            placeholder={isThinking ? '等待灵感...' : shouldGenerate ? '灵感已足够，可以开始烹调' : '可以先写，等主厨说完后发送'}
             aria-label="创作输入"
             onFocus={() => playSound('inputFocus')}
           />
-          <PixelButton type="submit" icon={Send} disabled={!input.trim() || isThinking || !readyToType || !done}>
+          <PixelButton type="submit" icon={Send} disabled={!input.trim() || isThinking || !readyToType || !done || shouldGenerate}>
             发送
           </PixelButton>
         </form>
+
+        {shouldGenerate && (
+          <div className="generation-ready">
+            <PixelButton onClick={onStartGeneration} icon={Sparkles}>
+              灵感已足够，开始烹调
+            </PixelButton>
+          </div>
+        )}
       </div>
     </section>
   );
